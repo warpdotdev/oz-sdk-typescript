@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "warp-api/*": ["./dist/src/*"],
-      "warp-api": ["./dist/src/index.ts"]
+      "warp-sdk/*": ["./dist/src/*"],
+      "warp-sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

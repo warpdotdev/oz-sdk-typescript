@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { WarpAPI } from 'warp-api';
+import { WarpAPI } from 'warp-sdk';
 
 const { stringifyQuery } = WarpAPI.prototype as any;
 

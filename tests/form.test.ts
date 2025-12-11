@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'warp-api/internal/uploads';
-import { toFile } from 'warp-api/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'warp-sdk/internal/uploads';
+import { toFile } from 'warp-sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

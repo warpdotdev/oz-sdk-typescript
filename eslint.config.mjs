@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^warp-api(/.*)?',
+              regex: '^warp-sdk(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],
