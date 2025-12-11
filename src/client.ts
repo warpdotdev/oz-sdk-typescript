@@ -128,7 +128,7 @@ export class WarpAPI {
   /**
    * API Client for interfacing with the Warp API API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['WARP_API_API_KEY'] ?? undefined]
+   * @param {string | undefined} [opts.apiKey=process.env['WARP_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['WARP_API_BASE_URL'] ?? https://app.warp.dev/api/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -139,12 +139,12 @@ export class WarpAPI {
    */
   constructor({
     baseURL = readEnv('WARP_API_BASE_URL'),
-    apiKey = readEnv('WARP_API_API_KEY'),
+    apiKey = readEnv('WARP_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.WarpAPIError(
-        "The WARP_API_API_KEY environment variable is missing or empty; either provide it, or instantiate the WarpAPI client with an apiKey option, like new WarpAPI({ apiKey: 'My API Key' }).",
+        "The WARP_API_KEY environment variable is missing or empty; either provide it, or instantiate the WarpAPI client with an apiKey option, like new WarpAPI({ apiKey: 'My API Key' }).",
       );
     }
 

@@ -26,7 +26,7 @@ The full API of this library can be found in [api.md](api.md).
 import WarpAPI from 'warp-sdk';
 
 const client = new WarpAPI({
-  apiKey: process.env['WARP_API_API_KEY'], // This is the default and can be omitted
+  apiKey: process.env['WARP_API_KEY'], // This is the default and can be omitted
 });
 
 const response = await client.agent.run({ prompt: 'Fix the bug in auth.go' });
@@ -43,7 +43,7 @@ This library includes TypeScript definitions for all request params and response
 import WarpAPI from 'warp-sdk';
 
 const client = new WarpAPI({
-  apiKey: process.env['WARP_API_API_KEY'], // This is the default and can be omitted
+  apiKey: process.env['WARP_API_KEY'], // This is the default and can be omitted
 });
 
 const params: WarpAPI.AgentRunParams = { prompt: 'Fix the bug in auth.go' };
