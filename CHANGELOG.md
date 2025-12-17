@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 (2025-12-17)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/warpdotdev/warp-sdk-typescript/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([8dade21](https://github.com/warpdotdev/warp-sdk-typescript/commit/8dade211b6dd9b977eb6d5b095a6d121a567d028))
+
+
+### Documentation
+
+* add environment and config usage documentation ([7314503](https://github.com/warpdotdev/warp-sdk-typescript/commit/7314503e1f9db4d4c4d55c5b860fae7998fd1b5d))
+
 ## 0.1.0 (2025-12-15)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/warpdotdev/warp-sdk-typescript/compare/v0.0.1...v0.1.0)

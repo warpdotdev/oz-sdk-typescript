@@ -55,12 +55,12 @@ $ cd warp-sdk-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link warp-sdk
+$ yarn link warp-agent-sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global warp-sdk
+$ pnpm link -—global warp-agent-sdk
 ```
 
 ## Running tests

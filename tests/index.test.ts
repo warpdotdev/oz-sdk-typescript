@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'warp-sdk/core/api-promise';
+import { APIPromise } from 'warp-agent-sdk/core/api-promise';
 
 import util from 'node:util';
-import WarpAPI from 'warp-sdk';
-import { APIUserAbortError } from 'warp-sdk';
+import WarpAPI from 'warp-agent-sdk';
+import { APIUserAbortError } from 'warp-agent-sdk';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

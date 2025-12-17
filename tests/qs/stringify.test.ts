@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from 'warp-sdk/internal/qs';
-import { encode } from 'warp-sdk/internal/qs/utils';
-import { StringifyOptions } from 'warp-sdk/internal/qs/types';
+import { stringify } from 'warp-agent-sdk/internal/qs';
+import { encode } from 'warp-agent-sdk/internal/qs/utils';
+import { StringifyOptions } from 'warp-agent-sdk/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

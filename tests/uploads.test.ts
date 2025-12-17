@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'warp-sdk/internal/to-file';
-import { toFile } from 'warp-sdk/core/uploads';
+import type { ResponseLike } from 'warp-agent-sdk/internal/to-file';
+import { toFile } from 'warp-agent-sdk/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('warp-sdk/core/uploads');
+    const uploads = await import('warp-agent-sdk/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

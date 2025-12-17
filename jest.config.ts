@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^warp-sdk$': '<rootDir>/src/index.ts',
-    '^warp-sdk/(.*)$': '<rootDir>/src/$1',
+    '^warp-agent-sdk$': '<rootDir>/src/index.ts',
+    '^warp-agent-sdk/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
