@@ -31,6 +31,67 @@ const response = await client.agent.run({ prompt: 'Fix the bug in auth.go' });
 console.log(response.task_id);
 ```
 
+### Using environments and configuration
+
+You can configure the agent with a custom environment and other settings using the `config` parameter:
+
+<!-- prettier-ignore -->
+```ts
+import WarpAPI from 'warp-sdk';
+
+const client = new WarpAPI();
+
+const response = await client.agent.run({
+  prompt: 'Fix the bug in auth.go',
+  config: {
+    environment_id: 'your-environment-id', // UID of a cloud environment
+    model_id: 'claude-sonnet-4', // Optional: specify the LLM model
+    name: 'bug-fix-config', // Optional: config name for traceability
+    base_prompt: 'You are a helpful coding assistant.', // Optional: custom base prompt
+  },
+});
+
+console.log(response.task_id);
+```
+
+#### Configuration options
+
+The `config` parameter accepts the following fields:
+
+- `environment_id`: UID of a cloud environment to run the agent in. Environments define the Docker image, GitHub repositories, and setup commands for agent execution. See [Creating an Environment](https://docs.warp.dev/integrations/integrations-overview/integrations-and-environments#creating-an-environment) for setup instructions.
+- `model_id`: LLM model to use (uses workspace default if not specified)
+- `name`: Config name for searchability and traceability
+- `base_prompt`: Custom base prompt for the agent
+- `mcp_servers`: Map of MCP server configurations by name
+
+#### MCP server configuration
+
+You can configure MCP servers to extend the agent's capabilities:
+
+<!-- prettier-ignore -->
+```ts
+const response = await client.agent.run({
+  prompt: 'Check my GitHub issues',
+  config: {
+    environment_id: 'your-environment-id',
+    mcp_servers: {
+      github: {
+        warp_id: 'your-shared-mcp-server-id', // Reference a Warp shared MCP server
+      },
+      'custom-server': {
+        command: 'npx',
+        args: ['-y', '@modelcontextprotocol/server-filesystem'],
+        env: { PATH: '/usr/local/bin' },
+      },
+      'remote-server': {
+        url: 'https://mcp.example.com/sse',
+        headers: { Authorization: 'Bearer token' },
+      },
+    },
+  },
+});
+```
+
 ### Request & Response types
 
 This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
