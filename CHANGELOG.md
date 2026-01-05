@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-01-05)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/warpdotdev/warp-sdk-typescript/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** fix array query parameter formatting ([2d9b185](https://github.com/warpdotdev/warp-sdk-typescript/commit/2d9b18571e9964a5b50a228757880e50fd35530e))
+
 ## 0.2.0 (2025-12-17)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/warpdotdev/warp-sdk-typescript/compare/v0.1.0...v0.2.0)
