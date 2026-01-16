@@ -40,6 +40,7 @@ describe('resource agent', () => {
         model_id: 'model_id',
         name: 'name',
       },
+      team: true,
       title: 'title',
     });
   });
