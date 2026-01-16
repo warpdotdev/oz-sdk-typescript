@@ -98,12 +98,17 @@ export interface TaskItem {
    * Source that created the task:
    *
    * - LINEAR: Created from Linear integration
-   * - API: Created via the public API
+   * - API: Created via the Warp API
    * - SLACK: Created from Slack integration
    * - LOCAL: Created from local CLI/app
    * - SCHEDULED_AGENT: Created by a scheduled agent
    */
   source?: TaskSourceType;
+
+  /**
+   * Timestamp when the agent started working on the task (RFC3339)
+   */
+  started_at?: string | null;
 
   status_message?: TaskItem.StatusMessage;
 }
@@ -133,7 +138,7 @@ export namespace TaskItem {
  * Source that created the task:
  *
  * - LINEAR: Created from Linear integration
- * - API: Created via the public API
+ * - API: Created via the Warp API
  * - SLACK: Created from Slack integration
  * - LOCAL: Created from local CLI/app
  * - SCHEDULED_AGENT: Created by a scheduled agent

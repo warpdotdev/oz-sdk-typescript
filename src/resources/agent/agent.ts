@@ -35,7 +35,7 @@ export interface AmbientAgentConfig {
   base_prompt?: string;
 
   /**
-   * UID of a CloudEnvironment GSO to use
+   * UID of the environment to run the task in
    */
   environment_id?: string;
 
@@ -45,7 +45,7 @@ export interface AmbientAgentConfig {
   mcp_servers?: { [key: string]: AmbientAgentConfig.McpServers };
 
   /**
-   * LLM model to use (uses workspace default if not specified)
+   * LLM model to use (uses team default if not specified)
    */
   model_id?: string;
 
@@ -122,6 +122,11 @@ export interface AgentRunParams {
    * Configuration for an ambient agent task
    */
   config?: AmbientAgentConfig;
+
+  /**
+   * Make the task visible to all team members, not only the calling user
+   */
+  team?: boolean;
 
   /**
    * Custom title for the task (auto-generated if not provided)
