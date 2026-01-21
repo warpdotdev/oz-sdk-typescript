@@ -1,17 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as TasksAPI from './tasks';
-import { TaskItem, TaskListParams, TaskListResponse, TaskSourceType, TaskState, Tasks } from './tasks';
+import * as RunsAPI from './runs';
+import { RunItem, RunListParams, RunListResponse, RunSourceType, RunState, Runs } from './runs';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Agent extends APIResource {
-  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
 
   /**
    * Spawn an ambient agent with a prompt and optional configuration. The agent will
-   * be queued for execution and assigned a unique task ID.
+   * be queued for execution and assigned a unique run ID.
    *
    * @example
    * ```ts
@@ -26,7 +26,7 @@ export class Agent extends APIResource {
 }
 
 /**
- * Configuration for an ambient agent task
+ * Configuration for an ambient agent run
  */
 export interface AmbientAgentConfig {
   /**
@@ -35,7 +35,7 @@ export interface AmbientAgentConfig {
   base_prompt?: string;
 
   /**
-   * UID of the environment to run the task in
+   * UID of the environment to run the agent in
    */
   environment_id?: string;
 
@@ -95,21 +95,21 @@ export namespace AmbientAgentConfig {
 
 export interface AgentRunResponse {
   /**
-   * Current state of the task:
-   *
-   * - QUEUED: Task is waiting to be picked up
-   * - PENDING: Task is being prepared
-   * - CLAIMED: Task has been claimed by a worker
-   * - INPROGRESS: Task is actively being executed
-   * - SUCCEEDED: Task completed successfully
-   * - FAILED: Task failed
+   * Unique identifier for the created run
    */
-  state: TasksAPI.TaskState;
+  run_id: string;
 
   /**
-   * Unique identifier for the created task
+   * Current state of the run:
+   *
+   * - QUEUED: Run is waiting to be picked up
+   * - PENDING: Run is being prepared
+   * - CLAIMED: Run has been claimed by a worker
+   * - INPROGRESS: Run is actively being executed
+   * - SUCCEEDED: Run completed successfully
+   * - FAILED: Run failed
    */
-  task_id: string;
+  state: RunsAPI.RunState;
 }
 
 export interface AgentRunParams {
@@ -119,22 +119,22 @@ export interface AgentRunParams {
   prompt: string;
 
   /**
-   * Configuration for an ambient agent task
+   * Configuration for an ambient agent run
    */
   config?: AmbientAgentConfig;
 
   /**
-   * Make the task visible to all team members, not only the calling user
+   * Make the run visible to all team members, not only the calling user
    */
   team?: boolean;
 
   /**
-   * Custom title for the task (auto-generated if not provided)
+   * Custom title for the run (auto-generated if not provided)
    */
   title?: string;
 }
 
-Agent.Tasks = Tasks;
+Agent.Runs = Runs;
 
 export declare namespace Agent {
   export {
@@ -144,11 +144,11 @@ export declare namespace Agent {
   };
 
   export {
-    Tasks as Tasks,
-    type TaskItem as TaskItem,
-    type TaskSourceType as TaskSourceType,
-    type TaskState as TaskState,
-    type TaskListResponse as TaskListResponse,
-    type TaskListParams as TaskListParams,
+    Runs as Runs,
+    type RunItem as RunItem,
+    type RunSourceType as RunSourceType,
+    type RunState as RunState,
+    type RunListResponse as RunListResponse,
+    type RunListParams as RunListParams,
   };
 }

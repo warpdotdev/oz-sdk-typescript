@@ -28,7 +28,7 @@ const client = new WarpAPI({
 
 const response = await client.agent.run({ prompt: 'Fix the bug in auth.go' });
 
-console.log(response.task_id);
+console.log(response.run_id);
 ```
 
 ### Request & Response types
@@ -145,7 +145,7 @@ const { data: response, response: raw } = await client.agent
   .run({ prompt: 'Fix the bug in auth.go' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.task_id);
+console.log(response.run_id);
 ```
 
 ### Logging
