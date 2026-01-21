@@ -1,6 +1,6 @@
 {
   "name": "warp-agent-sdk",
-  "version": "0.3.0",
+  "version": "1.0.0-alpha.0",
   "description": "The official TypeScript library for the Warp API API",
   "author": "Warp API <>",
   "types": "dist/index.d.ts",
