@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as RunsAPI from './runs';
-import { RunItem, RunListParams, RunListResponse, RunSourceType, RunState, Runs } from './runs';
+import { ArtifactItem, RunItem, RunListParams, RunListResponse, RunSourceType, RunState, Runs } from './runs';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -53,6 +53,12 @@ export interface AmbientAgentConfig {
    * Config name for searchability and traceability
    */
   name?: string;
+
+  /**
+   * Self-hosted worker ID that should execute this task. If not specified or set to
+   * "warp", the task runs on Warp-hosted workers.
+   */
+  worker_host?: string;
 }
 
 export namespace AmbientAgentConfig {
@@ -145,6 +151,7 @@ export declare namespace Agent {
 
   export {
     Runs as Runs,
+    type ArtifactItem as ArtifactItem,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
