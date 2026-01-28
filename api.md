@@ -13,6 +13,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/agent/runs.ts">ArtifactItem</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunItem</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunSourceType</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunState</a></code>

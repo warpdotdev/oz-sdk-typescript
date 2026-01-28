@@ -43,6 +43,7 @@ describe('resource runs', () => {
           created_before: '2019-12-27T18:11:19.117Z',
           creator: 'creator',
           cursor: 'cursor',
+          environmentId: 'environmentId',
           limit: 1,
           model_id: 'model_id',
           source: 'LINEAR',

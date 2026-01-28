@@ -39,6 +39,7 @@ describe('resource agent', () => {
         },
         model_id: 'model_id',
         name: 'name',
+        worker_host: 'worker_host',
       },
       team: true,
       title: 'title',

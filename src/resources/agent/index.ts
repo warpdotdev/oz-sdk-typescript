@@ -3,6 +3,7 @@
 export { Agent, type AmbientAgentConfig, type AgentRunResponse, type AgentRunParams } from './agent';
 export {
   Runs,
+  type ArtifactItem,
   type RunItem,
   type RunSourceType,
   type RunState,

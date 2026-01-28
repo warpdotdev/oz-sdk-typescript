@@ -34,6 +34,71 @@ export class Runs extends APIResource {
   }
 }
 
+export type ArtifactItem = ArtifactItem.PlanArtifact | ArtifactItem.PullRequestArtifact;
+
+export namespace ArtifactItem {
+  export interface PlanArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'plan';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    plan: PlanArtifact.Plan;
+  }
+
+  export namespace PlanArtifact {
+    export interface Plan {
+      /**
+       * Unique identifier for the plan document
+       */
+      document_uid: string;
+
+      /**
+       * Unique identifier for the associated notebook
+       */
+      notebook_uid?: string;
+
+      /**
+       * Title of the plan
+       */
+      title?: string;
+    }
+  }
+
+  export interface PullRequestArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'pull_request';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    pull_request: PullRequestArtifact.PullRequest;
+  }
+
+  export namespace PullRequestArtifact {
+    export interface PullRequest {
+      /**
+       * Branch name for the pull request
+       */
+      branch: string;
+
+      /**
+       * URL of the pull request
+       */
+      url: string;
+    }
+  }
+}
+
 export interface RunItem {
   /**
    * Timestamp when the run was created (RFC3339)
@@ -83,6 +148,11 @@ export interface RunItem {
   agent_config?: AgentAPI.AmbientAgentConfig;
 
   /**
+   * Artifacts created during the run (plans, pull requests, etc.)
+   */
+  artifacts?: Array<ArtifactItem>;
+
+  /**
    * UUID of the conversation associated with the run
    */
   conversation_id?: string;
@@ -117,6 +187,8 @@ export interface RunItem {
    * - SLACK: Created from Slack integration
    * - LOCAL: Created from local CLI/app
    * - SCHEDULED_AGENT: Created by a scheduled agent
+   * - WEB_APP: Created from the Warp web app
+   * - GITHUB_ACTION: Created from a GitHub action
    */
   source?: RunSourceType;
 
@@ -182,8 +254,17 @@ export namespace RunItem {
  * - SLACK: Created from Slack integration
  * - LOCAL: Created from local CLI/app
  * - SCHEDULED_AGENT: Created by a scheduled agent
+ * - WEB_APP: Created from the Warp web app
+ * - GITHUB_ACTION: Created from a GitHub action
  */
-export type RunSourceType = 'LINEAR' | 'API' | 'SLACK' | 'LOCAL' | 'SCHEDULED_AGENT';
+export type RunSourceType =
+  | 'LINEAR'
+  | 'API'
+  | 'SLACK'
+  | 'LOCAL'
+  | 'SCHEDULED_AGENT'
+  | 'WEB_APP'
+  | 'GITHUB_ACTION';
 
 /**
  * Current state of the run:
@@ -244,6 +325,11 @@ export interface RunListParams {
   cursor?: string;
 
   /**
+   * Filter runs by environment ID
+   */
+  environmentId?: string;
+
+  /**
    * Maximum number of runs to return
    */
   limit?: number;
@@ -267,6 +353,7 @@ export interface RunListParams {
 
 export declare namespace Runs {
   export {
+    type ArtifactItem as ArtifactItem,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
