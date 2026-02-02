@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0-alpha.1 (2026-02-02)
+
+Full Changelog: [v1.0.0-alpha.0...v1.0.0-alpha.1](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.0...v1.0.0-alpha.1)
+
+### Features
+
+* **api:** add artifacts, worker_host, and new source types ([434a92f](https://github.com/warpdotdev/warp-sdk-typescript/commit/434a92fd401576e6dde3002a5cab3f62ba0cdc43))
+* **api:** add schedules, agent list, skill-spec ([67e885e](https://github.com/warpdotdev/warp-sdk-typescript/commit/67e885ed59827c9869f0b52a5ae035a65f0a9863))
+
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([d92ea11](https://github.com/warpdotdev/warp-sdk-typescript/commit/d92ea115927df34abc928d557c61a799d0883ae9))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([2589365](https://github.com/warpdotdev/warp-sdk-typescript/commit/2589365a42e2080e3b3b7cd2c938caed5b03f67b))
+* **client:** do not parse responses with empty content-length ([4b9dd9a](https://github.com/warpdotdev/warp-sdk-typescript/commit/4b9dd9a0b5c44e35eed40f7940c7d2832944d1ad))
+
 ## 1.0.0-alpha.0 (2026-01-21)
 
 Full Changelog: [v0.3.0...v1.0.0-alpha.0](https://github.com/warpdotdev/warp-sdk-typescript/compare/v0.3.0...v1.0.0-alpha.0)
