@@ -32,6 +32,19 @@ export class Runs extends APIResource {
   list(query: RunListParams | null | undefined = {}, options?: RequestOptions): APIPromise<RunListResponse> {
     return this._client.get('/agent/runs', { query, ...options });
   }
+
+  /**
+   * Cancel an agent run that is currently queued or in progress. Once cancelled, the
+   * run will transition to a failed state.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.cancel('runId');
+   * ```
+   */
+  cancel(runID: string, options?: RequestOptions): APIPromise<string> {
+    return this._client.post(path`/agent/runs/${runID}/cancel`, options);
+  }
 }
 
 export type ArtifactItem = ArtifactItem.PlanArtifact | ArtifactItem.PullRequestArtifact;
@@ -157,7 +170,7 @@ export interface RunItem {
    */
   conversation_id?: string;
 
-  creator?: RunItem.Creator;
+  creator?: AgentAPI.RunCreatorInfo;
 
   /**
    * Whether the sandbox environment is currently running
@@ -201,28 +214,6 @@ export interface RunItem {
 }
 
 export namespace RunItem {
-  export interface Creator {
-    /**
-     * Display name of the creator
-     */
-    display_name?: string;
-
-    /**
-     * URL to the creator's photo
-     */
-    photo_url?: string;
-
-    /**
-     * Type of the creator principal
-     */
-    type?: 'user' | 'service_account';
-
-    /**
-     * Unique identifier of the creator
-     */
-    uid?: string;
-  }
-
   /**
    * Resource usage information for the run
    */
@@ -298,6 +289,11 @@ export namespace RunListResponse {
   }
 }
 
+/**
+ * The ID of the cancelled run
+ */
+export type RunCancelResponse = string;
+
 export interface RunListParams {
   /**
    * Filter by agent config name
@@ -358,6 +354,7 @@ export declare namespace Runs {
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunListResponse as RunListResponse,
+    type RunCancelResponse as RunCancelResponse,
     type RunListParams as RunListParams,
   };
 }

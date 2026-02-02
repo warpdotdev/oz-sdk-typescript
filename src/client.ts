@@ -17,7 +17,17 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Agent, AgentRunParams, AgentRunResponse, AmbientAgentConfig } from './resources/agent/agent';
+import {
+  Agent,
+  AgentListParams,
+  AgentListResponse,
+  AgentRunParams,
+  AgentRunResponse,
+  AmbientAgentConfig,
+  CloudEnvironmentConfig,
+  McpServerConfig,
+  RunCreatorInfo,
+} from './resources/agent/agent';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -712,7 +722,12 @@ export declare namespace WarpAPI {
   export {
     Agent as Agent,
     type AmbientAgentConfig as AmbientAgentConfig,
+    type CloudEnvironmentConfig as CloudEnvironmentConfig,
+    type McpServerConfig as McpServerConfig,
+    type RunCreatorInfo as RunCreatorInfo,
+    type AgentListResponse as AgentListResponse,
     type AgentRunResponse as AgentRunResponse,
+    type AgentListParams as AgentListParams,
     type AgentRunParams as AgentRunParams,
   };
 }

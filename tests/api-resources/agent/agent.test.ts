@@ -9,6 +9,26 @@ const client = new WarpAPI({
 
 describe('resource agent', () => {
   // Prism tests are disabled
+  test.skip('list', async () => {
+    const responsePromise = client.agent.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.agent.list({ repo: 'repo' }, { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      WarpAPI.NotFoundError,
+    );
+  });
+
+  // Prism tests are disabled
   test.skip('run: only required params', async () => {
     const responsePromise = client.agent.run({ prompt: 'Fix the bug in auth.go' });
     const rawResponse = await responsePromise.asResponse();
@@ -39,6 +59,7 @@ describe('resource agent', () => {
         },
         model_id: 'model_id',
         name: 'name',
+        skill_spec: 'skill_spec',
         worker_host: 'worker_host',
       },
       team: true,
