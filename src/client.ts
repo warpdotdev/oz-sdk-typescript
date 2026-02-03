@@ -23,10 +23,11 @@ import {
   AgentListResponse,
   AgentRunParams,
   AgentRunResponse,
+  AgentSkill,
   AmbientAgentConfig,
   CloudEnvironmentConfig,
   McpServerConfig,
-  RunCreatorInfo,
+  UserProfile,
 } from './resources/agent/agent';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -721,10 +722,11 @@ export declare namespace WarpAPI {
 
   export {
     Agent as Agent,
+    type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type McpServerConfig as McpServerConfig,
-    type RunCreatorInfo as RunCreatorInfo,
+    type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,

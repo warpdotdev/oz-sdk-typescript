@@ -2,10 +2,11 @@
 
 export {
   Agent,
+  type AgentSkill,
   type AmbientAgentConfig,
   type CloudEnvironmentConfig,
   type McpServerConfig,
-  type RunCreatorInfo,
+  type UserProfile,
   type AgentListResponse,
   type AgentRunResponse,
   type AgentListParams,

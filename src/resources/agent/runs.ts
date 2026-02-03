@@ -170,7 +170,7 @@ export interface RunItem {
    */
   conversation_id?: string;
 
-  creator?: AgentAPI.RunCreatorInfo;
+  creator?: AgentAPI.UserProfile;
 
   /**
    * Whether the sandbox environment is currently running

@@ -2,10 +2,11 @@
 
 Types:
 
+- <code><a href="./src/resources/agent/agent.ts">AgentSkill</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AmbientAgentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">CloudEnvironmentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">McpServerConfig</a></code>
-- <code><a href="./src/resources/agent/agent.ts">RunCreatorInfo</a></code>
+- <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentListResponse</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentRunResponse</a></code>
 

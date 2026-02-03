@@ -162,7 +162,7 @@ export interface ScheduledAgentItem {
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
-  created_by?: AgentAPI.RunCreatorInfo;
+  created_by?: AgentAPI.UserProfile;
 
   /**
    * Configuration for a cloud environment used by scheduled agents
@@ -179,7 +179,7 @@ export interface ScheduledAgentItem {
    */
   last_spawn_error?: string | null;
 
-  updated_by?: AgentAPI.RunCreatorInfo;
+  updated_by?: AgentAPI.UserProfile;
 }
 
 export namespace ScheduledAgentItem {
