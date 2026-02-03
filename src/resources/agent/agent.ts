@@ -60,6 +60,76 @@ export class Agent extends APIResource {
   }
 }
 
+export interface AgentSkill {
+  /**
+   * Human-readable name of the agent
+   */
+  name: string;
+
+  /**
+   * Available variants of this agent
+   */
+  variants: Array<AgentSkill.Variant>;
+}
+
+export namespace AgentSkill {
+  export interface Variant {
+    /**
+     * Stable identifier for this skill variant. Format: "{owner}/{repo}:{skill_path}"
+     * Example: "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md"
+     */
+    id: string;
+
+    /**
+     * Base prompt/instructions for the agent
+     */
+    base_prompt: string;
+
+    /**
+     * Description of the agent variant
+     */
+    description: string;
+
+    /**
+     * Environments where this agent variant is available
+     */
+    environments: Array<Variant.Environment>;
+
+    source: Variant.Source;
+  }
+
+  export namespace Variant {
+    export interface Environment {
+      /**
+       * Human-readable name of the environment
+       */
+      name: string;
+
+      /**
+       * Unique identifier for the environment
+       */
+      uid: string;
+    }
+
+    export interface Source {
+      /**
+       * GitHub repository name
+       */
+      name: string;
+
+      /**
+       * GitHub repository owner
+       */
+      owner: string;
+
+      /**
+       * Path to the skill definition file within the repository
+       */
+      skill_path: string;
+    }
+  }
+}
+
 /**
  * Configuration for an ambient agent run
  */
@@ -184,7 +254,7 @@ export interface McpServerConfig {
   warp_id?: string;
 }
 
-export interface RunCreatorInfo {
+export interface UserProfile {
   /**
    * Display name of the creator
    */
@@ -210,79 +280,7 @@ export interface AgentListResponse {
   /**
    * List of available agents
    */
-  agents: Array<AgentListResponse.Agent>;
-}
-
-export namespace AgentListResponse {
-  export interface Agent {
-    /**
-     * Human-readable name of the agent
-     */
-    name: string;
-
-    /**
-     * Available variants of this agent
-     */
-    variants: Array<Agent.Variant>;
-  }
-
-  export namespace Agent {
-    export interface Variant {
-      /**
-       * Stable identifier for this skill variant. Format: "{owner}/{repo}:{skill_path}"
-       * Example: "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md"
-       */
-      id: string;
-
-      /**
-       * Base prompt/instructions for the agent
-       */
-      base_prompt: string;
-
-      /**
-       * Description of the agent variant
-       */
-      description: string;
-
-      /**
-       * Environments where this agent variant is available
-       */
-      environments: Array<Variant.Environment>;
-
-      source: Variant.Source;
-    }
-
-    export namespace Variant {
-      export interface Environment {
-        /**
-         * Human-readable name of the environment
-         */
-        name: string;
-
-        /**
-         * Unique identifier for the environment
-         */
-        uid: string;
-      }
-
-      export interface Source {
-        /**
-         * GitHub repository name
-         */
-        name: string;
-
-        /**
-         * GitHub repository owner
-         */
-        owner: string;
-
-        /**
-         * Path to the skill definition file within the repository
-         */
-        skill_path: string;
-      }
-    }
-  }
+  agents: Array<AgentSkill>;
 }
 
 export interface AgentRunResponse {
@@ -339,10 +337,11 @@ Agent.Schedules = Schedules;
 
 export declare namespace Agent {
   export {
+    type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type McpServerConfig as McpServerConfig,
-    type RunCreatorInfo as RunCreatorInfo,
+    type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
