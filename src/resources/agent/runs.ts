@@ -323,7 +323,7 @@ export interface RunListParams {
   /**
    * Filter runs by environment ID
    */
-  environmentId?: string;
+  environment_id?: string;
 
   /**
    * Maximum number of runs to return
@@ -336,6 +336,16 @@ export interface RunListParams {
   model_id?: string;
 
   /**
+   * Filter runs by the scheduled agent ID that created them
+   */
+  schedule_id?: string;
+
+  /**
+   * Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md")
+   */
+  skill_spec?: string;
+
+  /**
    * Filter by run source type
    */
   source?: RunSourceType;
@@ -345,6 +355,11 @@ export interface RunListParams {
    * states.
    */
   state?: Array<RunState>;
+
+  /**
+   * Filter runs updated after this timestamp (RFC3339 format)
+   */
+  updated_after?: string;
 }
 
 export declare namespace Runs {
