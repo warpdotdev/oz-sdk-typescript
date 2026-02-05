@@ -54,18 +54,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'PLAN';
+    artifact_type: 'plan';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    data: PlanArtifact.Data;
+    plan: PlanArtifact.Plan;
   }
 
   export namespace PlanArtifact {
-    export interface Data {
+    export interface Plan {
       /**
        * Unique identifier for the plan document
        */
@@ -87,18 +87,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'PULL_REQUEST';
+    artifact_type: 'pull_request';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    data: PullRequestArtifact.Data;
+    pull_request: PullRequestArtifact.PullRequest;
   }
 
   export namespace PullRequestArtifact {
-    export interface Data {
+    export interface PullRequest {
       /**
        * Branch name for the pull request
        */
@@ -137,7 +137,6 @@ export interface RunItem {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
-   * - CANCELLED: Run was cancelled by user
    */
   state: RunState;
 
@@ -182,6 +181,12 @@ export interface RunItem {
    * Resource usage information for the run
    */
   request_usage?: RunItem.RequestUsage;
+
+  /**
+   * Information about the schedule that triggered this run (only present for
+   * scheduled runs)
+   */
+  schedule?: RunItem.Schedule;
 
   /**
    * UUID of the shared session (if available)
@@ -230,6 +235,27 @@ export namespace RunItem {
     inference_cost?: number;
   }
 
+  /**
+   * Information about the schedule that triggered this run (only present for
+   * scheduled runs)
+   */
+  export interface Schedule {
+    /**
+     * Cron expression at the time the run was created
+     */
+    cron_schedule: string;
+
+    /**
+     * Unique identifier for the schedule
+     */
+    schedule_id: string;
+
+    /**
+     * Name of the schedule at the time the run was created
+     */
+    schedule_name: string;
+  }
+
   export interface StatusMessage {
     /**
      * Human-readable status message
@@ -267,9 +293,8 @@ export type RunSourceType =
  * - INPROGRESS: Run is actively being executed
  * - SUCCEEDED: Run completed successfully
  * - FAILED: Run failed
- * - CANCELLED: Run was cancelled by user
  */
-export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED';
+export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED';
 
 export interface RunListResponse {
   page_info: RunListResponse.PageInfo;
@@ -325,7 +350,7 @@ export interface RunListParams {
   /**
    * Filter runs by environment ID
    */
-  environment_id?: string;
+  environmentId?: string;
 
   /**
    * Maximum number of runs to return
@@ -338,16 +363,6 @@ export interface RunListParams {
   model_id?: string;
 
   /**
-   * Filter runs by the scheduled agent ID that created them
-   */
-  schedule_id?: string;
-
-  /**
-   * Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md")
-   */
-  skill_spec?: string;
-
-  /**
    * Filter by run source type
    */
   source?: RunSourceType;
@@ -357,11 +372,6 @@ export interface RunListParams {
    * states.
    */
   state?: Array<RunState>;
-
-  /**
-   * Filter runs updated after this timestamp (RFC3339 format)
-   */
-  updated_after?: string;
 }
 
 export declare namespace Runs {
