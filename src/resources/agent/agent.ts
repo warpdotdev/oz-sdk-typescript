@@ -298,7 +298,6 @@ export interface AgentRunResponse {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
-   * - CANCELLED: Run was cancelled by user
    */
   state: RunsAPI.RunState;
 }
