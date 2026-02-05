@@ -54,18 +54,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'plan';
+    artifact_type: 'PLAN';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    plan: PlanArtifact.Plan;
+    data: PlanArtifact.Data;
   }
 
   export namespace PlanArtifact {
-    export interface Plan {
+    export interface Data {
       /**
        * Unique identifier for the plan document
        */
@@ -87,18 +87,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'pull_request';
+    artifact_type: 'PULL_REQUEST';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    pull_request: PullRequestArtifact.PullRequest;
+    data: PullRequestArtifact.Data;
   }
 
   export namespace PullRequestArtifact {
-    export interface PullRequest {
+    export interface Data {
       /**
        * Branch name for the pull request
        */
@@ -137,6 +137,7 @@ export interface RunItem {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
+   * - CANCELLED: Run was cancelled by user
    */
   state: RunState;
 
@@ -266,8 +267,9 @@ export type RunSourceType =
  * - INPROGRESS: Run is actively being executed
  * - SUCCEEDED: Run completed successfully
  * - FAILED: Run failed
+ * - CANCELLED: Run was cancelled by user
  */
-export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED';
+export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED';
 
 export interface RunListResponse {
   page_info: RunListResponse.PageInfo;
