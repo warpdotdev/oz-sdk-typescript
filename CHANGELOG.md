@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.0-alpha.3 (2026-02-05)
+
+Full Changelog: [v1.0.0-alpha.2...v1.0.0-alpha.3](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
+
+### Features
+
+* **api:** add schedules to runs ([b467e93](https://github.com/warpdotdev/warp-sdk-typescript/commit/b467e93299c88a90a64fd1f690a5eea685484d35))
+* **api:** update artifacts ([d3c1c08](https://github.com/warpdotdev/warp-sdk-typescript/commit/d3c1c088c52fafe7c272dc8a48aaff4c8a8bf0b6))
+
+
+### Bug Fixes
+
+* **client:** avoid removing abort listener too early ([16356a2](https://github.com/warpdotdev/warp-sdk-typescript/commit/16356a2120585d1d854a38d754c9ddc9e90d1627))
+
+
+### Chores
+
+* **client:** restructure abort controller binding ([28b7bd9](https://github.com/warpdotdev/warp-sdk-typescript/commit/28b7bd90695af32ada4ff67873c55559389db53e))
+
 ## 1.0.0-alpha.2 (2026-02-04)
 
 Full Changelog: [v1.0.0-alpha.1...v1.0.0-alpha.2](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
