@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0-alpha.4 (2026-02-06)
+
+Full Changelog: [v1.0.0-alpha.3...v1.0.0-alpha.4](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.3...v1.0.0-alpha.4)
+
+### Features
+
+* **api:** add computer_use_enabled param ([240bfbc](https://github.com/warpdotdev/warp-sdk-typescript/commit/240bfbc553994ba01d28eff9b4936842ebf9d46a))
+
+
+### Chores
+
+* **internal:** upgrade pnpm ([48a300d](https://github.com/warpdotdev/warp-sdk-typescript/commit/48a300d8f63d7adc4a5152231cc9fd73f01f8db8))
+
 ## 1.0.0-alpha.3 (2026-02-05)
 
 Full Changelog: [v1.0.0-alpha.2...v1.0.0-alpha.3](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
