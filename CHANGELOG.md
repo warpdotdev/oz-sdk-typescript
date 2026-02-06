@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-alpha.5 (2026-02-06)
+
+Full Changelog: [v1.0.0-alpha.4...v1.0.0-alpha.5](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.4...v1.0.0-alpha.5)
+
+### Features
+
+* **api:** new run source types ([642de7a](https://github.com/warpdotdev/warp-sdk-typescript/commit/642de7a4cfcfa291c86a99ec5d63f0044858ab99))
+
 ## 1.0.0-alpha.4 (2026-02-06)
 
 Full Changelog: [v1.0.0-alpha.3...v1.0.0-alpha.4](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.3...v1.0.0-alpha.4)
