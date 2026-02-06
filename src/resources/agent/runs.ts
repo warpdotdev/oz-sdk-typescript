@@ -54,18 +54,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'plan';
+    artifact_type: 'PLAN';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    plan: PlanArtifact.Plan;
+    data: PlanArtifact.Data;
   }
 
   export namespace PlanArtifact {
-    export interface Plan {
+    export interface Data {
       /**
        * Unique identifier for the plan document
        */
@@ -87,18 +87,18 @@ export namespace ArtifactItem {
     /**
      * Type of the artifact
      */
-    artifact_type: 'pull_request';
+    artifact_type: 'PULL_REQUEST';
 
     /**
      * Timestamp when the artifact was created (RFC3339)
      */
     created_at: string;
 
-    pull_request: PullRequestArtifact.PullRequest;
+    data: PullRequestArtifact.Data;
   }
 
   export namespace PullRequestArtifact {
-    export interface PullRequest {
+    export interface Data {
       /**
        * Branch name for the pull request
        */
@@ -137,6 +137,7 @@ export interface RunItem {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
+   * - CANCELLED: Run was cancelled by user
    */
   state: RunState;
 
@@ -293,8 +294,9 @@ export type RunSourceType =
  * - INPROGRESS: Run is actively being executed
  * - SUCCEEDED: Run completed successfully
  * - FAILED: Run failed
+ * - CANCELLED: Run was cancelled by user
  */
-export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED';
+export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED';
 
 export interface RunListResponse {
   page_info: RunListResponse.PageInfo;
@@ -350,7 +352,7 @@ export interface RunListParams {
   /**
    * Filter runs by environment ID
    */
-  environmentId?: string;
+  environment_id?: string;
 
   /**
    * Maximum number of runs to return
@@ -363,6 +365,16 @@ export interface RunListParams {
   model_id?: string;
 
   /**
+   * Filter runs by the scheduled agent ID that created them
+   */
+  schedule_id?: string;
+
+  /**
+   * Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md")
+   */
+  skill_spec?: string;
+
+  /**
    * Filter by run source type
    */
   source?: RunSourceType;
@@ -372,6 +384,11 @@ export interface RunListParams {
    * states.
    */
   state?: Array<RunState>;
+
+  /**
+   * Filter runs updated after this timestamp (RFC3339 format)
+   */
+  updated_after?: string;
 }
 
 export declare namespace Runs {

@@ -32,6 +32,7 @@ describe('resource schedules', () => {
       prompt: 'Review open pull requests and provide feedback',
       agent_config: {
         base_prompt: 'base_prompt',
+        computer_use_enabled: true,
         environment_id: 'environment_id',
         mcp_servers: {
           foo: {
@@ -91,6 +92,7 @@ describe('resource schedules', () => {
       prompt: 'prompt',
       agent_config: {
         base_prompt: 'base_prompt',
+        computer_use_enabled: true,
         environment_id: 'environment_id',
         mcp_servers: {
           foo: {

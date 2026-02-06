@@ -140,6 +140,12 @@ export interface AmbientAgentConfig {
   base_prompt?: string;
 
   /**
+   * Controls whether computer use is enabled for this agent. If not set, defaults to
+   * false.
+   */
+  computer_use_enabled?: boolean;
+
+  /**
    * UID of the environment to run the agent in
    */
   environment_id?: string;
@@ -298,6 +304,7 @@ export interface AgentRunResponse {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
+   * - CANCELLED: Run was cancelled by user
    */
   state: RunsAPI.RunState;
 }
