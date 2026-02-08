@@ -1,6 +1,6 @@
 {
   "name": "oz-agent-sdk",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "description": "The official TypeScript library for the Oz API API",
   "author": "Oz API <>",
   "types": "dist/index.d.ts",
