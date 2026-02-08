@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:warpdotdev/warp-sdk-typescript",
+  "repository": "github:warpdotdev/oz-sdk-typescript",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.27.0",
   "files": [
