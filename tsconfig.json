@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "warp-agent-sdk/*": ["./src/*"],
-      "warp-agent-sdk": ["./src/index.ts"]
+      "oz-agent-sdk/*": ["./src/*"],
+      "oz-agent-sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 

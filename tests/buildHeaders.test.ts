@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { buildHeaders, type HeadersLike, type NullableHeaders } from 'warp-agent-sdk/internal/headers';
+import { buildHeaders, type HeadersLike, type NullableHeaders } from 'oz-agent-sdk/internal/headers';
 
 function inspectNullableHeaders(headers: NullableHeaders) {
   return `NullableHeaders {${[

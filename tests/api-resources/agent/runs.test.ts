@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import WarpAPI from 'warp-agent-sdk';
+import WarpAPI from 'oz-agent-sdk';
 
 const client = new WarpAPI({
   apiKey: 'My API Key',

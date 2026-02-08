@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'warp-agent-sdk/internal/uploads';
-import { toFile } from 'warp-agent-sdk/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'oz-agent-sdk/internal/uploads';
+import { toFile } from 'oz-agent-sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

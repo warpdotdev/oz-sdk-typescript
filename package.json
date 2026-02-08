@@ -1,5 +1,5 @@
 {
-  "name": "warp-agent-sdk",
+  "name": "oz-agent-sdk",
   "version": "1.0.0-alpha.6",
   "description": "The official TypeScript library for the Warp API API",
   "author": "Warp API <>",
