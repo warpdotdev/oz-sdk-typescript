@@ -1,8 +1,8 @@
 {
   "name": "oz-agent-sdk",
   "version": "1.0.0-alpha.7",
-  "description": "The official TypeScript library for the Warp API API",
-  "author": "Warp API <>",
+  "description": "The official TypeScript library for the Oz API API",
+  "author": "Oz API <>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
