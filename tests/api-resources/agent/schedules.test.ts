@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import WarpAPI from 'oz-agent-sdk';
+import OzAPI from 'oz-agent-sdk';
 
-const client = new WarpAPI({
+const client = new OzAPI({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });

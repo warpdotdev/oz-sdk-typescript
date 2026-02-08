@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { WarpAPI } from 'oz-agent-sdk';
+import { OzAPI } from 'oz-agent-sdk';
 
-const { stringifyQuery } = WarpAPI.prototype as any;
+const { stringifyQuery } = OzAPI.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [
