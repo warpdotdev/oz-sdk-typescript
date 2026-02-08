@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-alpha.6 (2026-02-08)
+
+Full Changelog: [v1.0.0-alpha.5...v1.0.0-alpha.6](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.5...v1.0.0-alpha.6)
+
+### Features
+
+* **api:** modify openapi trigger ([834d9e0](https://github.com/warpdotdev/warp-sdk-typescript/commit/834d9e0849eb843db5cffdc10e5ce3c7732c37ad))
+
 ## 1.0.0-alpha.5 (2026-02-06)
 
 Full Changelog: [v1.0.0-alpha.4...v1.0.0-alpha.5](https://github.com/warpdotdev/warp-sdk-typescript/compare/v1.0.0-alpha.4...v1.0.0-alpha.5)
