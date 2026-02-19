@@ -8,7 +8,7 @@ const client = new OzAPI({
 });
 
 describe('resource schedules', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.agent.schedules.create({
       cron_schedule: '0 9 * * *',
@@ -24,7 +24,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.agent.schedules.create({
       cron_schedule: '0 9 * * *',
@@ -54,7 +54,7 @@ describe('resource schedules', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.agent.schedules.retrieve('scheduleId');
     const rawResponse = await responsePromise.asResponse();
@@ -66,7 +66,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.agent.schedules.update('scheduleId', {
       cron_schedule: 'cron_schedule',
@@ -83,7 +83,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.agent.schedules.update('scheduleId', {
       cron_schedule: 'cron_schedule',
@@ -112,7 +112,7 @@ describe('resource schedules', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.agent.schedules.list();
     const rawResponse = await responsePromise.asResponse();
@@ -124,7 +124,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.agent.schedules.delete('scheduleId');
     const rawResponse = await responsePromise.asResponse();
@@ -136,7 +136,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('pause', async () => {
     const responsePromise = client.agent.schedules.pause('scheduleId');
     const rawResponse = await responsePromise.asResponse();
@@ -148,7 +148,7 @@ describe('resource schedules', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('resume', async () => {
     const responsePromise = client.agent.schedules.resume('scheduleId');
     const rawResponse = await responsePromise.asResponse();
