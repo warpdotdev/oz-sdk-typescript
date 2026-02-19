@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-alpha.9 (2026-02-19)
+
+Full Changelog: [v1.0.0-alpha.8...v1.0.0-alpha.9](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.8...v1.0.0-alpha.9)
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([8193077](https://github.com/warpdotdev/oz-sdk-typescript/commit/8193077e420b7c6c8bf1cd17bfcd283ac0c7860b))
+* **internal:** avoid type checking errors with ts-reset ([be80828](https://github.com/warpdotdev/oz-sdk-typescript/commit/be80828361a15d93dafc3063e90f5c1723e312f4))
+* **internal:** remove mock server code ([7f8bc16](https://github.com/warpdotdev/oz-sdk-typescript/commit/7f8bc16fa7c3186906067ef3b4494e08a32a4c6d))
+
 ## 1.0.0-alpha.8 (2026-02-08)
 
 Full Changelog: [v1.0.0-alpha.7...v1.0.0-alpha.8](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.7...v1.0.0-alpha.8)
