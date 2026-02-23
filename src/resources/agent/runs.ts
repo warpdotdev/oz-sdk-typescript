@@ -47,7 +47,10 @@ export class Runs extends APIResource {
   }
 }
 
-export type ArtifactItem = ArtifactItem.PlanArtifact | ArtifactItem.PullRequestArtifact;
+export type ArtifactItem =
+  | ArtifactItem.PlanArtifact
+  | ArtifactItem.PullRequestArtifact
+  | ArtifactItem.ScreenshotArtifact;
 
 export namespace ArtifactItem {
   export interface PlanArtifact {
@@ -110,6 +113,39 @@ export namespace ArtifactItem {
       url: string;
     }
   }
+
+  export interface ScreenshotArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'SCREENSHOT';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    data: ScreenshotArtifact.Data;
+  }
+
+  export namespace ScreenshotArtifact {
+    export interface Data {
+      /**
+       * Unique identifier for the screenshot artifact
+       */
+      artifact_uid: string;
+
+      /**
+       * MIME type of the screenshot image
+       */
+      mime_type: string;
+
+      /**
+       * Optional description of the screenshot
+       */
+      description?: string;
+    }
+  }
 }
 
 export interface RunItem {
@@ -137,6 +173,8 @@ export interface RunItem {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
+   * - BLOCKED: Run is blocked (e.g., awaiting user input or approval)
+   * - ERROR: Run encountered an error
    * - CANCELLED: Run was cancelled by user
    */
   state: RunState;
@@ -157,7 +195,7 @@ export interface RunItem {
   updated_at: string;
 
   /**
-   * Configuration for an cloud agent run
+   * Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
@@ -352,9 +390,20 @@ export type RunSourceType =
  * - INPROGRESS: Run is actively being executed
  * - SUCCEEDED: Run completed successfully
  * - FAILED: Run failed
+ * - BLOCKED: Run is blocked (e.g., awaiting user input or approval)
+ * - ERROR: Run encountered an error
  * - CANCELLED: Run was cancelled by user
  */
-export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED';
+export type RunState =
+  | 'QUEUED'
+  | 'PENDING'
+  | 'CLAIMED'
+  | 'INPROGRESS'
+  | 'SUCCEEDED'
+  | 'FAILED'
+  | 'BLOCKED'
+  | 'ERROR'
+  | 'CANCELLED';
 
 export interface RunListResponse {
   page_info: RunListResponse.PageInfo;
@@ -385,7 +434,7 @@ export interface RunListParams {
   /**
    * Filter runs by artifact type (PLAN or PULL_REQUEST)
    */
-  artifact_type?: 'PLAN' | 'PULL_REQUEST';
+  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT';
 
   /**
    * Filter runs created after this timestamp (RFC3339 format)
