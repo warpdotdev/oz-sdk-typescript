@@ -21,12 +21,16 @@ import {
   ScheduledAgentItem,
   Schedules,
 } from './schedules';
+import * as SessionsAPI from './sessions';
+import { SessionCheckRedirectResponse, Sessions } from './sessions';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 export class Agent extends APIResource {
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
   schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
+  sessions: SessionsAPI.Sessions = new SessionsAPI.Sessions(this._client);
 
   /**
    * Retrieve a list of available agents (skills) that can be used to run tasks.
@@ -42,6 +46,21 @@ export class Agent extends APIResource {
     options?: RequestOptions,
   ): APIPromise<AgentListResponse> {
     return this._client.get('/agent', { query, ...options });
+  }
+
+  /**
+   * Retrieve an artifact by its UUID. For screenshot artifacts, returns a
+   * time-limited signed download URL.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.getArtifact(
+   *   'artifactUid',
+   * );
+   * ```
+   */
+  getArtifact(artifactUid: string, options?: RequestOptions): APIPromise<AgentGetArtifactResponse> {
+    return this._client.get(path`/agent/artifacts/${artifactUid}`, options);
   }
 
   /**
@@ -302,6 +321,58 @@ export interface AgentListResponse {
   agents: Array<AgentSkill>;
 }
 
+/**
+ * Response for artifact retrieval. Currently supports screenshot artifacts.
+ */
+export interface AgentGetArtifactResponse {
+  /**
+   * Type of the artifact (e.g., SCREENSHOT)
+   */
+  artifact_type: string;
+
+  /**
+   * Unique identifier (UUID) for the artifact
+   */
+  artifact_uid: string;
+
+  /**
+   * Timestamp when the artifact was created (RFC3339)
+   */
+  created_at: string;
+
+  /**
+   * Response data for a screenshot artifact, including a signed download URL.
+   */
+  data: AgentGetArtifactResponse.Data;
+}
+
+export namespace AgentGetArtifactResponse {
+  /**
+   * Response data for a screenshot artifact, including a signed download URL.
+   */
+  export interface Data {
+    /**
+     * MIME type of the screenshot (e.g., image/png)
+     */
+    content_type: string;
+
+    /**
+     * Time-limited signed URL to download the screenshot
+     */
+    download_url: string;
+
+    /**
+     * Timestamp when the download URL expires (RFC3339)
+     */
+    expires_at: string;
+
+    /**
+     * Optional description of the screenshot
+     */
+    description?: string;
+  }
+}
+
 export interface AgentRunResponse {
   /**
    * Unique identifier for the created run
@@ -427,6 +498,7 @@ export namespace AgentRunParams {
 
 Agent.Runs = Runs;
 Agent.Schedules = Schedules;
+Agent.Sessions = Sessions;
 
 export declare namespace Agent {
   export {
@@ -436,6 +508,7 @@ export declare namespace Agent {
     type McpServerConfig as McpServerConfig,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
+    type AgentGetArtifactResponse as AgentGetArtifactResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
     type AgentRunParams as AgentRunParams,
@@ -460,4 +533,6 @@ export declare namespace Agent {
     type ScheduleCreateParams as ScheduleCreateParams,
     type ScheduleUpdateParams as ScheduleUpdateParams,
   };
+
+  export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
 }

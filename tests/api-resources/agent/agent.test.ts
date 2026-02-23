@@ -36,6 +36,18 @@ describe('resource agent', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('getArtifact', async () => {
+    const responsePromise = client.agent.getArtifact('artifactUid');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('run', async () => {
     const responsePromise = client.agent.run({});
     const rawResponse = await responsePromise.asResponse();
