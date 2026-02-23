@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0-alpha.9 (2026-02-23)
+
+Full Changelog: [v1.0.0-alpha.8...v1.0.0-alpha.9](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.8...v1.0.0-alpha.9)
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([7de7a5b](https://github.com/warpdotdev/oz-sdk-typescript/commit/7de7a5bba2bb7ed232bd7bed6bb10a47aa838678))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([8193077](https://github.com/warpdotdev/oz-sdk-typescript/commit/8193077e420b7c6c8bf1cd17bfcd283ac0c7860b))
+* **internal:** avoid type checking errors with ts-reset ([be80828](https://github.com/warpdotdev/oz-sdk-typescript/commit/be80828361a15d93dafc3063e90f5c1723e312f4))
+* **internal:** remove mock server code ([7f8bc16](https://github.com/warpdotdev/oz-sdk-typescript/commit/7f8bc16fa7c3186906067ef3b4494e08a32a4c6d))
+* **internal:** upgrade pnpm version ([b8d239e](https://github.com/warpdotdev/oz-sdk-typescript/commit/b8d239eed2092ca12b758ece537c54cba4c00815))
+* update mock server docs ([b6d0ab3](https://github.com/warpdotdev/oz-sdk-typescript/commit/b6d0ab3a27db6f7e2ee50a0e62952981feff5199))
+
 ## 1.0.0-alpha.8 (2026-02-08)
 
 Full Changelog: [v1.0.0-alpha.7...v1.0.0-alpha.8](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.7...v1.0.0-alpha.8)
