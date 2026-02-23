@@ -8,11 +8,13 @@ Types:
 - <code><a href="./src/resources/agent/agent.ts">McpServerConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/agent/agent.ts">AgentGetArtifactResponse</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentRunResponse</a></code>
 
 Methods:
 
 - <code title="get /agent">client.agent.<a href="./src/resources/agent/agent.ts">list</a>({ ...params }) -> AgentListResponse</code>
+- <code title="get /agent/artifacts/{artifactUid}">client.agent.<a href="./src/resources/agent/agent.ts">getArtifact</a>(artifactUid) -> AgentGetArtifactResponse</code>
 - <code title="post /agent/run">client.agent.<a href="./src/resources/agent/agent.ts">run</a>({ ...params }) -> AgentRunResponse</code>
 
 ## Runs
@@ -49,3 +51,13 @@ Methods:
 - <code title="delete /agent/schedules/{scheduleId}">client.agent.schedules.<a href="./src/resources/agent/schedules.ts">delete</a>(scheduleID) -> ScheduleDeleteResponse</code>
 - <code title="post /agent/schedules/{scheduleId}/pause">client.agent.schedules.<a href="./src/resources/agent/schedules.ts">pause</a>(scheduleID) -> ScheduledAgentItem</code>
 - <code title="post /agent/schedules/{scheduleId}/resume">client.agent.schedules.<a href="./src/resources/agent/schedules.ts">resume</a>(scheduleID) -> ScheduledAgentItem</code>
+
+## Sessions
+
+Types:
+
+- <code><a href="./src/resources/agent/sessions.ts">SessionCheckRedirectResponse</a></code>
+
+Methods:
+
+- <code title="get /agent/sessions/{sessionUuid}/redirect">client.agent.sessions.<a href="./src/resources/agent/sessions.ts">checkRedirect</a>(sessionUuid) -> SessionCheckRedirectResponse</code>

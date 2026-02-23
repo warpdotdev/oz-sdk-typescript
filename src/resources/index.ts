@@ -8,6 +8,7 @@ export {
   type McpServerConfig,
   type UserProfile,
   type AgentListResponse,
+  type AgentGetArtifactResponse,
   type AgentRunResponse,
   type AgentListParams,
   type AgentRunParams,
