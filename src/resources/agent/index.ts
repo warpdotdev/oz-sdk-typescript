@@ -8,6 +8,7 @@ export {
   type McpServerConfig,
   type UserProfile,
   type AgentListResponse,
+  type AgentGetArtifactResponse,
   type AgentRunResponse,
   type AgentListParams,
   type AgentRunParams,
@@ -30,3 +31,4 @@ export {
   type ScheduleCreateParams,
   type ScheduleUpdateParams,
 } from './schedules';
+export { Sessions, type SessionCheckRedirectResponse } from './sessions';

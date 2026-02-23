@@ -19,6 +19,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   Agent,
+  AgentGetArtifactResponse,
   AgentListParams,
   AgentListResponse,
   AgentRunParams,
@@ -742,6 +743,7 @@ export declare namespace OzAPI {
     type McpServerConfig as McpServerConfig,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
+    type AgentGetArtifactResponse as AgentGetArtifactResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
     type AgentRunParams as AgentRunParams,
