@@ -60,7 +60,7 @@ $ yarn link oz-agent-sdk
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global oz-agent-sdk
+$ pnpm link --global oz-agent-sdk
 ```
 
 ## Running tests
