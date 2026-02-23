@@ -13,7 +13,6 @@ describe('resource schedules', () => {
     const responsePromise = client.agent.schedules.create({
       cron_schedule: '0 9 * * *',
       name: 'Daily Code Review',
-      prompt: 'Review open pull requests and provide feedback',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -29,7 +28,6 @@ describe('resource schedules', () => {
     const response = await client.agent.schedules.create({
       cron_schedule: '0 9 * * *',
       name: 'Daily Code Review',
-      prompt: 'Review open pull requests and provide feedback',
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
@@ -50,6 +48,7 @@ describe('resource schedules', () => {
         worker_host: 'worker_host',
       },
       enabled: true,
+      prompt: 'Review open pull requests and provide feedback',
       team: true,
     });
   });
@@ -72,7 +71,6 @@ describe('resource schedules', () => {
       cron_schedule: 'cron_schedule',
       enabled: true,
       name: 'name',
-      prompt: 'prompt',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -89,7 +87,6 @@ describe('resource schedules', () => {
       cron_schedule: 'cron_schedule',
       enabled: true,
       name: 'name',
-      prompt: 'prompt',
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
@@ -109,6 +106,7 @@ describe('resource schedules', () => {
         skill_spec: 'skill_spec',
         worker_host: 'worker_host',
       },
+      prompt: 'prompt',
     });
   });
 

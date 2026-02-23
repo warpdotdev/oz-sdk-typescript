@@ -17,9 +17,9 @@ export class Schedules extends APIResource {
    *   await client.agent.schedules.create({
    *     cron_schedule: '0 9 * * *',
    *     name: 'Daily Code Review',
+   *     enabled: true,
    *     prompt:
    *       'Review open pull requests and provide feedback',
-   *     enabled: true,
    *   });
    * ```
    */
@@ -52,7 +52,6 @@ export class Schedules extends APIResource {
    *     cron_schedule: 'cron_schedule',
    *     enabled: true,
    *     name: 'name',
-   *     prompt: 'prompt',
    *   });
    * ```
    */
@@ -158,7 +157,7 @@ export interface ScheduledAgentItem {
   updated_at: string;
 
   /**
-   * Configuration for an cloud agent run
+   * Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
@@ -246,12 +245,7 @@ export interface ScheduleCreateParams {
   name: string;
 
   /**
-   * The prompt/instruction for the agent to execute
-   */
-  prompt: string;
-
-  /**
-   * Configuration for an cloud agent run
+   * Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
@@ -259,6 +253,12 @@ export interface ScheduleCreateParams {
    * Whether the schedule should be active immediately
    */
   enabled?: boolean;
+
+  /**
+   * The prompt/instruction for the agent to execute. Required unless
+   * agent_config.skill_spec is provided.
+   */
+  prompt?: string;
 
   /**
    * Whether to create a team-owned schedule. Defaults to true for users on a single
@@ -284,14 +284,15 @@ export interface ScheduleUpdateParams {
   name: string;
 
   /**
-   * The prompt/instruction for the agent to execute
-   */
-  prompt: string;
-
-  /**
-   * Configuration for an cloud agent run
+   * Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
+
+  /**
+   * The prompt/instruction for the agent to execute. Required unless
+   * agent_config.skill_spec is provided.
+   */
+  prompt?: string;
 }
 
 export declare namespace Schedules {

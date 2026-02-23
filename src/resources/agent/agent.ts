@@ -45,7 +45,7 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Spawn an cloud agent with a prompt and optional configuration. The agent will be
+   * Spawn a cloud agent with a prompt and optional configuration. The agent will be
    * queued for execution and assigned a unique run ID.
    *
    * @example
@@ -136,7 +136,7 @@ export namespace AgentSkill {
 }
 
 /**
- * Configuration for an cloud agent run
+ * Configuration for a cloud agent run
  */
 export interface AmbientAgentConfig {
   /**
@@ -166,7 +166,10 @@ export interface AmbientAgentConfig {
   model_id?: string;
 
   /**
-   * Config name for searchability and traceability
+   * Human-readable label for grouping, filtering, and traceability. Automatically
+   * set to the skill name when running a skill-based agent. Set this explicitly to
+   * categorize runs by intent (e.g., "nightly-dependency-check") so you can filter
+   * and track them via the name query parameter on GET /agent/runs.
    */
   name?: string;
 
@@ -272,6 +275,11 @@ export interface UserProfile {
   display_name?: string;
 
   /**
+   * Email address of the creator
+   */
+  email?: string;
+
+  /**
    * URL to the creator's photo
    */
   photo_url?: string;
@@ -309,6 +317,8 @@ export interface AgentRunResponse {
    * - INPROGRESS: Run is actively being executed
    * - SUCCEEDED: Run completed successfully
    * - FAILED: Run failed
+   * - BLOCKED: Run is blocked (e.g., awaiting user input or approval)
+   * - ERROR: Run encountered an error
    * - CANCELLED: Run was cancelled by user
    */
   state: RunsAPI.RunState;
@@ -317,6 +327,11 @@ export interface AgentRunResponse {
    * @deprecated Use run_id instead.
    */
   task_id: string;
+
+  /**
+   * Whether the system is at capacity when the run was created
+   */
+  at_capacity?: boolean;
 }
 
 export interface AgentListParams {
@@ -343,7 +358,13 @@ export interface AgentListParams {
 
 export interface AgentRunParams {
   /**
-   * Configuration for an cloud agent run
+   * Optional file attachments to include with the prompt (max 5). Attachments are
+   * uploaded to cloud storage and made available to the agent.
+   */
+  attachments?: Array<AgentRunParams.Attachment>;
+
+  /**
+   * Configuration for a cloud agent run
    */
   config?: AmbientAgentConfig;
 
@@ -352,12 +373,6 @@ export interface AgentRunParams {
    * agent will continue from where the previous run left off.
    */
   conversation_id?: string;
-
-  /**
-   * Optional images to include with the prompt (max 5). Images are uploaded to cloud
-   * storage and made available to the agent.
-   */
-  images?: Array<AgentRunParams.Image>;
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
@@ -389,19 +404,24 @@ export interface AgentRunParams {
 
 export namespace AgentRunParams {
   /**
-   * A base64-encoded image to include with the prompt
+   * A base64-encoded file attachment to include with the prompt
    */
-  export interface Image {
+  export interface Attachment {
     /**
-     * Base64-encoded image data
+     * Base64-encoded attachment data
      */
     data: string;
 
     /**
-     * MIME type of the image. Supported types: image/jpeg, image/png, image/gif,
-     * image/webp
+     * Name of the attached file
      */
-    mime_type: 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
+    file_name: string;
+
+    /**
+     * MIME type of the attachment. Supported image types: image/jpeg, image/png,
+     * image/gif, image/webp
+     */
+    mime_type: string;
   }
 }
 
