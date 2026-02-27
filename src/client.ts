@@ -727,6 +727,9 @@ export class OzAPI {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Operations for running and managing cloud agents
+   */
   agent: API.Agent = new API.Agent(this);
 }
 
