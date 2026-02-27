@@ -5,6 +5,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations for running and managing cloud agents
+ */
 export class Sessions extends APIResource {
   /**
    * Check whether a shared session should redirect to a conversation transcript.
