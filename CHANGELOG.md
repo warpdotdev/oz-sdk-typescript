@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-alpha.11 (2026-02-27)
+
+Full Changelog: [v1.0.0-alpha.10...v1.0.0-alpha.11](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.10...v1.0.0-alpha.11)
+
+### Chores
+
+* **docs:** add missing descriptions ([ba496bd](https://github.com/warpdotdev/oz-sdk-typescript/commit/ba496bd91034b8aca1a91338b545886431fafe6d))
+* **internal:** move stringifyQuery implementation to internal function ([2a67ffa](https://github.com/warpdotdev/oz-sdk-typescript/commit/2a67ffa84d0cff4b34d1773061969ebd8b565099))
+
 ## 1.0.0-alpha.10 (2026-02-23)
 
 Full Changelog: [v1.0.0-alpha.9...v1.0.0-alpha.10](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.9...v1.0.0-alpha.10)
