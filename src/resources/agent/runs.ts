@@ -6,6 +6,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations for running and managing cloud agents
+ */
 export class Runs extends APIResource {
   /**
    * Retrieve detailed information about a specific agent run, including the full

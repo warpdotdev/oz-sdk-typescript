@@ -6,6 +6,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations for creating and managing scheduled agents
+ */
 export class Schedules extends APIResource {
   /**
    * Create a new scheduled agent that runs on a cron schedule. The agent will be
