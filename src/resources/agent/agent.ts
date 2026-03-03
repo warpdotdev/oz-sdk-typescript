@@ -120,6 +120,13 @@ export namespace AgentSkill {
     source: Variant.Source;
 
     /**
+     * Non-empty when the skill's SKILL.md file exists but is malformed. Contains a
+     * description of the parse failure. Only present when
+     * include_malformed_skills=true is passed to the list agents endpoint.
+     */
+    error?: string;
+
+    /**
      * Timestamp of the last time this skill was run (RFC3339)
      */
     last_run_timestamp?: string | null;
@@ -410,6 +417,13 @@ export interface AgentRunResponse {
 
 export interface AgentListParams {
   /**
+   * When true, includes skills whose SKILL.md file exists but is malformed. These
+   * variants will have a non-empty `error` field describing the parse failure.
+   * Defaults to false.
+   */
+  include_malformed_skills?: boolean;
+
+  /**
    * When true, clears the agent list cache before fetching. Use this to force a
    * refresh of the available agents.
    */
@@ -447,6 +461,11 @@ export interface AgentRunParams {
    * agent will continue from where the previous run left off.
    */
   conversation_id?: string;
+
+  /**
+   * Whether the run should be interactive. If not set, defaults to false.
+   */
+  interactive?: boolean;
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
