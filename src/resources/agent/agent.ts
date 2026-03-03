@@ -18,6 +18,7 @@ import {
   ScheduleDeleteResponse,
   ScheduleListResponse,
   ScheduleUpdateParams,
+  ScheduledAgentHistoryItem,
   ScheduledAgentItem,
   Schedules,
 } from './schedules';
@@ -297,6 +298,21 @@ export interface McpServerConfig {
   warp_id?: string;
 }
 
+/**
+ * Ownership scope for a resource (team or personal)
+ */
+export interface Scope {
+  /**
+   * Type of ownership ("User" for personal, "Team" for team-owned)
+   */
+  type: 'User' | 'Team';
+
+  /**
+   * UID of the owning user or team
+   */
+  uid?: string;
+}
+
 export interface UserProfile {
   /**
    * Display name of the creator
@@ -528,6 +544,7 @@ export declare namespace Agent {
     type AmbientAgentConfig as AmbientAgentConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type McpServerConfig as McpServerConfig,
+    type Scope as Scope,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
@@ -549,6 +566,7 @@ export declare namespace Agent {
 
   export {
     Schedules as Schedules,
+    type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
     type ScheduledAgentItem as ScheduledAgentItem,
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,

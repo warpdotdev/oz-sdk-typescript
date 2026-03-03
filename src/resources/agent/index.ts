@@ -6,6 +6,7 @@ export {
   type AmbientAgentConfig,
   type CloudEnvironmentConfig,
   type McpServerConfig,
+  type Scope,
   type UserProfile,
   type AgentListResponse,
   type AgentGetArtifactResponse,
@@ -25,6 +26,7 @@ export {
 } from './runs';
 export {
   Schedules,
+  type ScheduledAgentHistoryItem,
   type ScheduledAgentItem,
   type ScheduleListResponse,
   type ScheduleDeleteResponse,
