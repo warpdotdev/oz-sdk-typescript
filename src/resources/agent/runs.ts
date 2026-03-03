@@ -239,7 +239,7 @@ export interface RunItem {
   /**
    * Ownership scope for a resource (team or personal)
    */
-  scope?: RunItem.Scope;
+  scope?: AgentAPI.Scope;
 
   /**
    * UUID of the shared session (if available)
@@ -335,21 +335,6 @@ export namespace RunItem {
      * Name of the schedule at the time the run was created
      */
     schedule_name: string;
-  }
-
-  /**
-   * Ownership scope for a resource (team or personal)
-   */
-  export interface Scope {
-    /**
-     * Type of ownership ("User" for personal, "Team" for team-owned)
-     */
-    type: 'User' | 'Team';
-
-    /**
-     * UID of the owning user or team
-     */
-    uid?: string;
   }
 
   export interface StatusMessage {

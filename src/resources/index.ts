@@ -6,6 +6,7 @@ export {
   type AmbientAgentConfig,
   type CloudEnvironmentConfig,
   type McpServerConfig,
+  type Scope,
   type UserProfile,
   type AgentListResponse,
   type AgentGetArtifactResponse,
