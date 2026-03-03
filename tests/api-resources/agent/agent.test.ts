@@ -26,6 +26,7 @@ describe('resource agent', () => {
     await expect(
       client.agent.list(
         {
+          include_malformed_skills: true,
           refresh: true,
           repo: 'repo',
           sort_by: 'name',
