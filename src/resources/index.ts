@@ -5,6 +5,8 @@ export {
   type AgentSkill,
   type AmbientAgentConfig,
   type CloudEnvironmentConfig,
+  type Error,
+  type ErrorCode,
   type McpServerConfig,
   type Scope,
   type UserProfile,
