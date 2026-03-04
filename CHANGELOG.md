@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1 (2026-03-04)
+
+Full Changelog: [v1.0.0-alpha.12...v1.0.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.12...v1.0.1)
+
+### Features
+
+* **api:** error and error_code as types ([08a0106](https://github.com/warpdotdev/oz-sdk-typescript/commit/08a01063134a8c9578c9f3145e499c28f7f74a9b))
+
 ## 1.0.0-alpha.12 (2026-03-03)
 
 Full Changelog: [v1.0.0-alpha.11...v1.0.0-alpha.12](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.11...v1.0.0-alpha.12)
