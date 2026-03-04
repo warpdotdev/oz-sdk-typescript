@@ -383,23 +383,7 @@ export namespace RunItem {
      * - `resource_unavailable` — Transient infrastructure issue (retryable)
      * - `internal_error` — Unexpected server-side error (retryable)
      */
-    error_code?:
-      | 'insufficient_credits'
-      | 'feature_not_available'
-      | 'external_authentication_required'
-      | 'not_authorized'
-      | 'invalid_request'
-      | 'resource_not_found'
-      | 'budget_exceeded'
-      | 'integration_disabled'
-      | 'integration_not_configured'
-      | 'operation_not_supported'
-      | 'environment_setup_failed'
-      | 'content_policy_violation'
-      | 'conflict'
-      | 'authentication_required'
-      | 'resource_unavailable'
-      | 'internal_error';
+    error_code?: AgentAPI.ErrorCode;
 
     /**
      * Whether the error is transient and the client may retry by submitting a new run.
