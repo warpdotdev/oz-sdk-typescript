@@ -5,6 +5,8 @@ Types:
 - <code><a href="./src/resources/agent/agent.ts">AgentSkill</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AmbientAgentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">CloudEnvironmentConfig</a></code>
+- <code><a href="./src/resources/agent/agent.ts">Error</a></code>
+- <code><a href="./src/resources/agent/agent.ts">ErrorCode</a></code>
 - <code><a href="./src/resources/agent/agent.ts">McpServerConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">Scope</a></code>
 - <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
