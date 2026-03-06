@@ -122,21 +122,6 @@ export class Schedules extends APIResource {
   }
 }
 
-/**
- * Scheduler-derived history metadata for a scheduled agent
- */
-export interface ScheduledAgentHistoryItem {
-  /**
-   * Timestamp of the last successful run (RFC3339)
-   */
-  last_ran?: string | null;
-
-  /**
-   * Timestamp of the next scheduled run (RFC3339)
-   */
-  next_run?: string | null;
-}
-
 export interface ScheduledAgentItem {
   /**
    * Unique identifier for the scheduled agent
@@ -189,7 +174,7 @@ export interface ScheduledAgentItem {
   /**
    * Scheduler-derived history metadata for a scheduled agent
    */
-  history?: ScheduledAgentHistoryItem;
+  history?: ScheduledAgentItem.History;
 
   /**
    * Error message from the last failed spawn attempt, if any
@@ -199,9 +184,41 @@ export interface ScheduledAgentItem {
   /**
    * Ownership scope for a resource (team or personal)
    */
-  scope?: AgentAPI.Scope;
+  scope?: ScheduledAgentItem.Scope;
 
   updated_by?: AgentAPI.UserProfile;
+}
+
+export namespace ScheduledAgentItem {
+  /**
+   * Scheduler-derived history metadata for a scheduled agent
+   */
+  export interface History {
+    /**
+     * Timestamp of the last successful run (RFC3339)
+     */
+    last_ran?: string | null;
+
+    /**
+     * Timestamp of the next scheduled run (RFC3339)
+     */
+    next_run?: string | null;
+  }
+
+  /**
+   * Ownership scope for a resource (team or personal)
+   */
+  export interface Scope {
+    /**
+     * Type of ownership ("User" for personal, "Team" for team-owned)
+     */
+    type: 'User' | 'Team';
+
+    /**
+     * UID of the owning user or team
+     */
+    uid?: string;
+  }
 }
 
 export interface ScheduleListResponse {
@@ -283,7 +300,6 @@ export interface ScheduleUpdateParams {
 
 export declare namespace Schedules {
   export {
-    type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
     type ScheduledAgentItem as ScheduledAgentItem,
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,

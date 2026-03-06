@@ -18,7 +18,6 @@ import {
   ScheduleDeleteResponse,
   ScheduleListResponse,
   ScheduleUpdateParams,
-  ScheduledAgentHistoryItem,
   ScheduledAgentItem,
   Schedules,
 } from './schedules';
@@ -263,108 +262,6 @@ export namespace CloudEnvironmentConfig {
 }
 
 /**
- * Error response following RFC 7807 (Problem Details for HTTP APIs). Includes
- * backward-compatible extension members.
- *
- * The response uses the `application/problem+json` content type. Additional
- * extension members (e.g., `auth_url`, `provider`) may be present depending on the
- * error code.
- */
-export interface Error {
-  /**
-   * Human-readable error message combining title and detail. Backward-compatible
-   * extension member for older clients.
-   */
-  error: string;
-
-  /**
-   * The HTTP status code for this occurrence of the problem (RFC 7807)
-   */
-  status: number;
-
-  /**
-   * A short, human-readable summary of the problem type (RFC 7807)
-   */
-  title: string;
-
-  /**
-   * A URI reference that identifies the problem type (RFC 7807). Format:
-   * `https://docs.warp.dev/agent-platform/troubleshooting/errors/{error_code}` See
-   * PlatformErrorCode for the list of possible error codes.
-   */
-  type: string;
-
-  /**
-   * A human-readable explanation specific to this occurrence of the problem
-   * (RFC 7807)
-   */
-  detail?: string;
-
-  /**
-   * The request path that generated this error (RFC 7807)
-   */
-  instance?: string;
-
-  /**
-   * Whether the request can be retried. When true, the error is transient and the
-   * request may be retried. When false, retrying without addressing the underlying
-   * cause will not succeed.
-   */
-  retryable?: boolean;
-
-  /**
-   * OpenTelemetry trace ID for debugging and support requests
-   */
-  trace_id?: string;
-}
-
-/**
- * Machine-readable error code identifying the problem type. Used in the `type` URI
- * of Error responses and in the `error_code` field of RunStatusMessage.
- *
- * User errors (run transitions to FAILED):
- *
- * - `insufficient_credits` — Team has no remaining add-on credits
- * - `feature_not_available` — Required feature not enabled for user's plan
- * - `external_authentication_required` — User hasn't authorized a required
- *   external service
- * - `not_authorized` — Principal lacks permission for the requested operation
- * - `invalid_request` — Request is malformed or contains invalid parameters
- * - `resource_not_found` — Referenced resource does not exist
- * - `budget_exceeded` — Spending budget limit has been reached
- * - `integration_disabled` — Integration is disabled and must be enabled
- * - `integration_not_configured` — Integration setup is incomplete
- * - `operation_not_supported` — Requested operation not supported for this
- *   resource/state
- * - `environment_setup_failed` — Client-side environment setup failed
- * - `content_policy_violation` — Prompt or setup commands violated content policy
- * - `conflict` — Request conflicts with the current state of the resource
- *
- * Warp errors (run transitions to ERROR):
- *
- * - `authentication_required` — Request lacks valid authentication credentials
- * - `resource_unavailable` — Transient infrastructure issue (retryable)
- * - `internal_error` — Unexpected server-side error (retryable)
- */
-export type ErrorCode =
-  | 'insufficient_credits'
-  | 'feature_not_available'
-  | 'external_authentication_required'
-  | 'not_authorized'
-  | 'invalid_request'
-  | 'resource_not_found'
-  | 'budget_exceeded'
-  | 'integration_disabled'
-  | 'integration_not_configured'
-  | 'operation_not_supported'
-  | 'environment_setup_failed'
-  | 'content_policy_violation'
-  | 'conflict'
-  | 'authentication_required'
-  | 'resource_unavailable'
-  | 'internal_error';
-
-/**
  * Configuration for an MCP server. Must have exactly one of: warp_id, command, or
  * url.
  */
@@ -398,21 +295,6 @@ export interface McpServerConfig {
    * Reference to a Warp shared MCP server by UUID
    */
   warp_id?: string;
-}
-
-/**
- * Ownership scope for a resource (team or personal)
- */
-export interface Scope {
-  /**
-   * Type of ownership ("User" for personal, "Team" for team-owned)
-   */
-  type: 'User' | 'Team';
-
-  /**
-   * UID of the owning user or team
-   */
-  uid?: string;
 }
 
 export interface UserProfile {
@@ -645,10 +527,7 @@ export declare namespace Agent {
     type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
-    type Error as Error,
-    type ErrorCode as ErrorCode,
     type McpServerConfig as McpServerConfig,
-    type Scope as Scope,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
@@ -670,7 +549,6 @@ export declare namespace Agent {
 
   export {
     Schedules as Schedules,
-    type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
     type ScheduledAgentItem as ScheduledAgentItem,
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
