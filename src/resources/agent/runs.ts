@@ -38,7 +38,11 @@ export class Runs extends APIResource {
 
   /**
    * Cancel an agent run that is currently queued or in progress. Once cancelled, the
-   * run will transition to a failed state.
+   * run will transition to a cancelled state.
+   *
+   * Not all runs can be cancelled. Runs that are in a terminal state (SUCCEEDED,
+   * FAILED, ERROR, BLOCKED, CANCELLED) return 400. Runs in PENDING state return 409
+   * (retry after a moment). Self-hosted, local, and GitHub Action runs return 422.
    *
    * @example
    * ```ts
@@ -239,7 +243,7 @@ export interface RunItem {
   /**
    * Ownership scope for a resource (team or personal)
    */
-  scope?: RunItem.Scope;
+  scope?: AgentAPI.Scope;
 
   /**
    * UUID of the shared session (if available)
@@ -271,6 +275,10 @@ export interface RunItem {
    */
   started_at?: string | null;
 
+  /**
+   * Status message for a run. For terminal error states, includes structured error
+   * code and retryability info from the platform error catalog.
+   */
   status_message?: RunItem.StatusMessage;
 }
 
@@ -338,25 +346,51 @@ export namespace RunItem {
   }
 
   /**
-   * Ownership scope for a resource (team or personal)
+   * Status message for a run. For terminal error states, includes structured error
+   * code and retryability info from the platform error catalog.
    */
-  export interface Scope {
-    /**
-     * Type of ownership ("User" for personal, "Team" for team-owned)
-     */
-    type: 'User' | 'Team';
-
-    /**
-     * UID of the owning user or team
-     */
-    uid?: string;
-  }
-
   export interface StatusMessage {
     /**
      * Human-readable status message
      */
-    message?: string;
+    message: string;
+
+    /**
+     * Machine-readable error code identifying the problem type. Used in the `type` URI
+     * of Error responses and in the `error_code` field of RunStatusMessage.
+     *
+     * User errors (run transitions to FAILED):
+     *
+     * - `insufficient_credits` — Team has no remaining add-on credits
+     * - `feature_not_available` — Required feature not enabled for user's plan
+     * - `external_authentication_required` — User hasn't authorized a required
+     *   external service
+     * - `not_authorized` — Principal lacks permission for the requested operation
+     * - `invalid_request` — Request is malformed or contains invalid parameters
+     * - `resource_not_found` — Referenced resource does not exist
+     * - `budget_exceeded` — Spending budget limit has been reached
+     * - `integration_disabled` — Integration is disabled and must be enabled
+     * - `integration_not_configured` — Integration setup is incomplete
+     * - `operation_not_supported` — Requested operation not supported for this
+     *   resource/state
+     * - `environment_setup_failed` — Client-side environment setup failed
+     * - `content_policy_violation` — Prompt or setup commands violated content policy
+     * - `conflict` — Request conflicts with the current state of the resource
+     *
+     * Warp errors (run transitions to ERROR):
+     *
+     * - `authentication_required` — Request lacks valid authentication credentials
+     * - `resource_unavailable` — Transient infrastructure issue (retryable)
+     * - `internal_error` — Unexpected server-side error (retryable)
+     */
+    error_code?: AgentAPI.ErrorCode;
+
+    /**
+     * Whether the error is transient and the client may retry by submitting a new run.
+     * Only present on terminal error states. When false, retrying without addressing
+     * the underlying cause will not succeed.
+     */
+    retryable?: boolean;
   }
 }
 
