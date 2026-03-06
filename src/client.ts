@@ -27,7 +27,10 @@ import {
   AgentSkill,
   AmbientAgentConfig,
   CloudEnvironmentConfig,
+  Error,
+  ErrorCode,
   McpServerConfig,
+  Scope,
   UserProfile,
 } from './resources/agent/agent';
 import { type Fetch } from './internal/builtin-types';
@@ -743,7 +746,10 @@ export declare namespace OzAPI {
     type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
+    type Error as Error,
+    type ErrorCode as ErrorCode,
     type McpServerConfig as McpServerConfig,
+    type Scope as Scope,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
