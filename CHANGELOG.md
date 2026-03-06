@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.2 (2026-03-06)
+
+Full Changelog: [v1.0.1...v1.0.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.1...v1.0.2)
+
+### Features
+
+* **api:** fix ScheduledAgentHistoryItem name ([485083d](https://github.com/warpdotdev/oz-sdk-typescript/commit/485083de645ff844e55bc1d04fbd51d3c5875947))
+* **api:** fix schema version issues ([bda484e](https://github.com/warpdotdev/oz-sdk-typescript/commit/bda484e2cf52c1233cc3d31d574f1356a0dfe159))
+* **api:** sorting ([d584cc6](https://github.com/warpdotdev/oz-sdk-typescript/commit/d584cc67d3739aa2b690732e4e936fe5d3f22b41))
+
+
+### Bug Fixes
+
+* fix request delays for retrying to be more respectful of high requested delays ([21ffbe5](https://github.com/warpdotdev/oz-sdk-typescript/commit/21ffbe5a1701d518ab01fd6331e3388243926472))
+
 ## 1.0.1 (2026-03-04)
 
 Full Changelog: [v1.0.0-alpha.12...v1.0.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.0-alpha.12...v1.0.1)
