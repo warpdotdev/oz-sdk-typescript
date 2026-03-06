@@ -125,7 +125,7 @@ export class Schedules extends APIResource {
 /**
  * Scheduler-derived history metadata for a scheduled agent
  */
-export interface ScheduleHistoryItem {
+export interface ScheduledAgentHistoryItem {
   /**
    * Timestamp of the last successful run (RFC3339)
    */
@@ -189,7 +189,7 @@ export interface ScheduledAgentItem {
   /**
    * Scheduler-derived history metadata for a scheduled agent
    */
-  history?: ScheduleHistoryItem;
+  history?: ScheduledAgentHistoryItem;
 
   /**
    * Error message from the last failed spawn attempt, if any
@@ -283,7 +283,7 @@ export interface ScheduleUpdateParams {
 
 export declare namespace Schedules {
   export {
-    type ScheduleHistoryItem as ScheduleHistoryItem,
+    type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
     type ScheduledAgentItem as ScheduledAgentItem,
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,

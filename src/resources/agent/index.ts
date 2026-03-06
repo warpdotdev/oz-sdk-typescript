@@ -28,7 +28,7 @@ export {
 } from './runs';
 export {
   Schedules,
-  type ScheduleHistoryItem,
+  type ScheduledAgentHistoryItem,
   type ScheduledAgentItem,
   type ScheduleListResponse,
   type ScheduleDeleteResponse,
