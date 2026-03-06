@@ -51,6 +51,8 @@ describe('resource runs', () => {
           schedule_id: 'schedule_id',
           skill: 'skill',
           skill_spec: 'skill_spec',
+          sort_by: 'updated_at',
+          sort_order: 'asc',
           source: 'LINEAR',
           state: ['QUEUED'],
           updated_after: '2019-12-27T18:11:19.117Z',
