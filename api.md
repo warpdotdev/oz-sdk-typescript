@@ -41,7 +41,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/agent/schedules.ts">ScheduleHistoryItem</a></code>
+- <code><a href="./src/resources/agent/schedules.ts">ScheduledAgentHistoryItem</a></code>
 - <code><a href="./src/resources/agent/schedules.ts">ScheduledAgentItem</a></code>
 - <code><a href="./src/resources/agent/schedules.ts">ScheduleListResponse</a></code>
 - <code><a href="./src/resources/agent/schedules.ts">ScheduleDeleteResponse</a></code>
