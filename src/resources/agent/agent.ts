@@ -16,9 +16,9 @@ import * as SchedulesAPI from './schedules';
 import {
   ScheduleCreateParams,
   ScheduleDeleteResponse,
-  ScheduleHistoryItem,
   ScheduleListResponse,
   ScheduleUpdateParams,
+  ScheduledAgentHistoryItem,
   ScheduledAgentItem,
   Schedules,
 } from './schedules';
@@ -670,7 +670,7 @@ export declare namespace Agent {
 
   export {
     Schedules as Schedules,
-    type ScheduleHistoryItem as ScheduleHistoryItem,
+    type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
     type ScheduledAgentItem as ScheduledAgentItem,
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
