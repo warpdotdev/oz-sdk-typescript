@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.3 (2026-03-09)
+
+Full Changelog: [v1.0.2...v1.0.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.2...v1.0.3)
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([4420fda](https://github.com/warpdotdev/oz-sdk-typescript/commit/4420fdab4fdc8cc948556b74d2370221528e1f47))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([842b67e](https://github.com/warpdotdev/oz-sdk-typescript/commit/842b67ea7ff38e6032be0af5cdedef6c5f1b67a9))
+* **internal:** update dependencies to address dependabot vulnerabilities ([7d17121](https://github.com/warpdotdev/oz-sdk-typescript/commit/7d171218c88c717ddbe930cb6634d1387b685327))
+
 ## 1.0.2 (2026-03-06)
 
 Full Changelog: [v1.0.1...v1.0.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.1...v1.0.2)
