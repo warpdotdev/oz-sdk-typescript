@@ -243,6 +243,11 @@ export interface CloudEnvironmentConfig {
   name?: string;
 
   /**
+   * Optional cloud provider configurations for automatic auth
+   */
+  providers?: CloudEnvironmentConfig.Providers;
+
+  /**
    * Shell commands to run during environment setup
    */
   setup_commands?: Array<string>;
@@ -259,6 +264,53 @@ export namespace CloudEnvironmentConfig {
      * GitHub repository name
      */
     repo: string;
+  }
+
+  /**
+   * Optional cloud provider configurations for automatic auth
+   */
+  export interface Providers {
+    /**
+     * AWS IAM role assumption settings
+     */
+    aws?: Providers.Aws;
+
+    /**
+     * GCP Workload Identity Federation settings
+     */
+    gcp?: Providers.Gcp;
+  }
+
+  export namespace Providers {
+    /**
+     * AWS IAM role assumption settings
+     */
+    export interface Aws {
+      /**
+       * AWS IAM role ARN to assume
+       */
+      role_arn: string;
+    }
+
+    /**
+     * GCP Workload Identity Federation settings
+     */
+    export interface Gcp {
+      /**
+       * GCP project number
+       */
+      project_number: string;
+
+      /**
+       * Workload Identity Federation pool ID
+       */
+      workload_identity_federation_pool_id: string;
+
+      /**
+       * Workload Identity Federation provider ID
+       */
+      workload_identity_federation_provider_id: string;
+    }
   }
 }
 
