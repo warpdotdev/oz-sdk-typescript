@@ -32,6 +32,8 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
+        harness: 'harness',
+        idle_timeout_minutes: 1,
         mcp_servers: {
           foo: {
             args: ['string'],
@@ -91,6 +93,8 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
+        harness: 'harness',
+        idle_timeout_minutes: 1,
         mcp_servers: {
           foo: {
             args: ['string'],
