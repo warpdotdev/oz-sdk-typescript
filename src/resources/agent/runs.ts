@@ -469,7 +469,7 @@ export type RunCancelResponse = string;
 
 export interface RunListParams {
   /**
-   * Filter runs by artifact type
+   * Filter runs by artifact type (PLAN or PULL_REQUEST)
    */
   artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT';
 
