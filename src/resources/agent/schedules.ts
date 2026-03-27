@@ -94,8 +94,7 @@ export class Schedules extends APIResource {
   }
 
   /**
-   * Pause a scheduled agent. The agent will not run until resumed. This sets the
-   * enabled flag to false.
+   * Pause a scheduled agent. The agent will not run until resumed.
    *
    * @example
    * ```ts
@@ -109,7 +108,7 @@ export class Schedules extends APIResource {
 
   /**
    * Resume a paused scheduled agent. The agent will start running according to its
-   * cron schedule. This sets the enabled flag to true.
+   * cron schedule.
    *
    * @example
    * ```ts
