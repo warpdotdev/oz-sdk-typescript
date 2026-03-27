@@ -186,6 +186,19 @@ export interface AmbientAgentConfig {
   environment_id?: string;
 
   /**
+   * Agent harness to use for the agent run. Default (empty) uses Warp's built-in Oz
+   * harness.
+   */
+  harness?: string;
+
+  /**
+   * Number of minutes to keep the agent environment alive after task completion. If
+   * not set, defaults to 10 minutes. Maximum allowed value is min(60,
+   * floor(max_instance_runtime_seconds / 60) for your billing tier).
+   */
+  idle_timeout_minutes?: number;
+
+  /**
    * Map of MCP server configurations by name
    */
   mcp_servers?: { [key: string]: McpServerConfig };
