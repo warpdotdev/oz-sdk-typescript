@@ -234,6 +234,14 @@ export interface RunItem {
   creator?: AgentAPI.UserProfile;
 
   /**
+   * Where the run executed:
+   *
+   * - LOCAL: Executed in the user's local Oz environment
+   * - REMOTE: Executed by a remote/cloud worker
+   */
+  execution_location?: 'LOCAL' | 'REMOTE';
+
+  /**
    * Whether the sandbox environment is currently running
    */
   is_sandbox_running?: boolean;
@@ -481,6 +489,11 @@ export interface RunListParams extends RunsCursorPageParams {
    * Filter runs by environment ID
    */
   environment_id?: string;
+
+  /**
+   * Filter by where the run executed
+   */
+  execution_location?: 'LOCAL' | 'REMOTE';
 
   /**
    * Filter by model ID
