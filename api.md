@@ -4,9 +4,11 @@ Types:
 
 - <code><a href="./src/resources/agent/agent.ts">AgentSkill</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AmbientAgentConfig</a></code>
+- <code><a href="./src/resources/agent/agent.ts">AwsProviderConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">CloudEnvironmentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">Error</a></code>
 - <code><a href="./src/resources/agent/agent.ts">ErrorCode</a></code>
+- <code><a href="./src/resources/agent/agent.ts">GcpProviderConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">McpServerConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">Scope</a></code>
 - <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
@@ -18,7 +20,7 @@ Methods:
 
 - <code title="get /agent">client.agent.<a href="./src/resources/agent/agent.ts">list</a>({ ...params }) -> AgentListResponse</code>
 - <code title="get /agent/artifacts/{artifactUid}">client.agent.<a href="./src/resources/agent/agent.ts">getArtifact</a>(artifactUid) -> AgentGetArtifactResponse</code>
-- <code title="post /agent/run">client.agent.<a href="./src/resources/agent/agent.ts">run</a>({ ...params }) -> AgentRunResponse</code>
+- <code title="post /agent/runs">client.agent.<a href="./src/resources/agent/agent.ts">run</a>({ ...params }) -> AgentRunResponse</code>
 
 ## Runs
 
@@ -28,13 +30,12 @@ Types:
 - <code><a href="./src/resources/agent/runs.ts">RunItem</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunSourceType</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunState</a></code>
-- <code><a href="./src/resources/agent/runs.ts">RunListResponse</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunCancelResponse</a></code>
 
 Methods:
 
 - <code title="get /agent/runs/{runId}">client.agent.runs.<a href="./src/resources/agent/runs.ts">retrieve</a>(runID) -> RunItem</code>
-- <code title="get /agent/runs">client.agent.runs.<a href="./src/resources/agent/runs.ts">list</a>({ ...params }) -> RunListResponse</code>
+- <code title="get /agent/runs">client.agent.runs.<a href="./src/resources/agent/runs.ts">list</a>({ ...params }) -> RunItemsRunsCursorPage</code>
 - <code title="post /agent/runs/{runId}/cancel">client.agent.runs.<a href="./src/resources/agent/runs.ts">cancel</a>(runID) -> string</code>
 
 ## Schedules

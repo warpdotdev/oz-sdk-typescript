@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
 import { APIPromise } from '../../core/api-promise';
+import { PagePromise, RunsCursorPage, type RunsCursorPageParams } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -29,11 +30,17 @@ export class Runs extends APIResource {
    *
    * @example
    * ```ts
-   * const runs = await client.agent.runs.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const runItem of client.agent.runs.list()) {
+   *   // ...
+   * }
    * ```
    */
-  list(query: RunListParams | null | undefined = {}, options?: RequestOptions): APIPromise<RunListResponse> {
-    return this._client.get('/agent/runs', { query, ...options });
+  list(
+    query: RunListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<RunItemsRunsCursorPage, RunItem> {
+    return this._client.getAPIList('/agent/runs', RunsCursorPage<RunItem>, { query, ...options });
   }
 
   /**
@@ -53,6 +60,8 @@ export class Runs extends APIResource {
     return this._client.post(path`/agent/runs/${runID}/cancel`, options);
   }
 }
+
+export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>;
 
 export type ArtifactItem =
   | ArtifactItem.PlanArtifact
@@ -442,32 +451,12 @@ export type RunState =
   | 'ERROR'
   | 'CANCELLED';
 
-export interface RunListResponse {
-  page_info: RunListResponse.PageInfo;
-
-  runs: Array<RunItem>;
-}
-
-export namespace RunListResponse {
-  export interface PageInfo {
-    /**
-     * Whether there are more results available
-     */
-    has_next_page: boolean;
-
-    /**
-     * Opaque cursor for fetching the next page
-     */
-    next_cursor?: string;
-  }
-}
-
 /**
  * The ID of the cancelled run
  */
 export type RunCancelResponse = string;
 
-export interface RunListParams {
+export interface RunListParams extends RunsCursorPageParams {
   /**
    * Filter runs by artifact type
    */
@@ -489,19 +478,9 @@ export interface RunListParams {
   creator?: string;
 
   /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
    * Filter runs by environment ID
    */
   environment_id?: string;
-
-  /**
-   * Maximum number of runs to return
-   */
-  limit?: number;
 
   /**
    * Filter by model ID
@@ -572,8 +551,8 @@ export declare namespace Runs {
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
-    type RunListResponse as RunListResponse,
     type RunCancelResponse as RunCancelResponse,
+    type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
   };
 }

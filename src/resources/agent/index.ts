@@ -4,9 +4,11 @@ export {
   Agent,
   type AgentSkill,
   type AmbientAgentConfig,
+  type AwsProviderConfig,
   type CloudEnvironmentConfig,
   type Error,
   type ErrorCode,
+  type GcpProviderConfig,
   type McpServerConfig,
   type Scope,
   type UserProfile,
@@ -22,9 +24,9 @@ export {
   type RunItem,
   type RunSourceType,
   type RunState,
-  type RunListResponse,
   type RunCancelResponse,
   type RunListParams,
+  type RunItemsRunsCursorPage,
 } from './runs';
 export {
   Schedules,
