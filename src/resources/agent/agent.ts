@@ -1,13 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AgentAPI from './agent';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
   RunCancelResponse,
   RunItem,
+  RunItemsRunsCursorPage,
   RunListParams,
-  RunListResponse,
   RunSourceType,
   RunState,
   Runs,
@@ -68,18 +69,16 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Spawn a cloud agent with a prompt and optional configuration. The agent will be
-   * queued for execution and assigned a unique run ID.
+   * Alias for POST /agent/run. This is the preferred endpoint for creating new agent
+   * runs. Behavior is identical to POST /agent/run.
    *
    * @example
    * ```ts
-   * const response = await client.agent.run({
-   *   prompt: 'Fix the bug in auth.go',
-   * });
+   * const response = await client.agent.run();
    * ```
    */
   run(body: AgentRunParams, options?: RequestOptions): APIPromise<AgentRunResponse> {
-    return this._client.post('/agent/run', { body, ...options });
+    return this._client.post('/agent/runs', { body, ...options });
   }
 }
 
@@ -232,6 +231,16 @@ export interface AmbientAgentConfig {
 }
 
 /**
+ * AWS IAM role assumption settings
+ */
+export interface AwsProviderConfig {
+  /**
+   * AWS IAM role ARN to assume
+   */
+  role_arn: string;
+}
+
+/**
  * Configuration for a cloud environment used by scheduled agents
  */
 export interface CloudEnvironmentConfig {
@@ -286,44 +295,12 @@ export namespace CloudEnvironmentConfig {
     /**
      * AWS IAM role assumption settings
      */
-    aws?: Providers.Aws;
+    aws?: AgentAPI.AwsProviderConfig;
 
     /**
      * GCP Workload Identity Federation settings
      */
-    gcp?: Providers.Gcp;
-  }
-
-  export namespace Providers {
-    /**
-     * AWS IAM role assumption settings
-     */
-    export interface Aws {
-      /**
-       * AWS IAM role ARN to assume
-       */
-      role_arn: string;
-    }
-
-    /**
-     * GCP Workload Identity Federation settings
-     */
-    export interface Gcp {
-      /**
-       * GCP project number
-       */
-      project_number: string;
-
-      /**
-       * Workload Identity Federation pool ID
-       */
-      workload_identity_federation_pool_id: string;
-
-      /**
-       * Workload Identity Federation provider ID
-       */
-      workload_identity_federation_provider_id: string;
-    }
+    gcp?: AgentAPI.GcpProviderConfig;
   }
 }
 
@@ -428,6 +405,26 @@ export type ErrorCode =
   | 'authentication_required'
   | 'resource_unavailable'
   | 'internal_error';
+
+/**
+ * GCP Workload Identity Federation settings
+ */
+export interface GcpProviderConfig {
+  /**
+   * GCP project number
+   */
+  project_number: string;
+
+  /**
+   * Workload Identity Federation pool ID
+   */
+  workload_identity_federation_pool_id: string;
+
+  /**
+   * Workload Identity Federation provider ID
+   */
+  workload_identity_federation_provider_id: string;
+}
 
 /**
  * Configuration for an MCP server. Must have exactly one of: warp_id, command, or
@@ -709,9 +706,11 @@ export declare namespace Agent {
   export {
     type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
+    type AwsProviderConfig as AwsProviderConfig,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type Error as Error,
     type ErrorCode as ErrorCode,
+    type GcpProviderConfig as GcpProviderConfig,
     type McpServerConfig as McpServerConfig,
     type Scope as Scope,
     type UserProfile as UserProfile,
@@ -728,8 +727,8 @@ export declare namespace Agent {
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
-    type RunListResponse as RunListResponse,
     type RunCancelResponse as RunCancelResponse,
+    type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
   };
 
