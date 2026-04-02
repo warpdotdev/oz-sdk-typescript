@@ -32,7 +32,7 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
-        harness: { type: 'oz' },
+        harness: { type: 'type' },
         idle_timeout_minutes: 1,
         mcp_servers: {
           foo: {
@@ -93,7 +93,7 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
-        harness: { type: 'oz' },
+        harness: { type: 'type' },
         idle_timeout_minutes: 1,
         mcp_servers: {
           foo: {
