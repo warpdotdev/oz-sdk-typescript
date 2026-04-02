@@ -186,7 +186,7 @@ export interface AmbientAgentConfig {
 
   /**
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in Oz harness.
+   * uses Warp's built-in harness.
    */
   harness?: AmbientAgentConfig.Harness;
 
@@ -233,13 +233,16 @@ export interface AmbientAgentConfig {
 export namespace AmbientAgentConfig {
   /**
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in Oz harness.
+   * uses Warp's built-in harness.
    */
   export interface Harness {
     /**
-     * The harness type identifier (e.g. "claude").
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
      */
-    type?: string;
+    type?: 'oz' | 'claude';
   }
 }
 
