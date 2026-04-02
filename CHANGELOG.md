@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.0-alpha.1 (2026-04-02)
+
+Full Changelog: [v1.1.0-alpha.0...v1.1.0-alpha.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.0...v1.1.0-alpha.1)
+
+### Features
+
+* **api:** api update ([2a72eed](https://github.com/warpdotdev/oz-sdk-typescript/commit/2a72eed3e37028822c08d95c62284f7ad2031a10))
+
+
+### Chores
+
+* update SDK settings ([5fb3398](https://github.com/warpdotdev/oz-sdk-typescript/commit/5fb3398dc8a3cc0ef1502eaba66ff163f002639d))
+* update SDK settings ([1ebeed5](https://github.com/warpdotdev/oz-sdk-typescript/commit/1ebeed5341749a0e508853beedf9e0a4955a5c93))
+* update SDK settings ([ca7e29f](https://github.com/warpdotdev/oz-sdk-typescript/commit/ca7e29f68a7d7d2dca4258eab6591f5ce8fa7961))
+
 ## 1.1.0-alpha.0 (2026-04-02)
 
 Full Changelog: [v1.0.2...v1.1.0-alpha.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.2...v1.1.0-alpha.0)
