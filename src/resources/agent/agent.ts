@@ -185,10 +185,10 @@ export interface AmbientAgentConfig {
   environment_id?: string;
 
   /**
-   * Agent harness to use for the agent run. Default (empty) uses Warp's built-in Oz
-   * harness.
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in Oz harness.
    */
-  harness?: string;
+  harness?: AmbientAgentConfig.Harness;
 
   /**
    * Number of minutes to keep the agent environment alive after task completion. If
@@ -228,6 +228,19 @@ export interface AmbientAgentConfig {
    * "warp", the task runs on Warp-hosted workers.
    */
   worker_host?: string;
+}
+
+export namespace AmbientAgentConfig {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in Oz harness.
+   */
+  export interface Harness {
+    /**
+     * The harness type identifier (e.g. "claude").
+     */
+    type?: string;
+  }
 }
 
 /**
