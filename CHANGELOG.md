@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.1.0-alpha.0 (2026-04-02)
+
+Full Changelog: [v1.0.2...v1.1.0-alpha.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.2...v1.1.0-alpha.0)
+
+### Features
+
+* Add harness enum to openAPI spec ([36fa2f7](https://github.com/warpdotdev/oz-sdk-typescript/commit/36fa2f720d9cab9c7419d4e351dc200de2814cd3))
+* Add VMIdleTimeoutMinutes param to API ([f69cb9f](https://github.com/warpdotdev/oz-sdk-typescript/commit/f69cb9fbd297f5c395eec28208d6ccee42125120))
+* Address Stainless diagnostics ([0a7a253](https://github.com/warpdotdev/oz-sdk-typescript/commit/0a7a2535743f5a95d09b6491388b0faca79b11df))
+* **api:** api update ([36dd429](https://github.com/warpdotdev/oz-sdk-typescript/commit/36dd42978291f15506666a1115ae98a6e3f87af4))
+* **api:** api update ([d9cddd6](https://github.com/warpdotdev/oz-sdk-typescript/commit/d9cddd6e04aa60dcbdbf4fda5edcc7952520fe72))
+* **api:** api update ([e59522b](https://github.com/warpdotdev/oz-sdk-typescript/commit/e59522b2d8335f3c72787a0d60e45017dbafd1b6))
+* Create run for every local conversation and add filter ([64c6a1f](https://github.com/warpdotdev/oz-sdk-typescript/commit/64c6a1f34c49fc659e353ffee66b41d922caabfb))
+* Endpoint to upload third-party harness block snapshots ([de7b4ab](https://github.com/warpdotdev/oz-sdk-typescript/commit/de7b4ab962b47f47554d5ba2c201930c15a595ac))
+* Fix the harness type in the openAPI spec ([8b53e4a](https://github.com/warpdotdev/oz-sdk-typescript/commit/8b53e4ae6fe31f8f74e46297f8dea1edca375114))
+* Orchestrations V2: Public API endpoints ([29a9bf5](https://github.com/warpdotdev/oz-sdk-typescript/commit/29a9bf58392ed3df54b1ec74e154f2e1f1aeeb6b))
+* Use correct branch for Stainless PRs ([f79393c](https://github.com/warpdotdev/oz-sdk-typescript/commit/f79393caa4fbac92137f2b766957dd3b14b07f75))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([4420fda](https://github.com/warpdotdev/oz-sdk-typescript/commit/4420fdab4fdc8cc948556b74d2370221528e1f47))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([096e999](https://github.com/warpdotdev/oz-sdk-typescript/commit/096e99986d06140c10c2fb43290b2d1e15501efd))
+* **ci:** skip uploading artifacts on stainless-internal branches ([842b67e](https://github.com/warpdotdev/oz-sdk-typescript/commit/842b67ea7ff38e6032be0af5cdedef6c5f1b67a9))
+* **internal:** tweak CI branches ([e176700](https://github.com/warpdotdev/oz-sdk-typescript/commit/e176700608c5bc5a1f928f07a03929f63bf6853e))
+* **internal:** update dependencies to address dependabot vulnerabilities ([7d17121](https://github.com/warpdotdev/oz-sdk-typescript/commit/7d171218c88c717ddbe930cb6634d1387b685327))
+* **internal:** update gitignore ([71499fd](https://github.com/warpdotdev/oz-sdk-typescript/commit/71499fd606505c058f5a8f41bbe20107181e9ab9))
+
 ## 1.0.2 (2026-03-06)
 
 Full Changelog: [v1.0.1...v1.0.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.0.1...v1.0.2)
