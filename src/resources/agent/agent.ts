@@ -648,6 +648,12 @@ export interface AgentRunParams {
   interactive?: boolean;
 
   /**
+   * Optional run ID of the parent that spawned this run. Used for orchestration
+   * hierarchies.
+   */
+  parent_run_id?: string;
+
+  /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
    * specified via the skill field or config.skill_spec.
    */
