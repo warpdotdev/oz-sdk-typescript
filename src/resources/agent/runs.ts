@@ -63,32 +63,6 @@ export class Runs extends APIResource {
 
 export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>;
 
-/**
- * Information about the agent skill used for the run. Either full_path or
- * bundled_skill_id will be set, but not both.
- */
-export interface AgentSkill {
-  /**
-   * Unique identifier for bundled skills
-   */
-  bundled_skill_id?: string;
-
-  /**
-   * Description of the skill
-   */
-  description?: string;
-
-  /**
-   * Path to the SKILL.md file (for file-based skills)
-   */
-  full_path?: string;
-
-  /**
-   * Human-readable name of the skill
-   */
-  name?: string;
-}
-
 export type ArtifactItem =
   | ArtifactItem.PlanArtifact
   | ArtifactItem.PullRequestArtifact
@@ -190,21 +164,6 @@ export namespace ArtifactItem {
   }
 }
 
-/**
- * Resource usage information for the run
- */
-export interface RequestUsage {
-  /**
-   * Cost of compute resources for the run
-   */
-  compute_cost?: number;
-
-  /**
-   * Cost of LLM inference for the run
-   */
-  inference_cost?: number;
-}
-
 export interface RunItem {
   /**
    * Timestamp when the run was created (RFC3339)
@@ -260,7 +219,7 @@ export interface RunItem {
    * Information about the agent skill used for the run. Either full_path or
    * bundled_skill_id will be set, but not both.
    */
-  agent_skill?: AgentSkill;
+  agent_skill?: RunItem.AgentSkill;
 
   /**
    * Artifacts created during the run (plans, pull requests, etc.)
@@ -290,13 +249,13 @@ export interface RunItem {
   /**
    * Resource usage information for the run
    */
-  request_usage?: RequestUsage;
+  request_usage?: RunItem.RequestUsage;
 
   /**
    * Information about the schedule that triggered this run (only present for
    * scheduled runs)
    */
-  schedule?: ScheduleInfo;
+  schedule?: RunItem.Schedule;
 
   /**
    * Ownership scope for a resource (team or personal)
@@ -337,7 +296,119 @@ export interface RunItem {
    * Status message for a run. For terminal error states, includes structured error
    * code and retryability info from the platform error catalog.
    */
-  status_message?: RunStatusMessage;
+  status_message?: RunItem.StatusMessage;
+}
+
+export namespace RunItem {
+  /**
+   * Information about the agent skill used for the run. Either full_path or
+   * bundled_skill_id will be set, but not both.
+   */
+  export interface AgentSkill {
+    /**
+     * Unique identifier for bundled skills
+     */
+    bundled_skill_id?: string;
+
+    /**
+     * Description of the skill
+     */
+    description?: string;
+
+    /**
+     * Path to the SKILL.md file (for file-based skills)
+     */
+    full_path?: string;
+
+    /**
+     * Human-readable name of the skill
+     */
+    name?: string;
+  }
+
+  /**
+   * Resource usage information for the run
+   */
+  export interface RequestUsage {
+    /**
+     * Cost of compute resources for the run
+     */
+    compute_cost?: number;
+
+    /**
+     * Cost of LLM inference for the run
+     */
+    inference_cost?: number;
+  }
+
+  /**
+   * Information about the schedule that triggered this run (only present for
+   * scheduled runs)
+   */
+  export interface Schedule {
+    /**
+     * Cron expression at the time the run was created
+     */
+    cron_schedule: string;
+
+    /**
+     * Unique identifier for the schedule
+     */
+    schedule_id: string;
+
+    /**
+     * Name of the schedule at the time the run was created
+     */
+    schedule_name: string;
+  }
+
+  /**
+   * Status message for a run. For terminal error states, includes structured error
+   * code and retryability info from the platform error catalog.
+   */
+  export interface StatusMessage {
+    /**
+     * Human-readable status message
+     */
+    message: string;
+
+    /**
+     * Machine-readable error code identifying the problem type. Used in the `type` URI
+     * of Error responses and in the `error_code` field of RunStatusMessage.
+     *
+     * User errors (run transitions to FAILED):
+     *
+     * - `insufficient_credits` — Team has no remaining add-on credits
+     * - `feature_not_available` — Required feature not enabled for user's plan
+     * - `external_authentication_required` — User hasn't authorized a required
+     *   external service
+     * - `not_authorized` — Principal lacks permission for the requested operation
+     * - `invalid_request` — Request is malformed or contains invalid parameters
+     * - `resource_not_found` — Referenced resource does not exist
+     * - `budget_exceeded` — Spending budget limit has been reached
+     * - `integration_disabled` — Integration is disabled and must be enabled
+     * - `integration_not_configured` — Integration setup is incomplete
+     * - `operation_not_supported` — Requested operation not supported for this
+     *   resource/state
+     * - `environment_setup_failed` — Client-side environment setup failed
+     * - `content_policy_violation` — Prompt or setup commands violated content policy
+     * - `conflict` — Request conflicts with the current state of the resource
+     *
+     * Warp errors (run transitions to ERROR):
+     *
+     * - `authentication_required` — Request lacks valid authentication credentials
+     * - `resource_unavailable` — Transient infrastructure issue (retryable)
+     * - `internal_error` — Unexpected server-side error (retryable)
+     */
+    error_code?: AgentAPI.ErrorCode;
+
+    /**
+     * Whether the error is transient and the client may retry by submitting a new run.
+     * Only present on terminal error states. When false, retrying without addressing
+     * the underlying cause will not succeed.
+     */
+    retryable?: boolean;
+  }
 }
 
 /**
@@ -387,75 +458,6 @@ export type RunState =
   | 'BLOCKED'
   | 'ERROR'
   | 'CANCELLED';
-
-/**
- * Status message for a run. For terminal error states, includes structured error
- * code and retryability info from the platform error catalog.
- */
-export interface RunStatusMessage {
-  /**
-   * Human-readable status message
-   */
-  message: string;
-
-  /**
-   * Machine-readable error code identifying the problem type. Used in the `type` URI
-   * of Error responses and in the `error_code` field of RunStatusMessage.
-   *
-   * User errors (run transitions to FAILED):
-   *
-   * - `insufficient_credits` — Team has no remaining add-on credits
-   * - `feature_not_available` — Required feature not enabled for user's plan
-   * - `external_authentication_required` — User hasn't authorized a required
-   *   external service
-   * - `not_authorized` — Principal lacks permission for the requested operation
-   * - `invalid_request` — Request is malformed or contains invalid parameters
-   * - `resource_not_found` — Referenced resource does not exist
-   * - `budget_exceeded` — Spending budget limit has been reached
-   * - `integration_disabled` — Integration is disabled and must be enabled
-   * - `integration_not_configured` — Integration setup is incomplete
-   * - `operation_not_supported` — Requested operation not supported for this
-   *   resource/state
-   * - `environment_setup_failed` — Client-side environment setup failed
-   * - `content_policy_violation` — Prompt or setup commands violated content policy
-   * - `conflict` — Request conflicts with the current state of the resource
-   *
-   * Warp errors (run transitions to ERROR):
-   *
-   * - `authentication_required` — Request lacks valid authentication credentials
-   * - `resource_unavailable` — Transient infrastructure issue (retryable)
-   * - `internal_error` — Unexpected server-side error (retryable)
-   */
-  error_code?: AgentAPI.ErrorCode;
-
-  /**
-   * Whether the error is transient and the client may retry by submitting a new run.
-   * Only present on terminal error states. When false, retrying without addressing
-   * the underlying cause will not succeed.
-   */
-  retryable?: boolean;
-}
-
-/**
- * Information about the schedule that triggered this run (only present for
- * scheduled runs)
- */
-export interface ScheduleInfo {
-  /**
-   * Cron expression at the time the run was created
-   */
-  cron_schedule: string;
-
-  /**
-   * Unique identifier for the schedule
-   */
-  schedule_id: string;
-
-  /**
-   * Name of the schedule at the time the run was created
-   */
-  schedule_name: string;
-}
 
 /**
  * The ID of the cancelled run
@@ -558,14 +560,10 @@ export interface RunListParams extends RunsCursorPageParams {
 
 export declare namespace Runs {
   export {
-    type AgentSkill as AgentSkill,
     type ArtifactItem as ArtifactItem,
-    type RequestUsage as RequestUsage,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
-    type RunStatusMessage as RunStatusMessage,
-    type ScheduleInfo as ScheduleInfo,
     type RunCancelResponse as RunCancelResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
