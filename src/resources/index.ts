@@ -9,7 +9,6 @@ export {
   type Error,
   type ErrorCode,
   type GcpProviderConfig,
-  type Harness,
   type McpServerConfig,
   type Scope,
   type UserProfile,
