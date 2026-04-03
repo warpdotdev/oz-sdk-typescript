@@ -9,7 +9,6 @@ Types:
 - <code><a href="./src/resources/agent/agent.ts">Error</a></code>
 - <code><a href="./src/resources/agent/agent.ts">ErrorCode</a></code>
 - <code><a href="./src/resources/agent/agent.ts">GcpProviderConfig</a></code>
-- <code><a href="./src/resources/agent/agent.ts">Harness</a></code>
 - <code><a href="./src/resources/agent/agent.ts">McpServerConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">Scope</a></code>
 - <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
@@ -28,12 +27,9 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agent/runs.ts">ArtifactItem</a></code>
-- <code><a href="./src/resources/agent/runs.ts">RequestUsage</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunItem</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunSourceType</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunState</a></code>
-- <code><a href="./src/resources/agent/runs.ts">RunStatusMessage</a></code>
-- <code><a href="./src/resources/agent/runs.ts">ScheduleInfo</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunCancelResponse</a></code>
 
 Methods:
