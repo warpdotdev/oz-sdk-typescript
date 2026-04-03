@@ -5,16 +5,13 @@ import * as AgentAPI from './agent';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
-  RequestUsage,
   RunCancelResponse,
   RunItem,
   RunItemsRunsCursorPage,
   RunListParams,
   RunSourceType,
   RunState,
-  RunStatusMessage,
   Runs,
-  ScheduleInfo,
 } from './runs';
 import * as SchedulesAPI from './schedules';
 import {
@@ -191,7 +188,7 @@ export interface AmbientAgentConfig {
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
    * uses Warp's built-in Oz harness.
    */
-  harness?: Harness;
+  harness?: AmbientAgentConfig.Harness;
 
   /**
    * Number of minutes to keep the agent environment alive after task completion. If
@@ -231,6 +228,19 @@ export interface AmbientAgentConfig {
    * "warp", the task runs on Warp-hosted workers.
    */
   worker_host?: string;
+}
+
+export namespace AmbientAgentConfig {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in Oz harness.
+   */
+  export interface Harness {
+    /**
+     * The harness type identifier (e.g. "claude").
+     */
+    type?: string;
+  }
 }
 
 /**
@@ -427,17 +437,6 @@ export interface GcpProviderConfig {
    * Workload Identity Federation provider ID
    */
   workload_identity_federation_provider_id: string;
-}
-
-/**
- * Specifies which execution harness to use for the agent run. Default (nil/empty)
- * uses Warp's built-in Oz harness.
- */
-export interface Harness {
-  /**
-   * The harness type identifier (e.g. "claude").
-   */
-  type?: string;
 }
 
 /**
@@ -731,7 +730,6 @@ export declare namespace Agent {
     type Error as Error,
     type ErrorCode as ErrorCode,
     type GcpProviderConfig as GcpProviderConfig,
-    type Harness as Harness,
     type McpServerConfig as McpServerConfig,
     type Scope as Scope,
     type UserProfile as UserProfile,
@@ -745,12 +743,9 @@ export declare namespace Agent {
   export {
     Runs as Runs,
     type ArtifactItem as ArtifactItem,
-    type RequestUsage as RequestUsage,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
-    type RunStatusMessage as RunStatusMessage,
-    type ScheduleInfo as ScheduleInfo,
     type RunCancelResponse as RunCancelResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
