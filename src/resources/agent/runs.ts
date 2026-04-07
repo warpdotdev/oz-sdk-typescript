@@ -247,6 +247,11 @@ export interface RunItem {
   is_sandbox_running?: boolean;
 
   /**
+   * UUID of the parent run that spawned this run
+   */
+  parent_run_id?: string;
+
+  /**
    * Resource usage information for the run
    */
   request_usage?: RunItem.RequestUsage;
