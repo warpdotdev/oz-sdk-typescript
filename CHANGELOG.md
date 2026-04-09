@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0-alpha.3 (2026-04-09)
+
+Full Changelog: [v1.1.0-alpha.2...v1.1.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.2...v1.1.0-alpha.3)
+
+### Features
+
+* **api:** api update ([6232343](https://github.com/warpdotdev/oz-sdk-typescript/commit/62323438ed928f147bb99fd35b5876261b219206))
+* **api:** manual updates ([2a9b043](https://github.com/warpdotdev/oz-sdk-typescript/commit/2a9b043a00e3989da708823538ad749606dd4467))
+* ian/stainless_yml ([3aaefbf](https://github.com/warpdotdev/oz-sdk-typescript/commit/3aaefbf82428c9ff07c9f3a179d023e73a0773d3))
+
 ## 1.1.0-alpha.2 (2026-04-09)
 
 Full Changelog: [v1.1.0-alpha.1...v1.1.0-alpha.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.1...v1.1.0-alpha.2)
