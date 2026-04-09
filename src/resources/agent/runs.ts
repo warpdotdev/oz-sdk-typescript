@@ -66,7 +66,8 @@ export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>;
 export type ArtifactItem =
   | ArtifactItem.PlanArtifact
   | ArtifactItem.PullRequestArtifact
-  | ArtifactItem.ScreenshotArtifact;
+  | ArtifactItem.ScreenshotArtifact
+  | ArtifactItem.FileArtifact;
 
 export namespace ArtifactItem {
   export interface PlanArtifact {
@@ -160,6 +161,54 @@ export namespace ArtifactItem {
        * Optional description of the screenshot
        */
       description?: string;
+    }
+  }
+
+  export interface FileArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'FILE';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    data: FileArtifact.Data;
+  }
+
+  export namespace FileArtifact {
+    export interface Data {
+      /**
+       * Unique identifier for the file artifact
+       */
+      artifact_uid: string;
+
+      /**
+       * Last path component of filepath
+       */
+      filename: string;
+
+      /**
+       * Conversation-relative filepath for the uploaded file
+       */
+      filepath: string;
+
+      /**
+       * MIME type of the uploaded file
+       */
+      mime_type: string;
+
+      /**
+       * Optional description of the file
+       */
+      description?: string;
+
+      /**
+       * Size of the uploaded file in bytes
+       */
+      size_bytes?: number;
     }
   }
 }
@@ -473,7 +522,7 @@ export interface RunListParams extends RunsCursorPageParams {
   /**
    * Filter runs by artifact type
    */
-  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT';
+  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE';
 
   /**
    * Filter runs created after this timestamp (RFC3339 format)
