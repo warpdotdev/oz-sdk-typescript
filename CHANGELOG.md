@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.1.0-alpha.2 (2026-04-09)
+
+Full Changelog: [v1.1.0-alpha.1...v1.1.0-alpha.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.1...v1.1.0-alpha.2)
+
+### Features
+
+* [Artifacts] public API file artifact downloads ([66fea6a](https://github.com/warpdotdev/oz-sdk-typescript/commit/66fea6a12b356bd3c24050389d47a6e21a5926f0))
+* Add parent_run_id to retrieve/list runs API response ([c1295cf](https://github.com/warpdotdev/oz-sdk-typescript/commit/c1295cf9034313115bdbe2a23e41ab4c672047a7))
+* **api:** api update ([83c815d](https://github.com/warpdotdev/oz-sdk-typescript/commit/83c815dfd79b067bc18e7ba1123719c2f54dfd30))
+* **api:** api update ([1e3f393](https://github.com/warpdotdev/oz-sdk-typescript/commit/1e3f39319c2ac03806346752718d70e22d36359c))
+* **api:** api update ([277a2bd](https://github.com/warpdotdev/oz-sdk-typescript/commit/277a2bd8d5ba56805912cbe4ae457a936ec5fa12))
+* **api:** api update ([aca8a44](https://github.com/warpdotdev/oz-sdk-typescript/commit/aca8a443ea20f2305b621a821e81d03d63055087))
+* **api:** api update ([d5fe6bc](https://github.com/warpdotdev/oz-sdk-typescript/commit/d5fe6bcaa5fa0cd6aa24db5c7b39ec8a9d7e7156))
+* **api:** manual updates ([4923772](https://github.com/warpdotdev/oz-sdk-typescript/commit/49237729d9ccbe80b4e67b744ffe643d5dd78510))
+* **api:** manual updates ([9198d9d](https://github.com/warpdotdev/oz-sdk-typescript/commit/9198d9d1677e55fed526c9745dd05fdafd71ecae))
+* Define auth secrets and inject them into the environment. ([16c66fd](https://github.com/warpdotdev/oz-sdk-typescript/commit/16c66fdcfa1844f1ecaa925f0a200080925ce821))
+* ian/fix_conversation_id_nameing ([ee5e961](https://github.com/warpdotdev/oz-sdk-typescript/commit/ee5e961e92188a77236d1f1df042a5efab06940d))
+
+
+### Chores
+
+* **internal:** codegen related update ([3cd87de](https://github.com/warpdotdev/oz-sdk-typescript/commit/3cd87de85c86c0f84ce45eed3c1e62a37d1b1b04))
+
 ## 1.1.0-alpha.1 (2026-04-02)
 
 Full Changelog: [v1.1.0-alpha.0...v1.1.0-alpha.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.0...v1.1.0-alpha.1)
