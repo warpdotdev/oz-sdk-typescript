@@ -54,8 +54,8 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Retrieve an artifact by its UUID. For screenshot artifacts, returns a
-   * time-limited signed download URL.
+   * Retrieve an artifact by its UUID. For supported downloadable artifacts, returns
+   * a time-limited signed download URL.
    *
    * @example
    * ```ts
@@ -536,54 +536,130 @@ export interface AgentListResponse {
 }
 
 /**
- * Response for artifact retrieval. Currently supports screenshot artifacts.
+ * Response for retrieving a screenshot artifact.
  */
-export interface AgentGetArtifactResponse {
-  /**
-   * Type of the artifact (e.g., SCREENSHOT)
-   */
-  artifact_type: string;
-
-  /**
-   * Unique identifier (UUID) for the artifact
-   */
-  artifact_uid: string;
-
-  /**
-   * Timestamp when the artifact was created (RFC3339)
-   */
-  created_at: string;
-
-  /**
-   * Response data for a screenshot artifact, including a signed download URL.
-   */
-  data: AgentGetArtifactResponse.Data;
-}
+export type AgentGetArtifactResponse =
+  | AgentGetArtifactResponse.ScreenshotArtifactResponse
+  | AgentGetArtifactResponse.FileArtifactResponse;
 
 export namespace AgentGetArtifactResponse {
   /**
-   * Response data for a screenshot artifact, including a signed download URL.
+   * Response for retrieving a screenshot artifact.
    */
-  export interface Data {
+  export interface ScreenshotArtifactResponse {
     /**
-     * MIME type of the screenshot (e.g., image/png)
+     * Type of the artifact
      */
-    content_type: string;
+    artifact_type: 'SCREENSHOT';
 
     /**
-     * Time-limited signed URL to download the screenshot
+     * Unique identifier (UUID) for the artifact
      */
-    download_url: string;
+    artifact_uid: string;
 
     /**
-     * Timestamp when the download URL expires (RFC3339)
+     * Timestamp when the artifact was created (RFC3339)
      */
-    expires_at: string;
+    created_at: string;
 
     /**
-     * Optional description of the screenshot
+     * Response data for a screenshot artifact, including a signed download URL.
      */
-    description?: string;
+    data: ScreenshotArtifactResponse.Data;
+  }
+
+  export namespace ScreenshotArtifactResponse {
+    /**
+     * Response data for a screenshot artifact, including a signed download URL.
+     */
+    export interface Data {
+      /**
+       * MIME type of the screenshot (e.g., image/png)
+       */
+      content_type: string;
+
+      /**
+       * Time-limited signed URL to download the screenshot
+       */
+      download_url: string;
+
+      /**
+       * Timestamp when the download URL expires (RFC3339)
+       */
+      expires_at: string;
+
+      /**
+       * Optional description of the screenshot
+       */
+      description?: string;
+    }
+  }
+
+  /**
+   * Response for retrieving a file artifact.
+   */
+  export interface FileArtifactResponse {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'FILE';
+
+    /**
+     * Unique identifier (UUID) for the artifact
+     */
+    artifact_uid: string;
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Response data for a file artifact, including a signed download URL.
+     */
+    data: FileArtifactResponse.Data;
+  }
+
+  export namespace FileArtifactResponse {
+    /**
+     * Response data for a file artifact, including a signed download URL.
+     */
+    export interface Data {
+      /**
+       * MIME type of the uploaded file
+       */
+      content_type: string;
+
+      /**
+       * Time-limited signed URL to download the file
+       */
+      download_url: string;
+
+      /**
+       * Timestamp when the download URL expires (RFC3339)
+       */
+      expires_at: string;
+
+      /**
+       * Last path component of filepath
+       */
+      filename: string;
+
+      /**
+       * Conversation-relative filepath for the uploaded file
+       */
+      filepath: string;
+
+      /**
+       * Optional description of the file
+       */
+      description?: string;
+
+      /**
+       * Size of the uploaded file in bytes
+       */
+      size_bytes?: number;
+    }
   }
 }
 
