@@ -520,6 +520,12 @@ export type RunCancelResponse = string;
 
 export interface RunListParams extends RunsCursorPageParams {
   /**
+   * Filter runs by ancestor run ID. The referenced run must exist and be accessible
+   * to the caller.
+   */
+  ancestor_run_id?: string;
+
+  /**
    * Filter runs by artifact type
    */
   artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE';
