@@ -726,12 +726,6 @@ export interface AgentListParams {
 
 export interface AgentRunParams {
   /**
-   * Optional agent identity UID to use as the execution principal for the run. This
-   * is only valid for runs that are team owned.
-   */
-  agent_identity_uid?: string;
-
-  /**
    * Optional file attachments to include with the prompt (max 5). Attachments are
    * uploaded to cloud storage and made available to the agent.
    */
