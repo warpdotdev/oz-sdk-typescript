@@ -49,6 +49,26 @@ describe('resource agent', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('listEnvironments', async () => {
+    const responsePromise = client.agent.listEnvironments();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listEnvironments: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.agent.listEnvironments({ sort_by: 'name' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OzAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('run', async () => {
     const responsePromise = client.agent.run({});
     const rawResponse = await responsePromise.asResponse();
