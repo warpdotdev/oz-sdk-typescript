@@ -5,7 +5,6 @@ Types:
 - <code><a href="./src/resources/agent/agent.ts">AgentSkill</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AmbientAgentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AwsProviderConfig</a></code>
-- <code><a href="./src/resources/agent/agent.ts">CloudEnvironment</a></code>
 - <code><a href="./src/resources/agent/agent.ts">CloudEnvironmentConfig</a></code>
 - <code><a href="./src/resources/agent/agent.ts">Error</a></code>
 - <code><a href="./src/resources/agent/agent.ts">ErrorCode</a></code>
@@ -15,14 +14,12 @@ Types:
 - <code><a href="./src/resources/agent/agent.ts">UserProfile</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentListResponse</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentGetArtifactResponse</a></code>
-- <code><a href="./src/resources/agent/agent.ts">AgentListEnvironmentsResponse</a></code>
 - <code><a href="./src/resources/agent/agent.ts">AgentRunResponse</a></code>
 
 Methods:
 
 - <code title="get /agent">client.agent.<a href="./src/resources/agent/agent.ts">list</a>({ ...params }) -> AgentListResponse</code>
 - <code title="get /agent/artifacts/{artifactUid}">client.agent.<a href="./src/resources/agent/agent.ts">getArtifact</a>(artifactUid) -> AgentGetArtifactResponse</code>
-- <code title="get /agent/environments">client.agent.<a href="./src/resources/agent/agent.ts">listEnvironments</a>({ ...params }) -> AgentListEnvironmentsResponse</code>
 - <code title="post /agent/runs">client.agent.<a href="./src/resources/agent/agent.ts">run</a>({ ...params }) -> AgentRunResponse</code>
 
 ## Runs
