@@ -92,6 +92,12 @@ export namespace ArtifactItem {
       document_uid: string;
 
       /**
+       * Unique identifier for the plan artifact, usable with the artifact retrieval
+       * endpoint
+       */
+      artifact_uid?: string;
+
+      /**
        * Unique identifier for the associated notebook
        */
       notebook_uid?: string;
@@ -100,6 +106,11 @@ export namespace ArtifactItem {
        * Title of the plan
        */
       title?: string;
+
+      /**
+       * URL to open the plan in Warp Drive
+       */
+      url?: string;
     }
   }
 
@@ -519,6 +530,12 @@ export type RunState =
 export type RunCancelResponse = string;
 
 export interface RunListParams extends RunsCursorPageParams {
+  /**
+   * Filter runs by ancestor run ID. The referenced run must exist and be accessible
+   * to the caller.
+   */
+  ancestor_run_id?: string;
+
   /**
    * Filter runs by artifact type
    */
