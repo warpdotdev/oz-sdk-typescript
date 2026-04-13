@@ -54,8 +54,9 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Retrieve an artifact by its UUID. For supported downloadable artifacts, returns
-   * a time-limited signed download URL.
+   * Retrieve an artifact by its UUID. For downloadable file-like artifacts, returns
+   * a time-limited signed download URL. For plan artifacts, returns the current plan
+   * content inline.
    *
    * @example
    * ```ts
@@ -66,6 +67,23 @@ export class Agent extends APIResource {
    */
   getArtifact(artifactUid: string, options?: RequestOptions): APIPromise<AgentGetArtifactResponse> {
     return this._client.get(path`/agent/artifacts/${artifactUid}`, options);
+  }
+
+  /**
+   * Retrieve cloud environments accessible to the authenticated principal. Returns
+   * environments the caller owns, has been granted guest access to, or has accessed
+   * via link sharing.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.listEnvironments();
+   * ```
+   */
+  listEnvironments(
+    query: AgentListEnvironmentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AgentListEnvironmentsResponse> {
+    return this._client.get('/agent/environments', { query, ...options });
   }
 
   /**
@@ -191,6 +209,12 @@ export interface AmbientAgentConfig {
   harness?: AmbientAgentConfig.Harness;
 
   /**
+   * Authentication secrets for third-party harnesses. Only the secret for the
+   * harness specified gets injected into the environment.
+   */
+  harness_auth_secrets?: AmbientAgentConfig.HarnessAuthSecrets;
+
+  /**
    * Number of minutes to keep the agent environment alive after task completion. If
    * not set, defaults to 10 minutes. Maximum allowed value is min(60,
    * floor(max_instance_runtime_seconds / 60) for your billing tier).
@@ -237,20 +261,25 @@ export namespace AmbientAgentConfig {
    */
   export interface Harness {
     /**
-     * Name of a managed secret to use as the authentication credential for the
-     * harness. The secret must exist within the caller's personal or team scope. The
-     * environment variable injected into the agent is determined by the secret type
-     * (e.g. ANTHROPIC_API_KEY for anthropic_api_key secrets).
-     */
-    auth_secret_name?: string;
-
-    /**
      * The harness type identifier.
      *
      * - oz: Warp's built-in harness (default)
      * - claude: Claude Code harness
      */
     type?: 'oz' | 'claude';
+  }
+
+  /**
+   * Authentication secrets for third-party harnesses. Only the secret for the
+   * harness specified gets injected into the environment.
+   */
+  export interface HarnessAuthSecrets {
+    /**
+     * Name of a managed secret for Claude Code harness authentication. The secret must
+     * exist within the caller's personal or team scope. Only applicable when harness
+     * type is "claude".
+     */
+    claude_auth_secret_name?: string;
   }
 }
 
@@ -262,6 +291,97 @@ export interface AwsProviderConfig {
    * AWS IAM role ARN to assume
    */
   role_arn: string;
+}
+
+/**
+ * A cloud environment for running agents
+ */
+export interface CloudEnvironment {
+  /**
+   * Configuration for a cloud environment used by scheduled agents
+   */
+  config: CloudEnvironmentConfig;
+
+  /**
+   * Timestamp when the environment was last updated (RFC3339)
+   */
+  last_updated: string;
+
+  /**
+   * True when the most recent task failed during setup before it started running
+   */
+  setup_failed: boolean;
+
+  /**
+   * Unique identifier for the environment
+   */
+  uid: string;
+
+  creator?: UserProfile;
+
+  last_editor?: UserProfile;
+
+  /**
+   * Summary of the most recently created task for an environment
+   */
+  last_task_created?: CloudEnvironment.LastTaskCreated;
+
+  /**
+   * Timestamp of the most recent task run in this environment (RFC3339)
+   */
+  last_task_run_timestamp?: string | null;
+
+  /**
+   * Ownership scope for a resource (team or personal)
+   */
+  scope?: Scope;
+}
+
+export namespace CloudEnvironment {
+  /**
+   * Summary of the most recently created task for an environment
+   */
+  export interface LastTaskCreated {
+    /**
+     * Unique identifier of the task
+     */
+    id: string;
+
+    /**
+     * When the task was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Current state of the run:
+     *
+     * - QUEUED: Run is waiting to be picked up
+     * - PENDING: Run is being prepared
+     * - CLAIMED: Run has been claimed by a worker
+     * - INPROGRESS: Run is actively being executed
+     * - SUCCEEDED: Run completed successfully
+     * - FAILED: Run failed
+     * - BLOCKED: Run is blocked (e.g., awaiting user input or approval)
+     * - ERROR: Run encountered an error
+     * - CANCELLED: Run was cancelled by user
+     */
+    state: RunsAPI.RunState;
+
+    /**
+     * Title of the task
+     */
+    title: string;
+
+    /**
+     * When the task was last updated (RFC3339)
+     */
+    updated_at: string;
+
+    /**
+     * When the task started running (RFC3339), null if not yet started
+     */
+    started_at?: string | null;
+  }
 }
 
 /**
@@ -536,13 +656,76 @@ export interface AgentListResponse {
 }
 
 /**
- * Response for retrieving a screenshot artifact.
+ * Response for retrieving a plan artifact.
  */
 export type AgentGetArtifactResponse =
+  | AgentGetArtifactResponse.PlanArtifactResponse
   | AgentGetArtifactResponse.ScreenshotArtifactResponse
   | AgentGetArtifactResponse.FileArtifactResponse;
 
 export namespace AgentGetArtifactResponse {
+  /**
+   * Response for retrieving a plan artifact.
+   */
+  export interface PlanArtifactResponse {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'PLAN';
+
+    /**
+     * Unique identifier (UUID) for the artifact
+     */
+    artifact_uid: string;
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Response data for a plan artifact, including current markdown content.
+     */
+    data: PlanArtifactResponse.Data;
+  }
+
+  export namespace PlanArtifactResponse {
+    /**
+     * Response data for a plan artifact, including current markdown content.
+     */
+    export interface Data {
+      /**
+       * Current markdown content of the plan
+       */
+      content: string;
+
+      /**
+       * MIME type of the returned plan content
+       */
+      content_type: string;
+
+      /**
+       * Unique identifier for the plan document
+       */
+      document_uid: string;
+
+      /**
+       * Unique identifier for the associated notebook
+       */
+      notebook_uid: string;
+
+      /**
+       * Current title of the plan
+       */
+      title?: string;
+
+      /**
+       * URL to open the plan in Warp Drive
+       */
+      url?: string;
+    }
+  }
+
   /**
    * Response for retrieving a screenshot artifact.
    */
@@ -663,6 +846,13 @@ export namespace AgentGetArtifactResponse {
   }
 }
 
+export interface AgentListEnvironmentsResponse {
+  /**
+   * List of accessible cloud environments
+   */
+  environments: Array<CloudEnvironment>;
+}
+
 export interface AgentRunResponse {
   /**
    * Unique identifier for the created run
@@ -722,6 +912,16 @@ export interface AgentListParams {
    * - "last_run": Sort by most recently used
    */
   sort_by?: 'name' | 'last_run';
+}
+
+export interface AgentListEnvironmentsParams {
+  /**
+   * Sort order for the returned environments.
+   *
+   * - `name`: alphabetical by environment name
+   * - `last_updated`: most recently updated first (default)
+   */
+  sort_by?: 'name' | 'last_updated';
 }
 
 export interface AgentRunParams {
@@ -819,6 +1019,7 @@ export declare namespace Agent {
     type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type AwsProviderConfig as AwsProviderConfig,
+    type CloudEnvironment as CloudEnvironment,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type Error as Error,
     type ErrorCode as ErrorCode,
@@ -828,8 +1029,10 @@ export declare namespace Agent {
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
+    type AgentListEnvironmentsResponse as AgentListEnvironmentsResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
+    type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
     type AgentRunParams as AgentRunParams,
   };
 

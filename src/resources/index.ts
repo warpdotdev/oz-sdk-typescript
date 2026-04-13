@@ -5,6 +5,7 @@ export {
   type AgentSkill,
   type AmbientAgentConfig,
   type AwsProviderConfig,
+  type CloudEnvironment,
   type CloudEnvironmentConfig,
   type Error,
   type ErrorCode,
@@ -14,7 +15,9 @@ export {
   type UserProfile,
   type AgentListResponse,
   type AgentGetArtifactResponse,
+  type AgentListEnvironmentsResponse,
   type AgentRunResponse,
   type AgentListParams,
+  type AgentListEnvironmentsParams,
   type AgentRunParams,
 } from './agent/agent';
