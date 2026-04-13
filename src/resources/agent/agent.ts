@@ -191,6 +191,12 @@ export interface AmbientAgentConfig {
   harness?: AmbientAgentConfig.Harness;
 
   /**
+   * Authentication secrets for third-party harnesses. Only the secret for the
+   * harness specified gets injected into the environment.
+   */
+  harness_auth_secrets?: AmbientAgentConfig.HarnessAuthSecrets;
+
+  /**
    * Number of minutes to keep the agent environment alive after task completion. If
    * not set, defaults to 10 minutes. Maximum allowed value is min(60,
    * floor(max_instance_runtime_seconds / 60) for your billing tier).
@@ -237,20 +243,25 @@ export namespace AmbientAgentConfig {
    */
   export interface Harness {
     /**
-     * Name of a managed secret to use as the authentication credential for the
-     * harness. The secret must exist within the caller's personal or team scope. The
-     * environment variable injected into the agent is determined by the secret type
-     * (e.g. ANTHROPIC_API_KEY for anthropic_api_key secrets).
-     */
-    auth_secret_name?: string;
-
-    /**
      * The harness type identifier.
      *
      * - oz: Warp's built-in harness (default)
      * - claude: Claude Code harness
      */
     type?: 'oz' | 'claude';
+  }
+
+  /**
+   * Authentication secrets for third-party harnesses. Only the secret for the
+   * harness specified gets injected into the environment.
+   */
+  export interface HarnessAuthSecrets {
+    /**
+     * Name of a managed secret for Claude Code harness authentication. The secret must
+     * exist within the caller's personal or team scope. Only applicable when harness
+     * type is "claude".
+     */
+    claude_auth_secret_name?: string;
   }
 }
 
