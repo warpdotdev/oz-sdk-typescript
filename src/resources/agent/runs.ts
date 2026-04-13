@@ -92,12 +92,6 @@ export namespace ArtifactItem {
       document_uid: string;
 
       /**
-       * Unique identifier for the plan artifact, usable with the artifact retrieval
-       * endpoint
-       */
-      artifact_uid?: string;
-
-      /**
        * Unique identifier for the associated notebook
        */
       notebook_uid?: string;
@@ -106,11 +100,6 @@ export namespace ArtifactItem {
        * Title of the plan
        */
       title?: string;
-
-      /**
-       * URL to open the plan in Warp Drive
-       */
-      url?: string;
     }
   }
 
