@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.1 (2026-04-14)
+
+Full Changelog: [v1.1.0-alpha.3...v1.1.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.3...v1.1.1)
+
+### Features
+
+* Add parent_run_id filter to List runs endpoint ([2694f32](https://github.com/warpdotdev/oz-sdk-typescript/commit/2694f32a6f0125f0dac9a6a2d814138c64b8b64b))
+* Add system prompt to resolve-prompt for harnesses. ([a95e3f2](https://github.com/warpdotdev/oz-sdk-typescript/commit/a95e3f21c6acdac1bf845629c77e03be983e3ab0))
+* Add trigger URL to task source. ([641bbb6](https://github.com/warpdotdev/oz-sdk-typescript/commit/641bbb61a0bfb0a43407f2d3e8b253b0e4c3442b))
+* **api:** api update ([eff4efa](https://github.com/warpdotdev/oz-sdk-typescript/commit/eff4efaaf5f8ddeff192281f5bd44f2a75924c18))
+* **api:** api update ([c438610](https://github.com/warpdotdev/oz-sdk-typescript/commit/c438610d98132151c323045492e56908be6875b9))
+* **api:** api update ([52e41eb](https://github.com/warpdotdev/oz-sdk-typescript/commit/52e41ebb154217d96c657536f0c73f2ca3b6d83b))
+* **api:** api update ([f678bf0](https://github.com/warpdotdev/oz-sdk-typescript/commit/f678bf09b5bf5b6df310a932323964c69394403b))
+* **api:** api update ([af0a45a](https://github.com/warpdotdev/oz-sdk-typescript/commit/af0a45a94543900ab59dea7bb1dd56c4099afa9d))
+* **api:** api update ([15e333c](https://github.com/warpdotdev/oz-sdk-typescript/commit/15e333c19f330917adc043f2ab931732c1c209d8))
+* **api:** api update ([e722834](https://github.com/warpdotdev/oz-sdk-typescript/commit/e7228349fcacdd2b0745cddb7d137aeb967a20d3))
+* Inject auth secrets via ambient agent config. ([2dec429](https://github.com/warpdotdev/oz-sdk-typescript/commit/2dec42933777ff3915a9bd35f7042c760fe59d4a))
+
 ## 1.1.0-alpha.3 (2026-04-09)
 
 Full Changelog: [v1.1.0-alpha.2...v1.1.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.2...v1.1.0-alpha.3)

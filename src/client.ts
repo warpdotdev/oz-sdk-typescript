@@ -22,6 +22,8 @@ import { APIPromise } from './core/api-promise';
 import {
   Agent,
   AgentGetArtifactResponse,
+  AgentListEnvironmentsParams,
+  AgentListEnvironmentsResponse,
   AgentListParams,
   AgentListResponse,
   AgentRunParams,
@@ -29,6 +31,7 @@ import {
   AgentSkill,
   AmbientAgentConfig,
   AwsProviderConfig,
+  CloudEnvironment,
   CloudEnvironmentConfig,
   Error,
   ErrorCode,
@@ -781,6 +784,7 @@ export declare namespace OzAPI {
     type AgentSkill as AgentSkill,
     type AmbientAgentConfig as AmbientAgentConfig,
     type AwsProviderConfig as AwsProviderConfig,
+    type CloudEnvironment as CloudEnvironment,
     type CloudEnvironmentConfig as CloudEnvironmentConfig,
     type Error as Error,
     type ErrorCode as ErrorCode,
@@ -790,8 +794,10 @@ export declare namespace OzAPI {
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
+    type AgentListEnvironmentsResponse as AgentListEnvironmentsResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
+    type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
     type AgentRunParams as AgentRunParams,
   };
 }
