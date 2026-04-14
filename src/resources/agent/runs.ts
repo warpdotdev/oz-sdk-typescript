@@ -351,6 +351,11 @@ export interface RunItem {
    * code and retryability info from the platform error catalog.
    */
   status_message?: RunItem.StatusMessage;
+
+  /**
+   * URL to the run trigger (e.g. Slack thread, Linear issue, schedule)
+   */
+  trigger_url?: string;
 }
 
 export namespace RunItem {
