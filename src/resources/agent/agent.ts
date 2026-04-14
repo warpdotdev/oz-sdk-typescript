@@ -54,8 +54,9 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Retrieve an artifact by its UUID. For supported downloadable artifacts, returns
-   * a time-limited signed download URL.
+   * Retrieve an artifact by its UUID. For downloadable file-like artifacts, returns
+   * a time-limited signed download URL. For plan artifacts, returns the current plan
+   * content inline.
    *
    * @example
    * ```ts
@@ -655,13 +656,76 @@ export interface AgentListResponse {
 }
 
 /**
- * Response for retrieving a screenshot artifact.
+ * Response for retrieving a plan artifact.
  */
 export type AgentGetArtifactResponse =
+  | AgentGetArtifactResponse.PlanArtifactResponse
   | AgentGetArtifactResponse.ScreenshotArtifactResponse
   | AgentGetArtifactResponse.FileArtifactResponse;
 
 export namespace AgentGetArtifactResponse {
+  /**
+   * Response for retrieving a plan artifact.
+   */
+  export interface PlanArtifactResponse {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'PLAN';
+
+    /**
+     * Unique identifier (UUID) for the artifact
+     */
+    artifact_uid: string;
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Response data for a plan artifact, including current markdown content.
+     */
+    data: PlanArtifactResponse.Data;
+  }
+
+  export namespace PlanArtifactResponse {
+    /**
+     * Response data for a plan artifact, including current markdown content.
+     */
+    export interface Data {
+      /**
+       * Current markdown content of the plan
+       */
+      content: string;
+
+      /**
+       * MIME type of the returned plan content
+       */
+      content_type: string;
+
+      /**
+       * Unique identifier for the plan document
+       */
+      document_uid: string;
+
+      /**
+       * Unique identifier for the associated notebook
+       */
+      notebook_uid: string;
+
+      /**
+       * Current title of the plan
+       */
+      title?: string;
+
+      /**
+       * URL to open the plan in Warp Drive
+       */
+      url?: string;
+    }
+  }
+
   /**
    * Response for retrieving a screenshot artifact.
    */
