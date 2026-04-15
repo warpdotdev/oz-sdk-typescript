@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 (2026-04-15)
+
+Full Changelog: [v1.1.1...v1.2.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.1...v1.2.0)
+
+### Features
+
+* Add worker_host to AgentListSource in OpenAPI spec ([def7425](https://github.com/warpdotdev/oz-sdk-typescript/commit/def742588dfefd135fca8ee0d6b2e7e3b78faa69))
+
 ## 1.1.1 (2026-04-14)
 
 Full Changelog: [v1.1.0-alpha.3...v1.1.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.0-alpha.3...v1.1.1)
