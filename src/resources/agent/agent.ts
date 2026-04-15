@@ -178,6 +178,13 @@ export namespace AgentSkill {
        * Path to the skill definition file within the repository
        */
       skill_path: string;
+
+      /**
+       * Self-hosted worker host that reported this skill. Present only for skills
+       * discovered from self-hosted workers (as opposed to skills from GitHub repos
+       * linked to environments).
+       */
+      worker_host?: string;
     }
   }
 }
