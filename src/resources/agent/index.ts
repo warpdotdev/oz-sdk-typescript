@@ -41,11 +41,3 @@ export {
   type ScheduleUpdateParams,
 } from './schedules';
 export { Sessions, type SessionCheckRedirectResponse } from './sessions';
-export {
-  type AgentResponse,
-  type CreateAgentRequest,
-  type ListAgentIdentitiesResponse,
-  type UpdateAgentRequest,
-  type AgentCreateParams,
-  type AgentUpdateParams,
-} from './agent_';
