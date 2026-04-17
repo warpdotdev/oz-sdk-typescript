@@ -2,6 +2,16 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
+import * as AgentAgentAPI from './agent_';
+import {
+  Agent as AgentAPIAgent,
+  AgentCreateParams,
+  AgentResponse,
+  AgentUpdateParams,
+  CreateAgentRequest,
+  ListAgentIdentitiesResponse,
+  UpdateAgentRequest,
+} from './agent_';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
@@ -35,6 +45,7 @@ import { path } from '../../internal/utils/path';
 export class Agent extends APIResource {
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
   schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
+  agent: AgentAgentAPI.Agent = new AgentAgentAPI.Agent(this._client);
   sessions: SessionsAPI.Sessions = new SessionsAPI.Sessions(this._client);
 
   /**
@@ -1019,6 +1030,7 @@ export namespace AgentRunParams {
 
 Agent.Runs = Runs;
 Agent.Schedules = Schedules;
+Agent.Agent = AgentAPIAgent;
 Agent.Sessions = Sessions;
 
 export declare namespace Agent {
@@ -1062,6 +1074,16 @@ export declare namespace Agent {
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
     type ScheduleUpdateParams as ScheduleUpdateParams,
+  };
+
+  export {
+    AgentAPIAgent as Agent,
+    type AgentResponse as AgentResponse,
+    type CreateAgentRequest as CreateAgentRequest,
+    type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
+    type UpdateAgentRequest as UpdateAgentRequest,
+    type AgentCreateParams as AgentCreateParams,
+    type AgentUpdateParams as AgentUpdateParams,
   };
 
   export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
