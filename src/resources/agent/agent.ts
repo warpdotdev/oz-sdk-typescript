@@ -258,16 +258,6 @@ export interface AmbientAgentConfig {
   name?: string;
 
   /**
-   * Configures sharing behavior for the run's shared session. When set, the worker
-   * emits `--share public:<level>` and the bundled Warp client applies an
-   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read the
-   * conversation without being on the run's team. Subject to the workspace-level
-   * anyone-with-link sharing setting.
-   */
-  session_sharing?: AmbientAgentConfig.SessionSharing;
-
-  /**
    * Skill specification identifying which agent skill to use. Format:
    * "{owner}/{repo}:{skill_path}" Example:
    * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Use the list agents
@@ -308,27 +298,6 @@ export namespace AmbientAgentConfig {
      * type is "claude".
      */
     claude_auth_secret_name?: string;
-  }
-
-  /**
-   * Configures sharing behavior for the run's shared session. When set, the worker
-   * emits `--share public:<level>` and the bundled Warp client applies an
-   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read the
-   * conversation without being on the run's team. Subject to the workspace-level
-   * anyone-with-link sharing setting.
-   */
-  export interface SessionSharing {
-    /**
-     * Grants anyone-with-link access at the specified level to the run's shared
-     * session and backing conversation.
-     *
-     * - VIEWER: link viewers can read the session and conversation.
-     * - EDITOR: link viewers can also interact with the session. Anonymous
-     *   (unauthenticated) reads are not supported in this release; link viewers must
-     *   still be authenticated Warp users.
-     */
-    public_access?: 'VIEWER' | 'EDITOR';
   }
 }
 
