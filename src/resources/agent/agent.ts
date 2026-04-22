@@ -293,8 +293,9 @@ export namespace AmbientAgentConfig {
      *
      * - oz: Warp's built-in harness (default)
      * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
      */
-    type?: 'oz' | 'claude';
+    type?: 'oz' | 'claude' | 'gemini';
   }
 
   /**
