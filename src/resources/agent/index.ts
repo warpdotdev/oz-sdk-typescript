@@ -28,10 +28,7 @@ export {
   type RunSourceType,
   type RunState,
   type RunCancelResponse,
-  type RunListHandoffAttachmentsResponse,
-  type RunSubmitFollowupResponse,
   type RunListParams,
-  type RunSubmitFollowupParams,
   type RunItemsRunsCursorPage,
 } from './runs';
 export {
