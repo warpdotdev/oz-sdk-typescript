@@ -51,6 +51,7 @@ describe('resource schedules', () => {
         skill_spec: 'skill_spec',
         worker_host: 'worker_host',
       },
+      agent_uid: 'agent_uid',
       enabled: true,
       prompt: 'Review open pull requests and provide feedback',
       team: true,
@@ -114,6 +115,7 @@ describe('resource schedules', () => {
         skill_spec: 'skill_spec',
         worker_host: 'worker_host',
       },
+      agent_uid: 'agent_uid',
       prompt: 'prompt',
     });
   });
