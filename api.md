@@ -34,16 +34,12 @@ Types:
 - <code><a href="./src/resources/agent/runs.ts">RunSourceType</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunState</a></code>
 - <code><a href="./src/resources/agent/runs.ts">RunCancelResponse</a></code>
-- <code><a href="./src/resources/agent/runs.ts">RunListHandoffAttachmentsResponse</a></code>
-- <code><a href="./src/resources/agent/runs.ts">RunSubmitFollowupResponse</a></code>
 
 Methods:
 
 - <code title="get /agent/runs/{runId}">client.agent.runs.<a href="./src/resources/agent/runs.ts">retrieve</a>(runID) -> RunItem</code>
 - <code title="get /agent/runs">client.agent.runs.<a href="./src/resources/agent/runs.ts">list</a>({ ...params }) -> RunItemsRunsCursorPage</code>
 - <code title="post /agent/runs/{runId}/cancel">client.agent.runs.<a href="./src/resources/agent/runs.ts">cancel</a>(runID) -> string</code>
-- <code title="get /agent/runs/{runId}/handoff/attachments">client.agent.runs.<a href="./src/resources/agent/runs.ts">listHandoffAttachments</a>(runID) -> RunListHandoffAttachmentsResponse</code>
-- <code title="post /agent/runs/{runId}/followups">client.agent.runs.<a href="./src/resources/agent/runs.ts">submitFollowup</a>(runID, { ...params }) -> unknown</code>
 
 ## Schedules
 
