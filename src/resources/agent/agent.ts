@@ -18,9 +18,12 @@ import {
   RunCancelResponse,
   RunItem,
   RunItemsRunsCursorPage,
+  RunListHandoffAttachmentsResponse,
   RunListParams,
   RunSourceType,
   RunState,
+  RunSubmitFollowupParams,
+  RunSubmitFollowupResponse,
   Runs,
 } from './runs';
 import * as SchedulesAPI from './schedules';
@@ -1094,8 +1097,11 @@ export declare namespace Agent {
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
+    type RunListHandoffAttachmentsResponse as RunListHandoffAttachmentsResponse,
+    type RunSubmitFollowupResponse as RunSubmitFollowupResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
+    type RunSubmitFollowupParams as RunSubmitFollowupParams,
   };
 
   export {
