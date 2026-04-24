@@ -3,36 +3,11 @@
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
 import * as AgentAgentAPI from './agent_';
-import {
-  Agent as AgentAPIAgent,
-  AgentCreateParams,
-  AgentResponse,
-  AgentUpdateParams,
-  CreateAgentRequest,
-  ListAgentIdentitiesResponse,
-  UpdateAgentRequest,
-} from './agent_';
+import { Agent as AgentAPIAgent, AgentCreateParams, AgentResponse, AgentUpdateParams, CreateAgentRequest, ListAgentIdentitiesResponse, UpdateAgentRequest } from './agent_';
 import * as RunsAPI from './runs';
-import {
-  ArtifactItem,
-  RunCancelResponse,
-  RunItem,
-  RunItemsRunsCursorPage,
-  RunListParams,
-  RunSourceType,
-  RunState,
-  Runs,
-} from './runs';
+import { ArtifactItem, RunCancelResponse, RunItem, RunItemsRunsCursorPage, RunListParams, RunSourceType, RunState, Runs } from './runs';
 import * as SchedulesAPI from './schedules';
-import {
-  ScheduleCreateParams,
-  ScheduleDeleteResponse,
-  ScheduleListResponse,
-  ScheduleUpdateParams,
-  ScheduledAgentHistoryItem,
-  ScheduledAgentItem,
-  Schedules,
-} from './schedules';
+import { ScheduleCreateParams, ScheduleDeleteResponse, ScheduleListResponse, ScheduleUpdateParams, ScheduledAgentHistoryItem, ScheduledAgentItem, Schedules } from './schedules';
 import * as SessionsAPI from './sessions';
 import { SessionCheckRedirectResponse, Sessions } from './sessions';
 import { APIPromise } from '../../core/api-promise';
@@ -57,10 +32,7 @@ export class Agent extends APIResource {
    * const agents = await client.agent.list();
    * ```
    */
-  list(
-    query: AgentListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<AgentListResponse> {
+  list(query: AgentListParams | null | undefined = {}, options?: RequestOptions): APIPromise<AgentListResponse> {
     return this._client.get('/agent', { query, ...options });
   }
 
@@ -90,10 +62,7 @@ export class Agent extends APIResource {
    * const response = await client.agent.listEnvironments();
    * ```
    */
-  listEnvironments(
-    query: AgentListEnvironmentsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<AgentListEnvironmentsResponse> {
+  listEnvironments(query: AgentListEnvironmentsParams | null | undefined = {}, options?: RequestOptions): APIPromise<AgentListEnvironmentsResponse> {
     return this._client.get('/agent/environments', { query, ...options });
   }
 
@@ -582,23 +551,7 @@ export interface Error {
  * - `resource_unavailable` — Transient infrastructure issue (retryable)
  * - `internal_error` — Unexpected server-side error (retryable)
  */
-export type ErrorCode =
-  | 'insufficient_credits'
-  | 'feature_not_available'
-  | 'external_authentication_required'
-  | 'not_authorized'
-  | 'invalid_request'
-  | 'resource_not_found'
-  | 'budget_exceeded'
-  | 'integration_disabled'
-  | 'integration_not_configured'
-  | 'operation_not_supported'
-  | 'environment_setup_failed'
-  | 'content_policy_violation'
-  | 'conflict'
-  | 'authentication_required'
-  | 'resource_unavailable'
-  | 'internal_error';
+export type ErrorCode = 'insufficient_credits' | 'feature_not_available' | 'external_authentication_required' | 'not_authorized' | 'invalid_request' | 'resource_not_found' | 'budget_exceeded' | 'integration_disabled' | 'integration_not_configured' | 'operation_not_supported' | 'environment_setup_failed' | 'content_policy_violation' | 'conflict' | 'authentication_required' | 'resource_unavailable' | 'internal_error'
 
 /**
  * GCP Workload Identity Federation settings
@@ -708,10 +661,7 @@ export interface AgentListResponse {
 /**
  * Response for retrieving a plan artifact.
  */
-export type AgentGetArtifactResponse =
-  | AgentGetArtifactResponse.PlanArtifactResponse
-  | AgentGetArtifactResponse.ScreenshotArtifactResponse
-  | AgentGetArtifactResponse.FileArtifactResponse;
+export type AgentGetArtifactResponse = AgentGetArtifactResponse.PlanArtifactResponse | AgentGetArtifactResponse.ScreenshotArtifactResponse | AgentGetArtifactResponse.FileArtifactResponse
 
 export namespace AgentGetArtifactResponse {
   /**
@@ -1084,7 +1034,7 @@ export declare namespace Agent {
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
     type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
-    type AgentRunParams as AgentRunParams,
+    type AgentRunParams as AgentRunParams
   };
 
   export {
@@ -1095,7 +1045,7 @@ export declare namespace Agent {
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
-    type RunListParams as RunListParams,
+    type RunListParams as RunListParams
   };
 
   export {
@@ -1105,7 +1055,7 @@ export declare namespace Agent {
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
-    type ScheduleUpdateParams as ScheduleUpdateParams,
+    type ScheduleUpdateParams as ScheduleUpdateParams
   };
 
   export {
@@ -1115,8 +1065,11 @@ export declare namespace Agent {
     type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
     type UpdateAgentRequest as UpdateAgentRequest,
     type AgentCreateParams as AgentCreateParams,
-    type AgentUpdateParams as AgentUpdateParams,
+    type AgentUpdateParams as AgentUpdateParams
   };
 
-  export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
+  export {
+    Sessions as Sessions,
+    type SessionCheckRedirectResponse as SessionCheckRedirectResponse
+  };
 }
