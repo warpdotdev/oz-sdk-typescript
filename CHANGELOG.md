@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1 (2026-04-24)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.3.0...v1.3.1)
+
+### Chores
+
+* **formatter:** run prettier and eslint separately ([20ec5ad](https://github.com/warpdotdev/oz-sdk-typescript/commit/20ec5ad25afaf80cc9ea7a1db924ce78b03c0da4))
+
 ## 1.3.0 (2026-04-23)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.2.0...v1.3.0)
