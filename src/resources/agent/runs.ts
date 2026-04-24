@@ -36,10 +36,7 @@ export class Runs extends APIResource {
    * }
    * ```
    */
-  list(
-    query: RunListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<RunItemsRunsCursorPage, RunItem> {
+  list(query: RunListParams | null | undefined = {}, options?: RequestOptions): PagePromise<RunItemsRunsCursorPage, RunItem> {
     return this._client.getAPIList('/agent/runs', RunsCursorPage<RunItem>, { query, ...options });
   }
 
@@ -61,13 +58,9 @@ export class Runs extends APIResource {
   }
 }
 
-export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>;
+export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>
 
-export type ArtifactItem =
-  | ArtifactItem.PlanArtifact
-  | ArtifactItem.PullRequestArtifact
-  | ArtifactItem.ScreenshotArtifact
-  | ArtifactItem.FileArtifact;
+export type ArtifactItem = ArtifactItem.PlanArtifact | ArtifactItem.PullRequestArtifact | ArtifactItem.ScreenshotArtifact | ArtifactItem.FileArtifact
 
 export namespace ArtifactItem {
   export interface PlanArtifact {
@@ -494,16 +487,7 @@ export namespace RunItem {
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
  */
-export type RunSourceType =
-  | 'LINEAR'
-  | 'API'
-  | 'SLACK'
-  | 'LOCAL'
-  | 'SCHEDULED_AGENT'
-  | 'WEB_APP'
-  | 'GITHUB_ACTION'
-  | 'CLOUD_MODE'
-  | 'CLI';
+export type RunSourceType = 'LINEAR' | 'API' | 'SLACK' | 'LOCAL' | 'SCHEDULED_AGENT' | 'WEB_APP' | 'GITHUB_ACTION' | 'CLOUD_MODE' | 'CLI'
 
 /**
  * Current state of the run:
@@ -518,21 +502,12 @@ export type RunSourceType =
  * - ERROR: Run encountered an error
  * - CANCELLED: Run was cancelled by user
  */
-export type RunState =
-  | 'QUEUED'
-  | 'PENDING'
-  | 'CLAIMED'
-  | 'INPROGRESS'
-  | 'SUCCEEDED'
-  | 'FAILED'
-  | 'BLOCKED'
-  | 'ERROR'
-  | 'CANCELLED';
+export type RunState = 'QUEUED' | 'PENDING' | 'CLAIMED' | 'INPROGRESS' | 'SUCCEEDED' | 'FAILED' | 'BLOCKED' | 'ERROR' | 'CANCELLED'
 
 /**
  * The ID of the cancelled run
  */
-export type RunCancelResponse = string;
+export type RunCancelResponse = string
 
 export interface RunListParams extends RunsCursorPageParams {
   /**
@@ -642,6 +617,6 @@ export declare namespace Runs {
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
-    type RunListParams as RunListParams,
+    type RunListParams as RunListParams
   };
 }

@@ -58,11 +58,7 @@ export class Schedules extends APIResource {
    *   });
    * ```
    */
-  update(
-    scheduleID: string,
-    body: ScheduleUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ScheduledAgentItem> {
+  update(scheduleID: string, body: ScheduleUpdateParams, options?: RequestOptions): APIPromise<ScheduledAgentItem> {
     return this._client.put(path`/agent/schedules/${scheduleID}`, { body, ...options });
   }
 
@@ -287,6 +283,6 @@ export declare namespace Schedules {
     type ScheduleListResponse as ScheduleListResponse,
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
-    type ScheduleUpdateParams as ScheduleUpdateParams,
+    type ScheduleUpdateParams as ScheduleUpdateParams
   };
 }
