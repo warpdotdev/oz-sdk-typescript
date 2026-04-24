@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.0 (2026-04-23)
+
+Full Changelog: [v1.2.0...v1.3.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.2.0...v1.3.0)
+
+### Features
+
+* Accept and persist executor on schedule and integration create/update APIs ([5f9b8bc](https://github.com/warpdotdev/oz-sdk-typescript/commit/5f9b8bc3957e30ac32b1719ac58d098db375c94c))
+* Add API support for public access on oz session link ([4cb146c](https://github.com/warpdotdev/oz-sdk-typescript/commit/4cb146ccb9e0c03c84fc58bfc0913ac80de798e0))
+* Add Gemini as a third-party Oz harness. ([a40afa5](https://github.com/warpdotdev/oz-sdk-typescript/commit/a40afa57024e4c08626b7fe6b46adb6db0d326b7))
+* **api:** api update ([c8c6e74](https://github.com/warpdotdev/oz-sdk-typescript/commit/c8c6e74fc51ae73bf32104dd482ad2202bf34849))
+* **api:** api update ([272c460](https://github.com/warpdotdev/oz-sdk-typescript/commit/272c4604fc764ca8e844cbbdf9b3adea785bf378))
+* **api:** api update ([aedca4a](https://github.com/warpdotdev/oz-sdk-typescript/commit/aedca4a06790460e99ce7194cd7eba11e9769449))
+* **api:** api update ([b01e3a7](https://github.com/warpdotdev/oz-sdk-typescript/commit/b01e3a7535604d26079b1cbe00aca5cded1452e5))
+* **api:** api update ([5f82281](https://github.com/warpdotdev/oz-sdk-typescript/commit/5f82281f598ced615fb4349b76433f2b11f7e166))
+* **api:** api update ([b0a1504](https://github.com/warpdotdev/oz-sdk-typescript/commit/b0a1504a65ce72f232540eb69916bdd71bdabfe4))
+* **api:** api update ([5036b1b](https://github.com/warpdotdev/oz-sdk-typescript/commit/5036b1bb235dc35f844a85d269be889a82e852ca))
+* implement server-side cloud-to-cloud handoff for agent follow-ups (REMOTE-1290) ([1134f2b](https://github.com/warpdotdev/oz-sdk-typescript/commit/1134f2b93bb30785866bc67831b75182d65c6a45))
+* Update public API and graphql to support creating multiple service accounts and API keys ([1fa19c3](https://github.com/warpdotdev/oz-sdk-typescript/commit/1fa19c39375550cc1dfe4b7dd0bce5bb58361821))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([1c52dcf](https://github.com/warpdotdev/oz-sdk-typescript/commit/1c52dcf1aa971ee4dbd8b672e8dff5c7765d8148))
+
 ## 1.2.0 (2026-04-15)
 
 Full Changelog: [v1.1.1...v1.2.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.1.1...v1.2.0)

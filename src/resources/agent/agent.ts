@@ -2,6 +2,16 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
+import * as AgentAgentAPI from './agent_';
+import {
+  Agent as AgentAPIAgent,
+  AgentCreateParams,
+  AgentResponse,
+  AgentUpdateParams,
+  CreateAgentRequest,
+  ListAgentIdentitiesResponse,
+  UpdateAgentRequest,
+} from './agent_';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
@@ -35,6 +45,7 @@ import { path } from '../../internal/utils/path';
 export class Agent extends APIResource {
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
   schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
+  agent: AgentAgentAPI.Agent = new AgentAgentAPI.Agent(this._client);
   sessions: SessionsAPI.Sessions = new SessionsAPI.Sessions(this._client);
 
   /**
@@ -247,6 +258,16 @@ export interface AmbientAgentConfig {
   name?: string;
 
   /**
+   * Configures sharing behavior for the run's shared session. When set, the worker
+   * emits `--share public:<level>` and the bundled Warp client applies an
+   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
+   * ACL is mirrored onto the backing conversation so link viewers can read the
+   * conversation without being on the run's team. Subject to the workspace-level
+   * anyone-with-link sharing setting.
+   */
+  session_sharing?: AmbientAgentConfig.SessionSharing;
+
+  /**
    * Skill specification identifying which agent skill to use. Format:
    * "{owner}/{repo}:{skill_path}" Example:
    * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Use the list agents
@@ -272,8 +293,9 @@ export namespace AmbientAgentConfig {
      *
      * - oz: Warp's built-in harness (default)
      * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
      */
-    type?: 'oz' | 'claude';
+    type?: 'oz' | 'claude' | 'gemini';
   }
 
   /**
@@ -287,6 +309,27 @@ export namespace AmbientAgentConfig {
      * type is "claude".
      */
     claude_auth_secret_name?: string;
+  }
+
+  /**
+   * Configures sharing behavior for the run's shared session. When set, the worker
+   * emits `--share public:<level>` and the bundled Warp client applies an
+   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
+   * ACL is mirrored onto the backing conversation so link viewers can read the
+   * conversation without being on the run's team. Subject to the workspace-level
+   * anyone-with-link sharing setting.
+   */
+  export interface SessionSharing {
+    /**
+     * Grants anyone-with-link access at the specified level to the run's shared
+     * session and backing conversation.
+     *
+     * - VIEWER: link viewers can read the session and conversation.
+     * - EDITOR: link viewers can also interact with the session. Anonymous
+     *   (unauthenticated) reads are not supported in this release; link viewers must
+     *   still be authenticated Warp users.
+     */
+    public_access?: 'VIEWER' | 'EDITOR';
   }
 }
 
@@ -1019,6 +1062,7 @@ export namespace AgentRunParams {
 
 Agent.Runs = Runs;
 Agent.Schedules = Schedules;
+Agent.Agent = AgentAPIAgent;
 Agent.Sessions = Sessions;
 
 export declare namespace Agent {
@@ -1062,6 +1106,16 @@ export declare namespace Agent {
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
     type ScheduleUpdateParams as ScheduleUpdateParams,
+  };
+
+  export {
+    AgentAPIAgent as Agent,
+    type AgentResponse as AgentResponse,
+    type CreateAgentRequest as CreateAgentRequest,
+    type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
+    type UpdateAgentRequest as UpdateAgentRequest,
+    type AgentCreateParams as AgentCreateParams,
+    type AgentUpdateParams as AgentUpdateParams,
   };
 
   export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
