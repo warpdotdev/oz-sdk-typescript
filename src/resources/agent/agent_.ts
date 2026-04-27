@@ -62,7 +62,10 @@ export class Agent extends APIResource {
    * ```
    */
   delete(uid: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/agent/identities/${uid}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.delete(path`/agent/identities/${uid}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 }
 
@@ -127,6 +130,6 @@ export declare namespace Agent {
     type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
     type UpdateAgentRequest as UpdateAgentRequest,
     type AgentCreateParams as AgentCreateParams,
-    type AgentUpdateParams as AgentUpdateParams
+    type AgentUpdateParams as AgentUpdateParams,
   };
 }

@@ -87,7 +87,8 @@ export class PagePromise<
     super(
       client,
       request,
-      async (client, props) => new Page(client, props.response, await defaultParseResponse(client, props), props.options)
+      async (client, props) =>
+        new Page(client, props.response, await defaultParseResponse(client, props), props.options),
     );
   }
 
@@ -131,7 +132,12 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
 
   page_info: RunsCursorPageResponse.PageInfo;
 
-  constructor(client: OzAPI, response: Response, body: RunsCursorPageResponse<Item>, options: FinalRequestOptions) {
+  constructor(
+    client: OzAPI,
+    response: Response,
+    body: RunsCursorPageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
     super(client, response, body, options);
 
     this.runs = body.runs || [];
@@ -151,7 +157,7 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.page_info?.next_cursor
+    const cursor = this.page_info?.next_cursor;
     if (!cursor) {
       return null;
     }

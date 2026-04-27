@@ -2,7 +2,10 @@
 
 import OzAPI from 'oz-agent-sdk';
 
-const client = new OzAPI({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new OzAPI({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource agent', () => {
   // Mock server tests are disabled
@@ -20,14 +23,17 @@ describe('resource agent', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.agent.list({
-    include_malformed_skills: true,
-    refresh: true,
-    repo: 'repo',
-    sort_by: 'name',
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(OzAPI.NotFoundError);
+    await expect(
+      client.agent.list(
+        {
+          include_malformed_skills: true,
+          refresh: true,
+          repo: 'repo',
+          sort_by: 'name',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OzAPI.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -57,9 +63,9 @@ describe('resource agent', () => {
   // Mock server tests are disabled
   test.skip('listEnvironments: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.agent.listEnvironments({ sort_by: 'name' }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(OzAPI.NotFoundError);
+    await expect(
+      client.agent.listEnvironments({ sort_by: 'name' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OzAPI.NotFoundError);
   });
 
   // Mock server tests are disabled
