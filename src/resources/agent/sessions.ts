@@ -34,7 +34,5 @@ export interface SessionCheckRedirectResponse {
 }
 
 export declare namespace Sessions {
-  export {
-    type SessionCheckRedirectResponse as SessionCheckRedirectResponse
-  };
+  export { type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
 }

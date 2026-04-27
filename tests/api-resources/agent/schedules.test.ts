@@ -2,12 +2,18 @@
 
 import OzAPI from 'oz-agent-sdk';
 
-const client = new OzAPI({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new OzAPI({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource schedules', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.agent.schedules.create({ cron_schedule: '0 9 * * *', name: 'Daily Code Review' });
+    const responsePromise = client.agent.schedules.create({
+      cron_schedule: '0 9 * * *',
+      name: 'Daily Code Review',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,33 +26,35 @@ describe('resource schedules', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.agent.schedules.create({
-    cron_schedule: '0 9 * * *',
-    name: 'Daily Code Review',
-    agent_config: {
-    base_prompt: 'base_prompt',
-    computer_use_enabled: true,
-    environment_id: 'environment_id',
-    harness: { type: 'oz' },
-    harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
-    idle_timeout_minutes: 1,
-    mcp_servers: { foo: {
-    args: ['string'],
-    command: 'command',
-    env: { foo: 'string' },
-    headers: { foo: 'string' },
-    url: 'https://example.com',
-    warp_id: 'warp_id',
-  } },
-    model_id: 'model_id',
-    name: 'name',
-    session_sharing: { public_access: 'VIEWER' },
-    skill_spec: 'skill_spec',
-    worker_host: 'worker_host',
-  },
-    enabled: true,
-    prompt: 'Review open pull requests and provide feedback',
-    team: true,
-  });
+      cron_schedule: '0 9 * * *',
+      name: 'Daily Code Review',
+      agent_config: {
+        base_prompt: 'base_prompt',
+        computer_use_enabled: true,
+        environment_id: 'environment_id',
+        harness: { type: 'oz' },
+        harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
+        idle_timeout_minutes: 1,
+        mcp_servers: {
+          foo: {
+            args: ['string'],
+            command: 'command',
+            env: { foo: 'string' },
+            headers: { foo: 'string' },
+            url: 'https://example.com',
+            warp_id: 'warp_id',
+          },
+        },
+        model_id: 'model_id',
+        name: 'name',
+        session_sharing: { public_access: 'VIEWER' },
+        skill_spec: 'skill_spec',
+        worker_host: 'worker_host',
+      },
+      enabled: true,
+      prompt: 'Review open pull requests and provide feedback',
+      team: true,
+    });
   });
 
   // Mock server tests are disabled
@@ -64,10 +72,10 @@ describe('resource schedules', () => {
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.agent.schedules.update('scheduleId', {
-    cron_schedule: 'cron_schedule',
-    enabled: true,
-    name: 'name',
-  });
+      cron_schedule: 'cron_schedule',
+      enabled: true,
+      name: 'name',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -80,32 +88,34 @@ describe('resource schedules', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.agent.schedules.update('scheduleId', {
-    cron_schedule: 'cron_schedule',
-    enabled: true,
-    name: 'name',
-    agent_config: {
-    base_prompt: 'base_prompt',
-    computer_use_enabled: true,
-    environment_id: 'environment_id',
-    harness: { type: 'oz' },
-    harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
-    idle_timeout_minutes: 1,
-    mcp_servers: { foo: {
-    args: ['string'],
-    command: 'command',
-    env: { foo: 'string' },
-    headers: { foo: 'string' },
-    url: 'https://example.com',
-    warp_id: 'warp_id',
-  } },
-    model_id: 'model_id',
-    name: 'name',
-    session_sharing: { public_access: 'VIEWER' },
-    skill_spec: 'skill_spec',
-    worker_host: 'worker_host',
-  },
-    prompt: 'prompt',
-  });
+      cron_schedule: 'cron_schedule',
+      enabled: true,
+      name: 'name',
+      agent_config: {
+        base_prompt: 'base_prompt',
+        computer_use_enabled: true,
+        environment_id: 'environment_id',
+        harness: { type: 'oz' },
+        harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
+        idle_timeout_minutes: 1,
+        mcp_servers: {
+          foo: {
+            args: ['string'],
+            command: 'command',
+            env: { foo: 'string' },
+            headers: { foo: 'string' },
+            url: 'https://example.com',
+            warp_id: 'warp_id',
+          },
+        },
+        model_id: 'model_id',
+        name: 'name',
+        session_sharing: { public_access: 'VIEWER' },
+        skill_spec: 'skill_spec',
+        worker_host: 'worker_host',
+      },
+      prompt: 'prompt',
+    });
   });
 
   // Mock server tests are disabled

@@ -2,7 +2,10 @@
 
 import OzAPI from 'oz-agent-sdk';
 
-const client = new OzAPI({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new OzAPI({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource agent', () => {
   // Mock server tests are disabled

@@ -2,7 +2,10 @@
 
 import OzAPI from 'oz-agent-sdk';
 
-const client = new OzAPI({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new OzAPI({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource runs', () => {
   // Mock server tests are disabled
@@ -32,30 +35,33 @@ describe('resource runs', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.agent.runs.list({
-    ancestor_run_id: 'ancestor_run_id',
-    artifact_type: 'PLAN',
-    created_after: '2019-12-27T18:11:19.117Z',
-    created_before: '2019-12-27T18:11:19.117Z',
-    creator: 'creator',
-    cursor: 'cursor',
-    environment_id: 'environment_id',
-    execution_location: 'LOCAL',
-    limit: 1,
-    model_id: 'model_id',
-    name: 'name',
-    q: 'q',
-    schedule_id: 'schedule_id',
-    skill: 'skill',
-    skill_spec: 'skill_spec',
-    sort_by: 'updated_at',
-    sort_order: 'asc',
-    source: 'LINEAR',
-    state: ['QUEUED'],
-    updated_after: '2019-12-27T18:11:19.117Z',
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(OzAPI.NotFoundError);
+    await expect(
+      client.agent.runs.list(
+        {
+          ancestor_run_id: 'ancestor_run_id',
+          artifact_type: 'PLAN',
+          created_after: '2019-12-27T18:11:19.117Z',
+          created_before: '2019-12-27T18:11:19.117Z',
+          creator: 'creator',
+          cursor: 'cursor',
+          environment_id: 'environment_id',
+          execution_location: 'LOCAL',
+          limit: 1,
+          model_id: 'model_id',
+          name: 'name',
+          q: 'q',
+          schedule_id: 'schedule_id',
+          skill: 'skill',
+          skill_spec: 'skill_spec',
+          sort_by: 'updated_at',
+          sort_order: 'asc',
+          source: 'LINEAR',
+          state: ['QUEUED'],
+          updated_after: '2019-12-27T18:11:19.117Z',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OzAPI.NotFoundError);
   });
 
   // Mock server tests are disabled
