@@ -14,6 +14,10 @@ export class Sessions extends APIResource {
    * Returns a conversation_id if the agent sandbox has finished and conversation
    * data is available, or an empty object if no redirect is needed.
    *
+   * This endpoint is public (no authentication required) so that anonymous viewers
+   * can resolve a publicly-shared session link before signing in. Access to the
+   * underlying conversation transcript is still gated by conversation link-sharing.
+   *
    * @example
    * ```ts
    * const response = await client.agent.sessions.checkRedirect(
@@ -22,7 +26,7 @@ export class Sessions extends APIResource {
    * ```
    */
   checkRedirect(sessionUuid: string, options?: RequestOptions): APIPromise<SessionCheckRedirectResponse> {
-    return this._client.get(path`/agent/sessions/${sessionUuid}/redirect`, options);
+    return this._client.get(path`/agent/sessions/${sessionUuid}/redirect`, { ...options, __security: {} });
   }
 }
 

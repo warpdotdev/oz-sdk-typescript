@@ -21,6 +21,7 @@ export {
   type AgentListEnvironmentsParams,
   type AgentRunParams,
 } from './agent';
+export { Conversations, type ConversationCheckRedirectResponse } from './conversations';
 export {
   Runs,
   type ArtifactItem,

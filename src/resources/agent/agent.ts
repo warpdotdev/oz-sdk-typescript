@@ -12,6 +12,8 @@ import {
   ListAgentIdentitiesResponse,
   UpdateAgentRequest,
 } from './agent_';
+import * as ConversationsAPI from './conversations';
+import { ConversationCheckRedirectResponse, Conversations } from './conversations';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
@@ -50,6 +52,7 @@ export class Agent extends APIResource {
   schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
   agent: AgentAgentAPI.Agent = new AgentAgentAPI.Agent(this._client);
   sessions: SessionsAPI.Sessions = new SessionsAPI.Sessions(this._client);
+  conversations: ConversationsAPI.Conversations = new ConversationsAPI.Conversations(this._client);
 
   /**
    * Retrieve a list of available agents (skills) that can be used to run tasks.
@@ -1067,6 +1070,7 @@ Agent.Runs = Runs;
 Agent.Schedules = Schedules;
 Agent.Agent = AgentAPIAgent;
 Agent.Sessions = Sessions;
+Agent.Conversations = Conversations;
 
 export declare namespace Agent {
   export {
@@ -1125,4 +1129,9 @@ export declare namespace Agent {
   };
 
   export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
+
+  export {
+    Conversations as Conversations,
+    type ConversationCheckRedirectResponse as ConversationCheckRedirectResponse,
+  };
 }
