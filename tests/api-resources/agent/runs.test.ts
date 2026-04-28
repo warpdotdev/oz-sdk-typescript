@@ -46,6 +46,7 @@ describe('resource runs', () => {
           cursor: 'cursor',
           environment_id: 'environment_id',
           execution_location: 'LOCAL',
+          executor: 'executor',
           limit: 1,
           model_id: 'model_id',
           name: 'name',
