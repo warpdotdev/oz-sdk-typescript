@@ -86,37 +86,9 @@ export interface AgentResponse {
   name: string;
 
   /**
-   * Secrets that this agent may access by default.
-   */
-  secrets: Array<AgentResponse.Secret>;
-
-  /**
-   * Ordered list of normalized skill specs associated with this agent. Always
-   * present; empty when no skills are attached.
-   */
-  skills: Array<string>;
-
-  /**
    * Unique identifier for the agent
    */
   uid: string;
-
-  /**
-   * Optional description of the agent
-   */
-  description?: string | null;
-}
-
-export namespace AgentResponse {
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export interface CreateAgentRequest {
@@ -124,86 +96,17 @@ export interface CreateAgentRequest {
    * A name for the agent
    */
   name: string;
-
-  /**
-   * Optional description of the agent
-   */
-  description?: string | null;
-
-  /**
-   * Optional list of secrets associated with the agent. Duplicate names within a
-   * single request are rejected.
-   */
-  secrets?: Array<CreateAgentRequest.Secret>;
-
-  /**
-   * Optional list of skill specs to associate with the agent. Format:
-   * "{owner}/{repo}:{skill_path}" (e.g.,
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md"). Each spec is validated
-   * and normalized at attach time using the team's GitHub credentials; inaccessible
-   * or malformed specs are rejected.
-   */
-  skills?: Array<string>;
-}
-
-export namespace CreateAgentRequest {
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export interface ListAgentIdentitiesResponse {
   agents: Array<AgentResponse>;
 }
 
-/**
- * Partial update for an agent. Each field is optional:
- *
- * - Omitted or `null`: leave the field unchanged.
- * - Empty value: clear the field.
- * - Non-empty: replace the field wholesale with the provided value.
- */
 export interface UpdateAgentRequest {
-  /**
-   * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
-   * value to clear.
-   */
-  description?: string | null;
-
   /**
    * The new name for the agent
    */
   name?: string;
-
-  /**
-   * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
-   * clear, or pass a non-empty array to replace. Duplicate names are rejected.
-   */
-  secrets?: Array<UpdateAgentRequest.Secret> | null;
-
-  /**
-   * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
-   * clear, or pass a non-empty array to replace.
-   */
-  skills?: Array<string> | null;
-}
-
-export namespace UpdateAgentRequest {
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export interface AgentCreateParams {
@@ -211,75 +114,13 @@ export interface AgentCreateParams {
    * A name for the agent
    */
   name: string;
-
-  /**
-   * Optional description of the agent
-   */
-  description?: string | null;
-
-  /**
-   * Optional list of secrets associated with the agent. Duplicate names within a
-   * single request are rejected.
-   */
-  secrets?: Array<AgentCreateParams.Secret>;
-
-  /**
-   * Optional list of skill specs to associate with the agent. Format:
-   * "{owner}/{repo}:{skill_path}" (e.g.,
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md"). Each spec is validated
-   * and normalized at attach time using the team's GitHub credentials; inaccessible
-   * or malformed specs are rejected.
-   */
-  skills?: Array<string>;
-}
-
-export namespace AgentCreateParams {
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export interface AgentUpdateParams {
   /**
-   * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
-   * value to clear.
-   */
-  description?: string | null;
-
-  /**
    * The new name for the agent
    */
   name?: string;
-
-  /**
-   * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
-   * clear, or pass a non-empty array to replace. Duplicate names are rejected.
-   */
-  secrets?: Array<AgentUpdateParams.Secret> | null;
-
-  /**
-   * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
-   * clear, or pass a non-empty array to replace.
-   */
-  skills?: Array<string> | null;
-}
-
-export namespace AgentUpdateParams {
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export declare namespace Agent {
