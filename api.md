@@ -89,3 +89,13 @@ Types:
 Methods:
 
 - <code title="get /agent/sessions/{sessionUuid}/redirect">client.agent.sessions.<a href="./src/resources/agent/sessions.ts">checkRedirect</a>(sessionUuid) -> SessionCheckRedirectResponse</code>
+
+## Conversations
+
+Types:
+
+- <code><a href="./src/resources/agent/conversations.ts">ConversationCheckRedirectResponse</a></code>
+
+Methods:
+
+- <code title="get /agent/conversations/{conversationId}/redirect">client.agent.conversations.<a href="./src/resources/agent/conversations.ts">checkRedirect</a>(conversationID) -> ConversationCheckRedirectResponse</code>
