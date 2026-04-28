@@ -22,12 +22,7 @@ describe('resource agent', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.agent.agent.create({
-      name: 'name',
-      description: 'description',
-      secrets: [{ name: 'name' }],
-      skills: ['string'],
-    });
+    const response = await client.agent.agent.create({ name: 'name' });
   });
 
   // Mock server tests are disabled
