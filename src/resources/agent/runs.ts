@@ -345,8 +345,6 @@ export interface RunItem {
    */
   execution_location?: 'LOCAL' | 'REMOTE';
 
-  executor?: AgentAPI.UserProfile;
-
   /**
    * Whether the sandbox environment is currently running
    */
@@ -656,12 +654,6 @@ export interface RunListParams extends RunsCursorPageParams {
    * Filter by where the run executed
    */
   execution_location?: 'LOCAL' | 'REMOTE';
-
-  /**
-   * Filter by the user or agent that executed the run. This will often be the same
-   * as the creator, but not always: users may delegate tasks to agents.
-   */
-  executor?: string;
 
   /**
    * Filter by model ID
