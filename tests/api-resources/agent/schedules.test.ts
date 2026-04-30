@@ -53,7 +53,6 @@ describe('resource schedules', () => {
       },
       agent_uid: 'agent_uid',
       enabled: true,
-      mode: 'normal',
       prompt: 'Review open pull requests and provide feedback',
       team: true,
     });
@@ -117,7 +116,6 @@ describe('resource schedules', () => {
         worker_host: 'worker_host',
       },
       agent_uid: 'agent_uid',
-      mode: 'normal',
       prompt: 'prompt',
     });
   });
