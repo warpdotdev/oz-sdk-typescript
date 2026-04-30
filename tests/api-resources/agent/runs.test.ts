@@ -103,6 +103,6 @@ describe('resource runs', () => {
 
   // Mock server tests are disabled
   test.skip('submitFollowup: required and optional params', async () => {
-    const response = await client.agent.runs.submitFollowup('runId', { message: 'message' });
+    const response = await client.agent.runs.submitFollowup('runId', { message: 'message', mode: 'normal' });
   });
 });

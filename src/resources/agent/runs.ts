@@ -731,6 +731,12 @@ export interface RunSubmitFollowupParams {
    * The follow-up message to send to the run.
    */
   message: string;
+
+  /**
+   * Optional query mode for the follow-up. Defaults to `normal` when omitted. The
+   * server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
 }
 
 export declare namespace Runs {
