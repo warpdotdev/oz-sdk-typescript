@@ -1011,13 +1011,6 @@ export interface AgentRunParams {
   interactive?: boolean;
 
   /**
-   * Optional query mode for the run. Defaults to `normal` when omitted. The server
-   * does not infer mode from prompt prefixes such as `/plan`, so callers should pass
-   * this field explicitly to request non-normal behavior.
-   */
-  mode?: 'normal' | 'plan' | 'orchestrate';
-
-  /**
    * Optional run ID of the parent that spawned this run. Used for orchestration
    * hierarchies.
    */
