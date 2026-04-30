@@ -132,8 +132,7 @@ export interface CreateAgentRequest {
 
   /**
    * Optional list of secrets associated with the agent. Duplicate names within a
-   * single request are rejected. Each entry is unioned into the run-time secret
-   * scope when the agent executes.
+   * single request are rejected.
    */
   secrets?: Array<CreateAgentRequest.Secret>;
 
@@ -220,8 +219,7 @@ export interface AgentCreateParams {
 
   /**
    * Optional list of secrets associated with the agent. Duplicate names within a
-   * single request are rejected. Each entry is unioned into the run-time secret
-   * scope when the agent executes.
+   * single request are rejected.
    */
   secrets?: Array<AgentCreateParams.Secret>;
 
