@@ -1,4 +1,4 @@
 configured_endpoints: 22
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/warp-bnavetta/warp-api-f74133adb6e546317af84cb055755fb9fdaa4b9d5b4285bf0e25c5da2922b737.yml
-openapi_spec_hash: 30edc04bccac2c6d4d1228807a372023
-config_hash: 44a1e8f98607a5cf03815a63bae63453
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/warp-bnavetta/warp-api-3eeaadc6a0c1eefbc3c3a7e1212b2be5c061bad7bcabedf5ee30eb2a7f992505.yml
+openapi_spec_hash: a071b7c932453dc870e7e6cf39df0535
+config_hash: c15534df6c8d861059e44d9dd5483b3f
