@@ -246,6 +246,12 @@ export interface ScheduleCreateParams {
   enabled?: boolean;
 
   /**
+   * Optional query mode applied to every triggered run. Defaults to `normal` when
+   * omitted. The server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
+
+  /**
    * The prompt/instruction for the agent to execute. Required unless
    * agent_config.skill_spec is provided.
    */
@@ -284,6 +290,12 @@ export interface ScheduleUpdateParams {
    * team-owned schedules.
    */
   agent_uid?: string;
+
+  /**
+   * Optional query mode applied to every triggered run. Defaults to `normal` when
+   * omitted. The server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
    * The prompt/instruction for the agent to execute. Required unless
