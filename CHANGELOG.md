@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.4.0-alpha.0 (2026-05-03)
+
+Full Changelog: [v1.3.0...v1.4.0-alpha.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.3.0...v1.4.0-alpha.0)
+
+### Features
+
+* [APP-3106] Specs: Explicit QueryMode for cloud agent run creation ([f37a964](https://github.com/warpdotdev/oz-sdk-typescript/commit/f37a96402aebdfb6b0d71be82f47bfb718683a0a))
+* [REMOTE-1481] [3/N] Add executor filter to run list API ([42f4b80](https://github.com/warpdotdev/oz-sdk-typescript/commit/42f4b80a0f8a3668c8ed1d298f079841f062c739))
+* Add Codex as a third-party Oz harness. ([2f57bf6](https://github.com/warpdotdev/oz-sdk-typescript/commit/2f57bf6a01063fb16052b193e475fa791170218a))
+* **api:** api update ([8c890c7](https://github.com/warpdotdev/oz-sdk-typescript/commit/8c890c77c2d4c734fbfa3e6d7d0c4faedac00a6d))
+* **api:** api update ([05dcaf0](https://github.com/warpdotdev/oz-sdk-typescript/commit/05dcaf01a704331ead598aee570162bd9602b7b5))
+* **api:** api update ([55f73b5](https://github.com/warpdotdev/oz-sdk-typescript/commit/55f73b58efd037381de1b0237d1c1b1f43238317))
+* **api:** api update ([aeb9296](https://github.com/warpdotdev/oz-sdk-typescript/commit/aeb9296c64942f0688f16bec3411456075be4121))
+* **api:** api update ([178c28a](https://github.com/warpdotdev/oz-sdk-typescript/commit/178c28afcda1d04e385c52dd78b5ca673a62797d))
+* **api:** api update ([9fa808e](https://github.com/warpdotdev/oz-sdk-typescript/commit/9fa808ea74a46cf6f1a4214a7488c4cf1bb35d89))
+* **api:** api update ([9e8dff6](https://github.com/warpdotdev/oz-sdk-typescript/commit/9e8dff638bc3d753f0efa7db889e74a5078c5db3))
+* **api:** api update ([7b62832](https://github.com/warpdotdev/oz-sdk-typescript/commit/7b62832a439e2a22b0e605f6455db98832c0e8c8))
+* **api:** api update ([38bf722](https://github.com/warpdotdev/oz-sdk-typescript/commit/38bf7224d06eba1b62390f1ef7ead35065a718e3))
+* Apply service-account secrets at run creation ([3e3fd89](https://github.com/warpdotdev/oz-sdk-typescript/commit/3e3fd89618cf6172291a32faea547a76ad4c12be))
+* Extend service account API to support skills + secrets ([59203c0](https://github.com/warpdotdev/oz-sdk-typescript/commit/59203c04d0bdcacba47de93a565a7df9680f165e))
+* Make conversation/session redirects public ([78cc8b8](https://github.com/warpdotdev/oz-sdk-typescript/commit/78cc8b8fed1d919333fa3c86ca40ae57f0de98f6))
+* Memory data model scaffolding. ([c7bb9a4](https://github.com/warpdotdev/oz-sdk-typescript/commit/c7bb9a422a572a2e862e3357e94fb58058be4494))
+* support setting headers via env ([70285d6](https://github.com/warpdotdev/oz-sdk-typescript/commit/70285d6da4463f423b736481f1d0389d19fe78b0))
+
+
+### Chores
+
+* **format:** run eslint and prettier separately ([b7eae5e](https://github.com/warpdotdev/oz-sdk-typescript/commit/b7eae5e2e8f94504526c0ffb21e17573f32937b3))
+* **formatter:** run prettier and eslint separately ([20ec5ad](https://github.com/warpdotdev/oz-sdk-typescript/commit/20ec5ad25afaf80cc9ea7a1db924ce78b03c0da4))
+* **internal:** codegen related update ([e89a72d](https://github.com/warpdotdev/oz-sdk-typescript/commit/e89a72d48fb632e65fccc2fc6a4dbef994c1d50e))
+
 ## 1.3.0 (2026-04-23)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.2.0...v1.3.0)
