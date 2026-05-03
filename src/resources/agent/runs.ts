@@ -59,6 +59,50 @@ export class Runs extends APIResource {
   cancel(runID: string, options?: RequestOptions): APIPromise<string> {
     return this._client.post(path`/agent/runs/${runID}/cancel`, options);
   }
+
+  /**
+   * Return fresh presigned download URLs for handoff snapshot files uploaded by the
+   * latest ended execution of this run. An empty list is returned when no ended
+   * execution exists or no snapshot files were uploaded.
+   *
+   * This endpoint is useful for third-party harnesses that want to download the
+   * snapshot files produced by a previous execution before starting a handoff
+   * execution themselves.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.agent.runs.listHandoffAttachments('runId');
+   * ```
+   */
+  listHandoffAttachments(
+    runID: string,
+    options?: RequestOptions,
+  ): APIPromise<RunListHandoffAttachmentsResponse> {
+    return this._client.get(path`/agent/runs/${runID}/handoff/attachments`, options);
+  }
+
+  /**
+   * Send a follow-up message to an existing run. The server transparently routes the
+   * message based on the current state of the run (still queued, actively running,
+   * or ended). A 200 response means the follow-up was accepted; updated run state
+   * can be observed via `GET /agent/runs/{runId}`.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.submitFollowup(
+   *   'runId',
+   *   { message: 'message' },
+   * );
+   * ```
+   */
+  submitFollowup(
+    runID: string,
+    body: RunSubmitFollowupParams,
+    options?: RequestOptions,
+  ): APIPromise<unknown> {
+    return this._client.post(path`/agent/runs/${runID}/followups`, { body, ...options });
+  }
 }
 
 export type RunItemsRunsCursorPage = RunsCursorPage<RunItem>;
@@ -301,6 +345,8 @@ export interface RunItem {
    */
   execution_location?: 'LOCAL' | 'REMOTE';
 
+  executor?: AgentAPI.UserProfile;
+
   /**
    * Whether the sandbox environment is currently running
    */
@@ -534,6 +580,46 @@ export type RunState =
  */
 export type RunCancelResponse = string;
 
+/**
+ * Response body for listing handoff snapshot attachments.
+ */
+export interface RunListHandoffAttachmentsResponse {
+  /**
+   * Handoff snapshot attachments exposed by the latest ended execution. Empty when
+   * no ended execution exists or no files were uploaded.
+   */
+  attachments: Array<RunListHandoffAttachmentsResponse.Attachment>;
+}
+
+export namespace RunListHandoffAttachmentsResponse {
+  /**
+   * A handoff snapshot attachment exposed for download.
+   */
+  export interface Attachment {
+    /**
+     * Identifier for the snapshot attachment within the run.
+     */
+    attachment_id: string;
+
+    /**
+     * Time-limited signed URL to download the snapshot attachment.
+     */
+    download_url: string;
+
+    /**
+     * Original filename of the snapshot attachment.
+     */
+    filename: string;
+
+    /**
+     * MIME type of the snapshot attachment, if known.
+     */
+    mime_type?: string;
+  }
+}
+
+export type RunSubmitFollowupResponse = unknown;
+
 export interface RunListParams extends RunsCursorPageParams {
   /**
    * Filter runs by ancestor run ID. The referenced run must exist and be accessible
@@ -570,6 +656,12 @@ export interface RunListParams extends RunsCursorPageParams {
    * Filter by where the run executed
    */
   execution_location?: 'LOCAL' | 'REMOTE';
+
+  /**
+   * Filter by the user or agent that executed the run. This will often be the same
+   * as the creator, but not always: users may delegate tasks to agents.
+   */
+  executor?: string;
 
   /**
    * Filter by model ID
@@ -634,6 +726,19 @@ export interface RunListParams extends RunsCursorPageParams {
   updated_after?: string;
 }
 
+export interface RunSubmitFollowupParams {
+  /**
+   * The follow-up message to send to the run.
+   */
+  message: string;
+
+  /**
+   * Optional query mode for the follow-up. Defaults to `normal` when omitted. The
+   * server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
+}
+
 export declare namespace Runs {
   export {
     type ArtifactItem as ArtifactItem,
@@ -641,7 +746,10 @@ export declare namespace Runs {
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
+    type RunListHandoffAttachmentsResponse as RunListHandoffAttachmentsResponse,
+    type RunSubmitFollowupResponse as RunSubmitFollowupResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
+    type RunSubmitFollowupParams as RunSubmitFollowupParams,
   };
 }

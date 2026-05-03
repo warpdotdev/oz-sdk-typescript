@@ -21,6 +21,7 @@ export {
   type AgentListEnvironmentsParams,
   type AgentRunParams,
 } from './agent';
+export { Conversations, type ConversationCheckRedirectResponse } from './conversations';
 export {
   Runs,
   type ArtifactItem,
@@ -28,7 +29,10 @@ export {
   type RunSourceType,
   type RunState,
   type RunCancelResponse,
+  type RunListHandoffAttachmentsResponse,
+  type RunSubmitFollowupResponse,
   type RunListParams,
+  type RunSubmitFollowupParams,
   type RunItemsRunsCursorPage,
 } from './runs';
 export {

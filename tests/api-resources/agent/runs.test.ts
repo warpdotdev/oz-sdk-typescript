@@ -46,6 +46,7 @@ describe('resource runs', () => {
           cursor: 'cursor',
           environment_id: 'environment_id',
           execution_location: 'LOCAL',
+          executor: 'executor',
           limit: 1,
           model_id: 'model_id',
           name: 'name',
@@ -74,5 +75,34 @@ describe('resource runs', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listHandoffAttachments', async () => {
+    const responsePromise = client.agent.runs.listHandoffAttachments('runId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('submitFollowup: only required params', async () => {
+    const responsePromise = client.agent.runs.submitFollowup('runId', { message: 'message' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('submitFollowup: required and optional params', async () => {
+    const response = await client.agent.runs.submitFollowup('runId', { message: 'message', mode: 'normal' });
   });
 });

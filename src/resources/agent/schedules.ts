@@ -235,9 +235,21 @@ export interface ScheduleCreateParams {
   agent_config?: AgentAPI.AmbientAgentConfig;
 
   /**
+   * Agent UID to use as the execution principal for this schedule. Only valid for
+   * team-owned schedules.
+   */
+  agent_uid?: string;
+
+  /**
    * Whether the schedule should be active immediately
    */
   enabled?: boolean;
+
+  /**
+   * Optional query mode applied to every triggered run. Defaults to `normal` when
+   * omitted. The server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
    * The prompt/instruction for the agent to execute. Required unless
@@ -272,6 +284,18 @@ export interface ScheduleUpdateParams {
    * Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
+
+  /**
+   * Agent UID to use as the execution principal for this schedule. Only valid for
+   * team-owned schedules.
+   */
+  agent_uid?: string;
+
+  /**
+   * Optional query mode applied to every triggered run. Defaults to `normal` when
+   * omitted. The server does not infer mode from prompt prefixes such as `/plan`.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
    * The prompt/instruction for the agent to execute. Required unless

@@ -191,6 +191,18 @@ export class OzAPI {
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
+    const customHeadersEnv = readEnv('OZ_API_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
+
     this._options = options;
 
     this.apiKey = apiKey;
@@ -230,7 +242,14 @@ export class OzAPI {
     return;
   }
 
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+  protected async authHeaders(
+    opts: FinalRequestOptions,
+    schemes: { bearerAuth?: boolean },
+  ): Promise<NullableHeaders | undefined> {
+    return buildHeaders([schemes.bearerAuth ? await this.bearerAuth(opts) : null]);
+  }
+
+  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -681,7 +700,7 @@ export class OzAPI {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
+      await this.authHeaders(options, options.__security ?? { bearerAuth: true }),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,

@@ -12,15 +12,20 @@ import {
   ListAgentIdentitiesResponse,
   UpdateAgentRequest,
 } from './agent_';
+import * as ConversationsAPI from './conversations';
+import { ConversationCheckRedirectResponse, Conversations } from './conversations';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
   RunCancelResponse,
   RunItem,
   RunItemsRunsCursorPage,
+  RunListHandoffAttachmentsResponse,
   RunListParams,
   RunSourceType,
   RunState,
+  RunSubmitFollowupParams,
+  RunSubmitFollowupResponse,
   Runs,
 } from './runs';
 import * as SchedulesAPI from './schedules';
@@ -47,6 +52,7 @@ export class Agent extends APIResource {
   schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
   agent: AgentAgentAPI.Agent = new AgentAgentAPI.Agent(this._client);
   sessions: SessionsAPI.Sessions = new SessionsAPI.Sessions(this._client);
+  conversations: ConversationsAPI.Conversations = new ConversationsAPI.Conversations(this._client);
 
   /**
    * Retrieve a list of available agents (skills) that can be used to run tasks.
@@ -294,8 +300,9 @@ export namespace AmbientAgentConfig {
      * - oz: Warp's built-in harness (default)
      * - claude: Claude Code harness
      * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
      */
-    type?: 'oz' | 'claude' | 'gemini';
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
   }
 
   /**
@@ -1004,6 +1011,13 @@ export interface AgentRunParams {
   interactive?: boolean;
 
   /**
+   * Optional query mode for the run. Defaults to `normal` when omitted. The server
+   * does not infer mode from prompt prefixes such as `/plan`, so callers should pass
+   * this field explicitly to request non-normal behavior.
+   */
+  mode?: 'normal' | 'plan' | 'orchestrate';
+
+  /**
    * Optional run ID of the parent that spawned this run. Used for orchestration
    * hierarchies.
    */
@@ -1064,6 +1078,7 @@ Agent.Runs = Runs;
 Agent.Schedules = Schedules;
 Agent.Agent = AgentAPIAgent;
 Agent.Sessions = Sessions;
+Agent.Conversations = Conversations;
 
 export declare namespace Agent {
   export {
@@ -1094,8 +1109,11 @@ export declare namespace Agent {
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
+    type RunListHandoffAttachmentsResponse as RunListHandoffAttachmentsResponse,
+    type RunSubmitFollowupResponse as RunSubmitFollowupResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
     type RunListParams as RunListParams,
+    type RunSubmitFollowupParams as RunSubmitFollowupParams,
   };
 
   export {
@@ -1119,4 +1137,9 @@ export declare namespace Agent {
   };
 
   export { Sessions as Sessions, type SessionCheckRedirectResponse as SessionCheckRedirectResponse };
+
+  export {
+    Conversations as Conversations,
+    type ConversationCheckRedirectResponse as ConversationCheckRedirectResponse,
+  };
 }
