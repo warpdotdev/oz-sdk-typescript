@@ -116,6 +116,16 @@ export interface AgentResponse {
   uid: string;
 
   /**
+   * Base model for runs executed by this agent. The precedence order for model
+   * resolution is:
+   *
+   * 1. The model specified on the run itself
+   * 2. The agent's base model
+   * 3. The team's default model
+   */
+  base_model?: string;
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -138,6 +148,11 @@ export interface CreateAgentRequest {
    * A name for the agent
    */
   name: string;
+
+  /**
+   * Optional base model for runs executed by this agent.
+   */
+  base_model?: string | null;
 
   /**
    * Optional description of the agent
@@ -186,6 +201,12 @@ export interface ListAgentIdentitiesResponse {
  */
 export interface UpdateAgentRequest {
   /**
+   * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
+   * string to clear.
+   */
+  base_model?: string | null;
+
+  /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -228,6 +249,11 @@ export interface AgentCreateParams {
   name: string;
 
   /**
+   * Optional base model for runs executed by this agent.
+   */
+  base_model?: string | null;
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -262,6 +288,12 @@ export namespace AgentCreateParams {
 }
 
 export interface AgentUpdateParams {
+  /**
+   * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
+   * string to clear.
+   */
+  base_model?: string | null;
+
   /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.

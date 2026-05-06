@@ -24,6 +24,7 @@ describe('resource agent', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.agent.agent.create({
       name: 'name',
+      base_model: 'base_model',
       description: 'description',
       secrets: [{ name: 'name' }],
       skills: ['string'],
