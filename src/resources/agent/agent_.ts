@@ -67,6 +67,20 @@ export class Agent extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Retrieve a single agent by its unique identifier. The response includes an
+   * `available` flag indicating whether the agent is within the team's plan limit
+   * and may be used for runs.
+   *
+   * @example
+   * ```ts
+   * const agentResponse = await client.agent.agent.get('uid');
+   * ```
+   */
+  get(uid: string, options?: RequestOptions): APIPromise<AgentResponse> {
+    return this._client.get(path`/agent/identities/${uid}`, options);
+  }
 }
 
 export interface AgentResponse {
