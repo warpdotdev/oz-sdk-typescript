@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0-alpha.1 (2026-05-07)
+
+Full Changelog: [v1.4.0-alpha.0...v1.4.0-alpha.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.0...v1.4.0-alpha.1)
+
+### Features
+
+* [REMOTE-1538] Support base model on named agents ([3a54264](https://github.com/warpdotdev/oz-sdk-typescript/commit/3a54264de3e6baf3b379c92e48a00cbc9830831a))
+* **api:** api update ([059f1e3](https://github.com/warpdotdev/oz-sdk-typescript/commit/059f1e301e4ec75a6d8c27730ae8d01ef9bafc9d))
+* Include agent UID in scheduled agent API responses ([220e7b7](https://github.com/warpdotdev/oz-sdk-typescript/commit/220e7b79ec1407f7467cdc764eef28f06ecb7548))
+* Surface platform credits in the public API ([01c55d8](https://github.com/warpdotdev/oz-sdk-typescript/commit/01c55d8fc871536332ea72cdfa2bc804466c4aba))
+
 ## 1.4.0-alpha.0 (2026-05-03)
 
 Full Changelog: [v1.3.0...v1.4.0-alpha.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.3.0...v1.4.0-alpha.0)
