@@ -178,6 +178,11 @@ export interface ScheduledAgentItem {
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
+  /**
+   * UID of the agent that this schedule runs as
+   */
+  agent_uid?: string;
+
   created_by?: AgentAPI.UserProfile;
 
   /**
