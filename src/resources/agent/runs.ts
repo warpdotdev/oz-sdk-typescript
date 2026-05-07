@@ -455,6 +455,11 @@ export namespace RunItem {
      * Cost of LLM inference for the run
      */
     inference_cost?: number;
+
+    /**
+     * Cost of platform usage for the run
+     */
+    platform_cost?: number;
   }
 
   /**

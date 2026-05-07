@@ -67,6 +67,20 @@ export class Agent extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Retrieve a single agent by its unique identifier. The response includes an
+   * `available` flag indicating whether the agent is within the team's plan limit
+   * and may be used for runs.
+   *
+   * @example
+   * ```ts
+   * const agentResponse = await client.agent.agent.get('uid');
+   * ```
+   */
+  get(uid: string, options?: RequestOptions): APIPromise<AgentResponse> {
+    return this._client.get(path`/agent/identities/${uid}`, options);
+  }
 }
 
 export interface AgentResponse {
@@ -102,6 +116,16 @@ export interface AgentResponse {
   uid: string;
 
   /**
+   * Base model for runs executed by this agent. The precedence order for model
+   * resolution is:
+   *
+   * 1. The model specified on the run itself
+   * 2. The agent's base model
+   * 3. The team's default model
+   */
+  base_model?: string;
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -124,6 +148,11 @@ export interface CreateAgentRequest {
    * A name for the agent
    */
   name: string;
+
+  /**
+   * Optional base model for runs executed by this agent.
+   */
+  base_model?: string | null;
 
   /**
    * Optional description of the agent
@@ -172,6 +201,12 @@ export interface ListAgentIdentitiesResponse {
  */
 export interface UpdateAgentRequest {
   /**
+   * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
+   * string to clear.
+   */
+  base_model?: string | null;
+
+  /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -214,6 +249,11 @@ export interface AgentCreateParams {
   name: string;
 
   /**
+   * Optional base model for runs executed by this agent.
+   */
+  base_model?: string | null;
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -248,6 +288,12 @@ export namespace AgentCreateParams {
 }
 
 export interface AgentUpdateParams {
+  /**
+   * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
+   * string to clear.
+   */
+  base_model?: string | null;
+
   /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
