@@ -95,6 +95,12 @@ export interface AgentResponse {
   created_at: string;
 
   /**
+   * Memory stores attached to this agent. Always present; empty when no stores are
+   * attached.
+   */
+  memory_stores: Array<AgentResponse.MemoryStore>;
+
+  /**
    * Name of the agent
    */
   name: string;
@@ -133,6 +139,26 @@ export interface AgentResponse {
 
 export namespace AgentResponse {
   /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
+  /**
    * Reference to a managed secret by name.
    */
   export interface Secret {
@@ -160,6 +186,13 @@ export interface CreateAgentRequest {
   description?: string | null;
 
   /**
+   * Optional list of memory stores to attach to the agent. Each store must be
+   * team-owned by the same team as the agent. Duplicate UIDs within a single request
+   * are rejected.
+   */
+  memory_stores?: Array<CreateAgentRequest.MemoryStore>;
+
+  /**
    * Optional list of secrets associated with the agent. Duplicate names within a
    * single request are rejected. Each entry is unioned into the run-time secret
    * scope when the agent executes.
@@ -177,6 +210,26 @@ export interface CreateAgentRequest {
 }
 
 export namespace CreateAgentRequest {
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -213,6 +266,12 @@ export interface UpdateAgentRequest {
   description?: string | null;
 
   /**
+   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
+   * to clear, or pass a non-empty array to replace.
+   */
+  memory_stores?: Array<UpdateAgentRequest.MemoryStore> | null;
+
+  /**
    * The new name for the agent
    */
   name?: string;
@@ -231,6 +290,26 @@ export interface UpdateAgentRequest {
 }
 
 export namespace UpdateAgentRequest {
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -259,6 +338,13 @@ export interface AgentCreateParams {
   description?: string | null;
 
   /**
+   * Optional list of memory stores to attach to the agent. Each store must be
+   * team-owned by the same team as the agent. Duplicate UIDs within a single request
+   * are rejected.
+   */
+  memory_stores?: Array<AgentCreateParams.MemoryStore>;
+
+  /**
    * Optional list of secrets associated with the agent. Duplicate names within a
    * single request are rejected. Each entry is unioned into the run-time secret
    * scope when the agent executes.
@@ -276,6 +362,26 @@ export interface AgentCreateParams {
 }
 
 export namespace AgentCreateParams {
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -301,6 +407,12 @@ export interface AgentUpdateParams {
   description?: string | null;
 
   /**
+   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
+   * to clear, or pass a non-empty array to replace.
+   */
+  memory_stores?: Array<AgentUpdateParams.MemoryStore> | null;
+
+  /**
    * The new name for the agent
    */
   name?: string;
@@ -319,6 +431,26 @@ export interface AgentUpdateParams {
 }
 
 export namespace AgentUpdateParams {
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
