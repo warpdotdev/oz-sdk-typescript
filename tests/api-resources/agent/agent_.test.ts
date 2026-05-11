@@ -26,6 +26,7 @@ describe('resource agent', () => {
       name: 'name',
       base_model: 'base_model',
       description: 'description',
+      prompt: 'prompt',
       secrets: [{ name: 'name' }],
       skills: ['string'],
     });
