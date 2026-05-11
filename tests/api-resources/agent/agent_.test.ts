@@ -26,13 +26,6 @@ describe('resource agent', () => {
       name: 'name',
       base_model: 'base_model',
       description: 'description',
-      memory_stores: [
-        {
-          access: 'read_write',
-          instructions: 'instructions',
-          uid: 'uid',
-        },
-      ],
       secrets: [{ name: 'name' }],
       skills: ['string'],
     });
