@@ -129,6 +129,11 @@ export interface AgentResponse {
    * Optional description of the agent
    */
   description?: string | null;
+
+  /**
+   * Optional base prompt for this agent
+   */
+  prompt?: string | null;
 }
 
 export namespace AgentResponse {
@@ -158,6 +163,11 @@ export interface CreateAgentRequest {
    * Optional description of the agent
    */
   description?: string | null;
+
+  /**
+   * Optional base prompt for this agent
+   */
+  prompt?: string | null;
 
   /**
    * Optional list of secrets associated with the agent. Duplicate names within a
@@ -218,6 +228,12 @@ export interface UpdateAgentRequest {
   name?: string;
 
   /**
+   * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
+   * value to clear.
+   */
+  prompt?: string | null;
+
+  /**
    * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
    * clear, or pass a non-empty array to replace. Duplicate names are rejected.
    */
@@ -257,6 +273,11 @@ export interface AgentCreateParams {
    * Optional description of the agent
    */
   description?: string | null;
+
+  /**
+   * Optional base prompt for this agent
+   */
+  prompt?: string | null;
 
   /**
    * Optional list of secrets associated with the agent. Duplicate names within a
@@ -304,6 +325,12 @@ export interface AgentUpdateParams {
    * The new name for the agent
    */
   name?: string;
+
+  /**
+   * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
+   * value to clear.
+   */
+  prompt?: string | null;
 
   /**
    * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
