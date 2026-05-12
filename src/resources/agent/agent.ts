@@ -246,9 +246,19 @@ export interface AmbientAgentConfig {
   idle_timeout_minutes?: number;
 
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: AmbientAgentConfig.InferenceProviders;
+
+  /**
    * Map of MCP server configurations by name
    */
   mcp_servers?: { [key: string]: McpServerConfig };
+
+  /**
+   * Memory stores to attach to this run.
+   */
+  memory_stores?: Array<AmbientAgentConfig.MemoryStore>;
 
   /**
    * LLM model to use (uses team default if not specified)
@@ -316,6 +326,53 @@ export namespace AmbientAgentConfig {
      * type is "claude".
      */
     claude_auth_secret_name?: string;
+  }
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
   }
 
   /**

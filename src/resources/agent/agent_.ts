@@ -95,6 +95,12 @@ export interface AgentResponse {
   created_at: string;
 
   /**
+   * Memory stores attached to this agent. Always present; empty when no stores are
+   * attached.
+   */
+  memory_stores: Array<AgentResponse.MemoryStore>;
+
+  /**
    * Name of the agent
    */
   name: string;
@@ -131,12 +137,37 @@ export interface AgentResponse {
   description?: string | null;
 
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: AgentResponse.InferenceProviders;
+
+  /**
    * Optional base prompt for this agent
    */
   prompt?: string | null;
 }
 
 export namespace AgentResponse {
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -145,6 +176,33 @@ export namespace AgentResponse {
      * Name of the managed secret.
      */
     name: string;
+  }
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
   }
 }
 
@@ -163,6 +221,18 @@ export interface CreateAgentRequest {
    * Optional description of the agent
    */
   description?: string | null;
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: CreateAgentRequest.InferenceProviders;
+
+  /**
+   * Optional list of memory stores to attach to the agent. Each store must be
+   * team-owned by the same team as the agent. Duplicate UIDs within a single request
+   * are rejected.
+   */
+  memory_stores?: Array<CreateAgentRequest.MemoryStore>;
 
   /**
    * Optional base prompt for this agent
@@ -187,6 +257,53 @@ export interface CreateAgentRequest {
 }
 
 export namespace CreateAgentRequest {
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -223,6 +340,17 @@ export interface UpdateAgentRequest {
   description?: string | null;
 
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: UpdateAgentRequest.InferenceProviders | null;
+
+  /**
+   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
+   * to clear, or pass a non-empty array to replace.
+   */
+  memory_stores?: Array<UpdateAgentRequest.MemoryStore> | null;
+
+  /**
    * The new name for the agent
    */
   name?: string;
@@ -247,6 +375,53 @@ export interface UpdateAgentRequest {
 }
 
 export namespace UpdateAgentRequest {
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
@@ -275,6 +450,18 @@ export interface AgentCreateParams {
   description?: string | null;
 
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: AgentCreateParams.InferenceProviders;
+
+  /**
+   * Optional list of memory stores to attach to the agent. Each store must be
+   * team-owned by the same team as the agent. Duplicate UIDs within a single request
+   * are rejected.
+   */
+  memory_stores?: Array<AgentCreateParams.MemoryStore>;
+
+  /**
    * Optional base prompt for this agent
    */
   prompt?: string | null;
@@ -298,6 +485,53 @@ export interface AgentCreateParams {
 
 export namespace AgentCreateParams {
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
+  /**
    * Reference to a managed secret by name.
    */
   export interface Secret {
@@ -320,6 +554,17 @@ export interface AgentUpdateParams {
    * value to clear.
    */
   description?: string | null;
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: AgentUpdateParams.InferenceProviders | null;
+
+  /**
+   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
+   * to clear, or pass a non-empty array to replace.
+   */
+  memory_stores?: Array<AgentUpdateParams.MemoryStore> | null;
 
   /**
    * The new name for the agent
@@ -346,6 +591,53 @@ export interface AgentUpdateParams {
 }
 
 export namespace AgentUpdateParams {
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
+  }
+
   /**
    * Reference to a managed secret by name.
    */
