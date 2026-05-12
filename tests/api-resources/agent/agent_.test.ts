@@ -26,6 +26,14 @@ describe('resource agent', () => {
       name: 'name',
       base_model: 'base_model',
       description: 'description',
+      inference_providers: { aws: { disabled: true, role_arn: 'role_arn' } },
+      memory_stores: [
+        {
+          access: 'read_write',
+          instructions: 'instructions',
+          uid: 'uid',
+        },
+      ],
       prompt: 'prompt',
       secrets: [{ name: 'name' }],
       skills: ['string'],
