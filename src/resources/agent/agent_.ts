@@ -122,16 +122,6 @@ export interface AgentResponse {
   uid: string;
 
   /**
-   * Default harness for runs executed by this agent. The precedence order for
-   * harness resolution is:
-   *
-   * 1. The harness specified on the run itself
-   * 2. The agent's base harness
-   * 3. Oz
-   */
-  base_harness?: string;
-
-  /**
    * Base model for runs executed by this agent. The precedence order for model
    * resolution is:
    *
@@ -145,12 +135,6 @@ export interface AgentResponse {
    * Optional description of the agent
    */
   description?: string | null;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: AgentResponse.HarnessAuthSecrets;
 
   /**
    * Inference provider settings used for LLM calls.
@@ -195,19 +179,6 @@ export namespace AgentResponse {
   }
 
   /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-  }
-
-  /**
    * Inference provider settings used for LLM calls.
    */
   export interface InferenceProviders {
@@ -242,11 +213,6 @@ export interface CreateAgentRequest {
   name: string;
 
   /**
-   * Optional default harness for runs executed by this agent.
-   */
-  base_harness?: string | null;
-
-  /**
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
@@ -255,12 +221,6 @@ export interface CreateAgentRequest {
    * Optional description of the agent
    */
   description?: string | null;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: CreateAgentRequest.HarnessAuthSecrets;
 
   /**
    * Inference provider settings used for LLM calls.
@@ -297,19 +257,6 @@ export interface CreateAgentRequest {
 }
 
 export namespace CreateAgentRequest {
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-  }
-
   /**
    * Inference provider settings used for LLM calls.
    */
@@ -381,12 +328,6 @@ export interface ListAgentIdentitiesResponse {
  */
 export interface UpdateAgentRequest {
   /**
-   * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
-   * empty string to clear.
-   */
-  base_harness?: string | null;
-
-  /**
    * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
    * string to clear.
    */
@@ -397,12 +338,6 @@ export interface UpdateAgentRequest {
    * value to clear.
    */
   description?: string | null;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: UpdateAgentRequest.HarnessAuthSecrets | null;
 
   /**
    * Inference provider settings used for LLM calls.
@@ -440,19 +375,6 @@ export interface UpdateAgentRequest {
 }
 
 export namespace UpdateAgentRequest {
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-  }
-
   /**
    * Inference provider settings used for LLM calls.
    */
@@ -518,11 +440,6 @@ export interface AgentCreateParams {
   name: string;
 
   /**
-   * Optional default harness for runs executed by this agent.
-   */
-  base_harness?: string | null;
-
-  /**
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
@@ -531,12 +448,6 @@ export interface AgentCreateParams {
    * Optional description of the agent
    */
   description?: string | null;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: AgentCreateParams.HarnessAuthSecrets;
 
   /**
    * Inference provider settings used for LLM calls.
@@ -573,19 +484,6 @@ export interface AgentCreateParams {
 }
 
 export namespace AgentCreateParams {
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-  }
-
   /**
    * Inference provider settings used for LLM calls.
    */
@@ -646,12 +544,6 @@ export namespace AgentCreateParams {
 
 export interface AgentUpdateParams {
   /**
-   * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
-   * empty string to clear.
-   */
-  base_harness?: string | null;
-
-  /**
    * Replacement base model. Omit or pass `null` to leave unchanged, or pass an empty
    * string to clear.
    */
@@ -662,12 +554,6 @@ export interface AgentUpdateParams {
    * value to clear.
    */
   description?: string | null;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: AgentUpdateParams.HarnessAuthSecrets | null;
 
   /**
    * Inference provider settings used for LLM calls.
@@ -705,19 +591,6 @@ export interface AgentUpdateParams {
 }
 
 export namespace AgentUpdateParams {
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-  }
-
   /**
    * Inference provider settings used for LLM calls.
    */
