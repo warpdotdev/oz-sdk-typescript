@@ -24,8 +24,13 @@ describe('resource agent', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.agent.agent.create({
       name: 'name',
+      base_harness: 'base_harness',
       base_model: 'base_model',
       description: 'description',
+      harness_auth_secrets: {
+        claude_auth_secret_name: 'claude_auth_secret_name',
+        codex_auth_secret_name: 'codex_auth_secret_name',
+      },
       inference_providers: { aws: { disabled: true, role_arn: 'role_arn' } },
       memory_stores: [
         {
