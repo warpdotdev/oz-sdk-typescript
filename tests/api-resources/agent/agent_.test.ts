@@ -27,7 +27,6 @@ describe('resource agent', () => {
       base_harness: 'base_harness',
       base_model: 'base_model',
       description: 'description',
-      environment_id: 'environment_id',
       harness_auth_secrets: {
         claude_auth_secret_name: 'claude_auth_secret_name',
         codex_auth_secret_name: 'codex_auth_secret_name',

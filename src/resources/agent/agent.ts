@@ -284,22 +284,12 @@ export interface AmbientAgentConfig {
   session_sharing?: AmbientAgentConfig.SessionSharing;
 
   /**
-   * Skill specification identifying the primary agent skill to use. Format:
+   * Skill specification identifying which agent skill to use. Format:
    * "{owner}/{repo}:{skill_path}" Example:
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
-   * skills in create/update requests. Responses include the first skills entry here
-   * for backward compatibility. Use the list agents endpoint to discover available
-   * skills.
+   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Use the list agents
+   * endpoint to discover available skills.
    */
   skill_spec?: string;
-
-  /**
-   * Ordered skill specifications to attach to the run. Format:
-   * "{owner}/{repo}:{skill_path}" Example:
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
-   * skill_spec in create/update requests.
-   */
-  skills?: Array<string>;
 
   /**
    * Self-hosted worker ID that should execute this task. If not specified or set to
@@ -1099,7 +1089,7 @@ export interface AgentRunParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
-   * specified via the skill field, config.skill_spec, or config.skills.
+   * specified via the skill field or config.skill_spec.
    */
   prompt?: string;
 
