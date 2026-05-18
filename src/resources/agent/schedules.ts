@@ -258,7 +258,7 @@ export interface ScheduleCreateParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless
-   * agent_config.skill_spec is provided.
+   * agent_config.skill_spec or agent_config.skills is provided.
    */
   prompt?: string;
 
@@ -304,7 +304,7 @@ export interface ScheduleUpdateParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless
-   * agent_config.skill_spec is provided.
+   * agent_config.skill_spec or agent_config.skills is provided.
    */
   prompt?: string;
 }

@@ -147,6 +147,16 @@ export interface AgentResponse {
   description?: string | null;
 
   /**
+   * Default cloud environment ID for runs executed by this agent. The precedence
+   * order for environment resolution is:
+   *
+   * 1. The environment specified on the run itself
+   * 2. The agent's default environment
+   * 3. An empty environment
+   */
+  environment_id?: string;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -267,6 +277,12 @@ export interface CreateAgentRequest {
    * Optional description of the agent
    */
   description?: string | null;
+
+  /**
+   * Optional default cloud environment ID for runs executed by this agent. The
+   * environment must be owned by the same team as the agent.
+   */
+  environment_id?: string | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -423,6 +439,12 @@ export interface UpdateAgentRequest {
   description?: string | null;
 
   /**
+   * Replacement default cloud environment ID. Omit or pass `null` to leave
+   * unchanged, or pass an empty string to clear.
+   */
+  environment_id?: string | null;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -569,6 +591,12 @@ export interface AgentCreateParams {
   description?: string | null;
 
   /**
+   * Optional default cloud environment ID for runs executed by this agent. The
+   * environment must be owned by the same team as the agent.
+   */
+  environment_id?: string | null;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -710,6 +738,12 @@ export interface AgentUpdateParams {
    * value to clear.
    */
   description?: string | null;
+
+  /**
+   * Replacement default cloud environment ID. Omit or pass `null` to leave
+   * unchanged, or pass an empty string to clear.
+   */
+  environment_id?: string | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
