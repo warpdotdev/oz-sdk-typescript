@@ -31,7 +31,13 @@ describe('resource agent', () => {
         claude_auth_secret_name: 'claude_auth_secret_name',
         codex_auth_secret_name: 'codex_auth_secret_name',
       },
-      inference_providers: { aws: { disabled: true, role_arn: 'role_arn' } },
+      inference_providers: {
+        aws: {
+          disabled: true,
+          region: 'region',
+          role_arn: 'role_arn',
+        },
+      },
       memory_stores: [
         {
           access: 'read_write',
