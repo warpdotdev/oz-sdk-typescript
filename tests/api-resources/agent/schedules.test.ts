@@ -38,7 +38,13 @@ describe('resource schedules', () => {
           codex_auth_secret_name: 'codex_auth_secret_name',
         },
         idle_timeout_minutes: 1,
-        inference_providers: { aws: { disabled: true, role_arn: 'role_arn' } },
+        inference_providers: {
+          aws: {
+            disabled: true,
+            region: 'region',
+            role_arn: 'role_arn',
+          },
+        },
         mcp_servers: {
           foo: {
             args: ['string'],
@@ -114,7 +120,13 @@ describe('resource schedules', () => {
           codex_auth_secret_name: 'codex_auth_secret_name',
         },
         idle_timeout_minutes: 1,
-        inference_providers: { aws: { disabled: true, role_arn: 'role_arn' } },
+        inference_providers: {
+          aws: {
+            disabled: true,
+            region: 'region',
+            role_arn: 'role_arn',
+          },
+        },
         mcp_servers: {
           foo: {
             args: ['string'],

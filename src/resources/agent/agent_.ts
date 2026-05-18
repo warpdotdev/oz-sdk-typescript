@@ -235,6 +235,11 @@ export namespace AgentResponse {
       disabled?: boolean;
 
       /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
+
+      /**
        * IAM role ARN to assume when calling Bedrock.
        */
       role_arn?: string;
@@ -343,6 +348,11 @@ export namespace CreateAgentRequest {
        * If true, opt out of Bedrock at this layer.
        */
       disabled?: boolean;
+
+      /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
 
       /**
        * IAM role ARN to assume when calling Bedrock.
@@ -495,6 +505,11 @@ export namespace UpdateAgentRequest {
       disabled?: boolean;
 
       /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
+
+      /**
        * IAM role ARN to assume when calling Bedrock.
        */
       role_arn?: string;
@@ -635,6 +650,11 @@ export namespace AgentCreateParams {
       disabled?: boolean;
 
       /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
+
+      /**
        * IAM role ARN to assume when calling Bedrock.
        */
       role_arn?: string;
@@ -772,6 +792,11 @@ export namespace AgentUpdateParams {
        * If true, opt out of Bedrock at this layer.
        */
       disabled?: boolean;
+
+      /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
 
       /**
        * IAM role ARN to assume when calling Bedrock.

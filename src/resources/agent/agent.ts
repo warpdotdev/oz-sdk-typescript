@@ -356,6 +356,11 @@ export namespace AmbientAgentConfig {
       disabled?: boolean;
 
       /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
+
+      /**
        * IAM role ARN to assume when calling Bedrock.
        */
       role_arn?: string;
