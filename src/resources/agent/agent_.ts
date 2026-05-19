@@ -122,11 +122,6 @@ export interface AgentResponse {
   uid: string;
 
   /**
-   * When the agent was last updated (RFC3339)
-   */
-  updated_at: string;
-
-  /**
    * Default harness for runs executed by this agent. The precedence order for
    * harness resolution is:
    *
