@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.4.0-alpha.2 (2026-05-21)
+
+Full Changelog: [v1.4.0-alpha.1...v1.4.0-alpha.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.1...v1.4.0-alpha.2)
+
+### Features
+
+* Add default harness selection for agents ([a5ec72d](https://github.com/warpdotdev/oz-sdk-typescript/commit/a5ec72d95f8c53927571b3493396c1282c7f1844))
+* Add per-agent AWS Bedrock OIDC inference role (backend) ([c82dc15](https://github.com/warpdotdev/oz-sdk-typescript/commit/c82dc153cdac6ab44e4e2aa3bf451a50bba54a52))
+* Add updated_at to agent API responses ([0de41e1](https://github.com/warpdotdev/oz-sdk-typescript/commit/0de41e183fc457652ffda1cd94c624ed9f70e04c))
+* **agents:** add prompt property to agent identity data model ([bc889e1](https://github.com/warpdotdev/oz-sdk-typescript/commit/bc889e1be8e9d52df135230cb37aa6817192e4cd))
+* **api:** api update ([05594f1](https://github.com/warpdotdev/oz-sdk-typescript/commit/05594f1ad14c32f357fcd31ceaea7758c5b41a91))
+* **api:** api update ([4e81853](https://github.com/warpdotdev/oz-sdk-typescript/commit/4e81853387e0cb3031ba517781ab2560f92a98fc))
+* **api:** api update ([64fc1a2](https://github.com/warpdotdev/oz-sdk-typescript/commit/64fc1a2471b3e0ed9873795a04b4f0e2368c92dd))
+* **api:** api update ([f43cf4f](https://github.com/warpdotdev/oz-sdk-typescript/commit/f43cf4fb4f402b3961166a792b7556fbee266ece))
+* **api:** api update ([a530c11](https://github.com/warpdotdev/oz-sdk-typescript/commit/a530c11d0897c8c1cc3706e1fc68d2d9b1768689))
+* **api:** api update ([63390f5](https://github.com/warpdotdev/oz-sdk-typescript/commit/63390f5adc5bfae988ebc6081c3f447672c59d61))
+* **api:** api update ([89e4435](https://github.com/warpdotdev/oz-sdk-typescript/commit/89e44352062b2526d9bd39f28d70562c87d667cf))
+* **api:** api update ([345e736](https://github.com/warpdotdev/oz-sdk-typescript/commit/345e736aba6081962afbae4d997b267ee7755497))
+* **api:** api update ([63ba09a](https://github.com/warpdotdev/oz-sdk-typescript/commit/63ba09ae4224b712830fb30980b96e3658804e01))
+* **api:** api update ([cfd9f36](https://github.com/warpdotdev/oz-sdk-typescript/commit/cfd9f367cd29d9bd81d74e1b1c4c2a908806967b))
+* **api:** api update ([cc72fe8](https://github.com/warpdotdev/oz-sdk-typescript/commit/cc72fe842eb431c60bbe72f16b3aab1694893fb6))
+* Codex auth: API key support. ([3239af5](https://github.com/warpdotdev/oz-sdk-typescript/commit/3239af50b067dc61e9795e0abbd0e11fb155e83d))
+* **memory:** agent identity memory store attachments — API layer ([f987f21](https://github.com/warpdotdev/oz-sdk-typescript/commit/f987f2148a940658d6e751ef1b98e4a5dbc2c3a3))
+* **memory:** wire memory stores into run pipeline and add listing endpoint ([56324ee](https://github.com/warpdotdev/oz-sdk-typescript/commit/56324ee8cf997f928aa67e3c95821b78fea619b2))
+* Partial support for multiple skills per run ([a24ac35](https://github.com/warpdotdev/oz-sdk-typescript/commit/a24ac355581959d8fa6329a8adc2a7f11cc31dfb))
+* Resolve Bedrock region server-side and ship as AWS_REGION ([fce3967](https://github.com/warpdotdev/oz-sdk-typescript/commit/fce39679b0ca2095b812fac8631b71d81fceef63))
+* Retrieve memories in third party harnesses ([3df6e50](https://github.com/warpdotdev/oz-sdk-typescript/commit/3df6e50ad1915320ad8b0e15be00dac5c55c1b06))
+* Support service account impersonation in GCP Workload Identity Federation config ([2a1e2cd](https://github.com/warpdotdev/oz-sdk-typescript/commit/2a1e2cd9bd113ab834c70ff1df781696220b21b5))
+
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([17a7800](https://github.com/warpdotdev/oz-sdk-typescript/commit/17a7800ccf6ea73492d8dc5d20ff3a1b83ab36dc))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([173a753](https://github.com/warpdotdev/oz-sdk-typescript/commit/173a7532c552b3741ecb6e34a177d4f7f4ecce5d))
+* **tests:** remove redundant File import ([c8353e7](https://github.com/warpdotdev/oz-sdk-typescript/commit/c8353e75abd9f48897f6f60339cfdf62920eaf19))
+
 ## 1.4.0-alpha.1 (2026-05-07)
 
 Full Changelog: [v1.4.0-alpha.0...v1.4.0-alpha.1](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.0...v1.4.0-alpha.1)
