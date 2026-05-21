@@ -704,11 +704,6 @@ export interface GcpProviderConfig {
    * Workload Identity Federation provider ID
    */
   workload_identity_federation_provider_id: string;
-
-  /**
-   * Optional GCP service account email to impersonate
-   */
-  service_account_email?: string;
 }
 
 /**
