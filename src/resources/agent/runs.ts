@@ -363,6 +363,12 @@ export interface RunItem {
   request_usage?: RunItem.RequestUsage;
 
   /**
+   * Total runtime as an ISO 8601 duration (e.g. "PT2M30S"), computed server-side
+   * from run executions.
+   */
+  run_time?: string;
+
+  /**
    * Information about the schedule that triggered this run (only present for
    * scheduled runs)
    */
