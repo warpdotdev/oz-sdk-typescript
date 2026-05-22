@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.0-alpha.3 (2026-05-22)
+
+Full Changelog: [v1.4.0-alpha.2...v1.4.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.2...v1.4.0-alpha.3)
+
+### Features
+
+* Add server run runtime to agent API ([e49773d](https://github.com/warpdotdev/oz-sdk-typescript/commit/e49773d7328b9696bb5652f46a8de2504ba0e60a))
+* **api:** api update ([ecb0b48](https://github.com/warpdotdev/oz-sdk-typescript/commit/ecb0b48122aa481fa4ca2f8f388f1e039d0c2adc))
+* **api:** api update ([6bc09f4](https://github.com/warpdotdev/oz-sdk-typescript/commit/6bc09f40033ed75fccc155a81da1d86e865517aa))
+
 ## 1.4.0-alpha.2 (2026-05-21)
 
 Full Changelog: [v1.4.0-alpha.1...v1.4.0-alpha.2](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.1...v1.4.0-alpha.2)
