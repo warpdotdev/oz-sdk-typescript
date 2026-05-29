@@ -90,8 +90,8 @@ describe('resource runs', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('submitFollowup', async () => {
-    const responsePromise = client.agent.runs.submitFollowup('runId', {});
+  test.skip('submitFollowup: only required params', async () => {
+    const responsePromise = client.agent.runs.submitFollowup('runId', { message: 'message' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -99,5 +99,10 @@ describe('resource runs', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('submitFollowup: required and optional params', async () => {
+    const response = await client.agent.runs.submitFollowup('runId', { message: 'message', mode: 'normal' });
   });
 });

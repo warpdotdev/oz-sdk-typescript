@@ -1109,8 +1109,7 @@ export interface AgentRunParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
-   * specified via the skill field, config.skill_spec, or config.skills. Handoff
-   * requests may omit prompt when conversation_id is set.
+   * specified via the skill field, config.skill_spec, or config.skills.
    */
   prompt?: string;
 
