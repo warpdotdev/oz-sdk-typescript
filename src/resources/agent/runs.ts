@@ -92,7 +92,6 @@ export class Runs extends APIResource {
    * ```ts
    * const response = await client.agent.runs.submitFollowup(
    *   'runId',
-   *   { message: 'message' },
    * );
    * ```
    */
@@ -741,7 +740,7 @@ export interface RunSubmitFollowupParams {
   /**
    * The follow-up message to send to the run.
    */
-  message: string;
+  message?: string;
 
   /**
    * Optional query mode for the follow-up. Defaults to `normal` when omitted. The
