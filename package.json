@@ -50,15 +50,18 @@
     "typescript-eslint": "8.31.1"
   },
   "overrides": {
-    "minimatch": "^9.0.5"
+    "minimatch": "^9.0.5",
+    "handlebars": "4.7.9"
   },
   "pnpm": {
     "overrides": {
-      "minimatch": "^9.0.5"
+      "minimatch": "^9.0.5",
+      "handlebars": "4.7.9"
     }
   },
   "resolutions": {
-    "minimatch": "^9.0.5"
+    "minimatch": "^9.0.5",
+    "handlebars": "4.7.9"
   },
   "exports": {
     ".": {
