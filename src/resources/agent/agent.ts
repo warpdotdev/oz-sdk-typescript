@@ -104,8 +104,8 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Alias for POST /agent/run. This is the preferred endpoint for creating new agent
-   * runs. Behavior is identical to POST /agent/run.
+   * Spawn a cloud agent with a prompt and optional configuration. The agent will be
+   * queued for execution and assigned a unique run ID.
    *
    * @example
    * ```ts
