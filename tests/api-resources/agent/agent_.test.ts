@@ -39,6 +39,16 @@ describe('resource agent', () => {
           role_arn: 'role_arn',
         },
       },
+      mcp_servers: {
+        foo: {
+          args: ['string'],
+          command: 'command',
+          env: { foo: 'string' },
+          headers: { foo: 'string' },
+          url: 'https://example.com',
+          warp_id: 'warp_id',
+        },
+      },
       memory_stores: [
         {
           access: 'read_write',
