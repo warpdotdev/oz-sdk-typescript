@@ -104,8 +104,8 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Alias for POST /agent/run. This is the preferred endpoint for creating new agent
-   * runs. Behavior is identical to POST /agent/run.
+   * Spawn a cloud agent with a prompt and optional configuration. The agent will be
+   * queued for execution and assigned a unique run ID.
    *
    * @example
    * ```ts
@@ -1109,7 +1109,8 @@ export interface AgentRunParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
-   * specified via the skill field, config.skill_spec, or config.skills.
+   * specified via the skill field, config.skill_spec, or config.skills. Handoff
+   * requests may omit prompt when conversation_id is set.
    */
   prompt?: string;
 

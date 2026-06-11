@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AgentAPI from './agent';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -173,6 +174,12 @@ export interface AgentResponse {
   inference_providers?: AgentResponse.InferenceProviders;
 
   /**
+   * MCP server configurations attached to this agent by default. Run-level MCP
+   * config takes precedence over this agent-level default.
+   */
+  mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
+
+  /**
    * Optional base prompt for this agent
    */
   prompt?: string | null;
@@ -299,6 +306,12 @@ export interface CreateAgentRequest {
    * Inference provider settings used for LLM calls.
    */
   inference_providers?: CreateAgentRequest.InferenceProviders;
+
+  /**
+   * Optional map of MCP server configurations by name to attach to runs executed by
+   * this agent. Run-level MCP config takes precedence over this agent-level default.
+   */
+  mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
    * Optional list of memory stores to attach to the agent. Each store must be
@@ -461,6 +474,13 @@ export interface UpdateAgentRequest {
   inference_providers?: UpdateAgentRequest.InferenceProviders | null;
 
   /**
+   * Replacement map of MCP server configurations by name. Omit to leave unchanged,
+   * pass an empty object to clear, or pass a non-empty object to replace. Run-level
+   * MCP config takes precedence over this agent-level default.
+   */
+  mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
+
+  /**
    * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
    * to clear, or pass a non-empty array to replace.
    */
@@ -613,6 +633,12 @@ export interface AgentCreateParams {
   inference_providers?: AgentCreateParams.InferenceProviders;
 
   /**
+   * Optional map of MCP server configurations by name to attach to runs executed by
+   * this agent. Run-level MCP config takes precedence over this agent-level default.
+   */
+  mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
+
+  /**
    * Optional list of memory stores to attach to the agent. Each store must be
    * team-owned by the same team as the agent. Duplicate UIDs within a single request
    * are rejected.
@@ -760,6 +786,13 @@ export interface AgentUpdateParams {
    * Inference provider settings used for LLM calls.
    */
   inference_providers?: AgentUpdateParams.InferenceProviders | null;
+
+  /**
+   * Replacement map of MCP server configurations by name. Omit to leave unchanged,
+   * pass an empty object to clear, or pass a non-empty object to replace. Run-level
+   * MCP config takes precedence over this agent-level default.
+   */
+  mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
    * Replacement list of memory stores. Omit to leave unchanged, pass an empty array

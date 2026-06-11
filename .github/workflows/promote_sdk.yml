@@ -1,0 +1,26 @@
+# Promote SDK updates from this staging repository to the corresponding
+# production repository.
+
+name: Promote SDK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote:
+    name: promote
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Promote SDK to production
+        uses: warpdotdev/warp-github-actions/.github/actions/promote_sdk@main
+        with:
+          production_repo_token: ${{ secrets.STAINLESS_SDK_PROD_WRITE_TOKEN }}
