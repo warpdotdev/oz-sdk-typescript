@@ -96,10 +96,9 @@ export interface AgentResponse {
   created_at: string;
 
   /**
-   * Memory stores attached to this agent. Always present; empty when no stores are
-   * attached.
+   * Memory settings for an agent.
    */
-  memory_stores: Array<AgentResponse.MemoryStore>;
+  memory: AgentResponse.Memory;
 
   /**
    * Name of the agent
@@ -187,23 +186,92 @@ export interface AgentResponse {
 
 export namespace AgentResponse {
   /**
-   * Reference to a memory store to attach to an agent.
+   * Memory settings for an agent.
    */
-  export interface MemoryStore {
+  export interface Memory {
     /**
-     * Access level for the store.
+     * Team memory stores attached to the agent.
      */
-    access: 'read_write' | 'read_only';
+    attached_stores: Array<Memory.AttachedStore>;
 
     /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
+     * Auto-memory state for an agent.
      */
-    instructions: string;
+    auto_memory: Memory.AutoMemory;
+  }
+
+  export namespace Memory {
+    /**
+     * Reference to a memory store to attach to an agent.
+     */
+    export interface AttachedStore {
+      /**
+       * Access level for the store.
+       */
+      access: 'read_write' | 'read_only';
+
+      /**
+       * Instructions for how the agent should use this memory store. Must not be empty.
+       */
+      instructions: string;
+
+      /**
+       * UID of the memory store.
+       */
+      uid: string;
+    }
 
     /**
-     * UID of the memory store.
+     * Auto-memory state for an agent.
      */
-    uid: string;
+    export interface AutoMemory {
+      /**
+       * Whether this agent has an agent-owned memory store.
+       */
+      enabled: boolean;
+
+      /**
+       * Memory store attached to an agent.
+       */
+      store?: AutoMemory.Store;
+    }
+
+    export namespace AutoMemory {
+      /**
+       * Memory store attached to an agent.
+       */
+      export interface Store {
+        /**
+         * Access level for the store.
+         */
+        access: 'read_write' | 'read_only';
+
+        /**
+         * Instructions for how the agent should use this memory store.
+         */
+        instructions: string;
+
+        /**
+         * Public owner type.
+         */
+        owner_type: 'user' | 'service_account' | 'team';
+
+        /**
+         * Public UID of the user, service account, or team that owns the memory store.
+         */
+        owner_uid: string;
+
+        /**
+         * UID of the memory store.
+         */
+        uid: string;
+
+        /**
+         * Optional description for the memory store.
+         */
+        description?: string;
+      }
+    }
   }
 
   /**
@@ -314,11 +382,9 @@ export interface CreateAgentRequest {
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
-   * Optional list of memory stores to attach to the agent. Each store must be
-   * team-owned by the same team as the agent. Duplicate UIDs within a single request
-   * are rejected.
+   * Memory settings for creating an agent.
    */
-  memory_stores?: Array<CreateAgentRequest.MemoryStore>;
+  memory?: CreateAgentRequest.Memory;
 
   /**
    * Optional base prompt for this agent
@@ -396,23 +462,52 @@ export namespace CreateAgentRequest {
   }
 
   /**
-   * Reference to a memory store to attach to an agent.
+   * Memory settings for creating an agent.
    */
-  export interface MemoryStore {
+  export interface Memory {
     /**
-     * Access level for the store.
+     * Existing team memory stores to attach to the agent. Duplicate UIDs within a
+     * single request are rejected.
      */
-    access: 'read_write' | 'read_only';
+    attached_stores?: Array<Memory.AttachedStore>;
 
     /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
+     * Auto-memory settings for creating an agent.
      */
-    instructions: string;
+    auto_memory?: Memory.AutoMemory;
+  }
+
+  export namespace Memory {
+    /**
+     * Reference to a memory store to attach to an agent.
+     */
+    export interface AttachedStore {
+      /**
+       * Access level for the store.
+       */
+      access: 'read_write' | 'read_only';
+
+      /**
+       * Instructions for how the agent should use this memory store. Must not be empty.
+       */
+      instructions: string;
+
+      /**
+       * UID of the memory store.
+       */
+      uid: string;
+    }
 
     /**
-     * UID of the memory store.
+     * Auto-memory settings for creating an agent.
      */
-    uid: string;
+    export interface AutoMemory {
+      /**
+       * Whether to create and attach a default service-account-owned memory store for
+       * this agent. Defaults to true when omitted.
+       */
+      enabled?: boolean;
+    }
   }
 
   /**
@@ -481,10 +576,9 @@ export interface UpdateAgentRequest {
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
-   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
-   * to clear, or pass a non-empty array to replace.
+   * Memory settings for updating an agent.
    */
-  memory_stores?: Array<UpdateAgentRequest.MemoryStore> | null;
+  memory?: UpdateAgentRequest.Memory | null;
 
   /**
    * The new name for the agent
@@ -564,23 +658,36 @@ export namespace UpdateAgentRequest {
   }
 
   /**
-   * Reference to a memory store to attach to an agent.
+   * Memory settings for updating an agent.
    */
-  export interface MemoryStore {
+  export interface Memory {
     /**
-     * Access level for the store.
+     * Replacement list of attached team memory stores. Omit to leave unchanged, pass
+     * an empty array to clear, or pass a non-empty array to replace.
      */
-    access: 'read_write' | 'read_only';
+    attached_stores?: Array<Memory.AttachedStore> | null;
+  }
 
+  export namespace Memory {
     /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
+     * Reference to a memory store to attach to an agent.
      */
-    instructions: string;
+    export interface AttachedStore {
+      /**
+       * Access level for the store.
+       */
+      access: 'read_write' | 'read_only';
 
-    /**
-     * UID of the memory store.
-     */
-    uid: string;
+      /**
+       * Instructions for how the agent should use this memory store. Must not be empty.
+       */
+      instructions: string;
+
+      /**
+       * UID of the memory store.
+       */
+      uid: string;
+    }
   }
 
   /**
@@ -639,11 +746,9 @@ export interface AgentCreateParams {
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
-   * Optional list of memory stores to attach to the agent. Each store must be
-   * team-owned by the same team as the agent. Duplicate UIDs within a single request
-   * are rejected.
+   * Memory settings for creating an agent.
    */
-  memory_stores?: Array<AgentCreateParams.MemoryStore>;
+  memory?: AgentCreateParams.Memory;
 
   /**
    * Optional base prompt for this agent
@@ -721,23 +826,52 @@ export namespace AgentCreateParams {
   }
 
   /**
-   * Reference to a memory store to attach to an agent.
+   * Memory settings for creating an agent.
    */
-  export interface MemoryStore {
+  export interface Memory {
     /**
-     * Access level for the store.
+     * Existing team memory stores to attach to the agent. Duplicate UIDs within a
+     * single request are rejected.
      */
-    access: 'read_write' | 'read_only';
+    attached_stores?: Array<Memory.AttachedStore>;
 
     /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
+     * Auto-memory settings for creating an agent.
      */
-    instructions: string;
+    auto_memory?: Memory.AutoMemory;
+  }
+
+  export namespace Memory {
+    /**
+     * Reference to a memory store to attach to an agent.
+     */
+    export interface AttachedStore {
+      /**
+       * Access level for the store.
+       */
+      access: 'read_write' | 'read_only';
+
+      /**
+       * Instructions for how the agent should use this memory store. Must not be empty.
+       */
+      instructions: string;
+
+      /**
+       * UID of the memory store.
+       */
+      uid: string;
+    }
 
     /**
-     * UID of the memory store.
+     * Auto-memory settings for creating an agent.
      */
-    uid: string;
+    export interface AutoMemory {
+      /**
+       * Whether to create and attach a default service-account-owned memory store for
+       * this agent. Defaults to true when omitted.
+       */
+      enabled?: boolean;
+    }
   }
 
   /**
@@ -795,10 +929,9 @@ export interface AgentUpdateParams {
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
-   * Replacement list of memory stores. Omit to leave unchanged, pass an empty array
-   * to clear, or pass a non-empty array to replace.
+   * Memory settings for updating an agent.
    */
-  memory_stores?: Array<AgentUpdateParams.MemoryStore> | null;
+  memory?: AgentUpdateParams.Memory | null;
 
   /**
    * The new name for the agent
@@ -878,23 +1011,36 @@ export namespace AgentUpdateParams {
   }
 
   /**
-   * Reference to a memory store to attach to an agent.
+   * Memory settings for updating an agent.
    */
-  export interface MemoryStore {
+  export interface Memory {
     /**
-     * Access level for the store.
+     * Replacement list of attached team memory stores. Omit to leave unchanged, pass
+     * an empty array to clear, or pass a non-empty array to replace.
      */
-    access: 'read_write' | 'read_only';
+    attached_stores?: Array<Memory.AttachedStore> | null;
+  }
 
+  export namespace Memory {
     /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
+     * Reference to a memory store to attach to an agent.
      */
-    instructions: string;
+    export interface AttachedStore {
+      /**
+       * Access level for the store.
+       */
+      access: 'read_write' | 'read_only';
 
-    /**
-     * UID of the memory store.
-     */
-    uid: string;
+      /**
+       * Instructions for how the agent should use this memory store. Must not be empty.
+       */
+      instructions: string;
+
+      /**
+       * UID of the memory store.
+       */
+      uid: string;
+    }
   }
 
   /**

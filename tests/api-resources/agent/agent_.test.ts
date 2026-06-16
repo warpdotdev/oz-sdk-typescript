@@ -49,13 +49,16 @@ describe('resource agent', () => {
           warp_id: 'warp_id',
         },
       },
-      memory_stores: [
-        {
-          access: 'read_write',
-          instructions: 'instructions',
-          uid: 'uid',
-        },
-      ],
+      memory: {
+        attached_stores: [
+          {
+            access: 'read_write',
+            instructions: 'instructions',
+            uid: 'uid',
+          },
+        ],
+        auto_memory: { enabled: true },
+      },
       prompt: 'prompt',
       secrets: [{ name: 'name' }],
       skills: ['string'],
