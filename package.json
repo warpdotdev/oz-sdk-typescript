@@ -51,17 +51,20 @@
   },
   "overrides": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.7",
+    "js-yaml": "4.2.0"
   },
   "pnpm": {
     "overrides": {
       "flatted": "^3.4.2",
-      "minimatch": "^9.0.7"
+      "minimatch": "^9.0.7",
+      "js-yaml": "4.2.0"
     }
   },
   "resolutions": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.7",
+    "js-yaml": "4.2.0"
   },
   "exports": {
     ".": {
