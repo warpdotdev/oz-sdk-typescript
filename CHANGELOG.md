@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.4.0-alpha.4 (2026-06-25)
+
+Full Changelog: [v1.4.0-alpha.3...v1.4.0-alpha.4](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.3...v1.4.0-alpha.4)
+
+### Features
+
+* Allow for empty-prompt cloud-agent handoff ([9c70c23](https://github.com/warpdotdev/oz-sdk-typescript/commit/9c70c23f280621a38982ad69d5558baa19461136))
+* **api:** api update ([9962d72](https://github.com/warpdotdev/oz-sdk-typescript/commit/9962d72c129a1a366a50a234cbec55a39c405d75))
+* **api:** api update ([6ca1066](https://github.com/warpdotdev/oz-sdk-typescript/commit/6ca106630fa48317e9da4907ed56c3132b0313d8))
+* **api:** api update ([eb49f4e](https://github.com/warpdotdev/oz-sdk-typescript/commit/eb49f4e0db257b83d8bd411572b127ce57ab8bb8))
+* **api:** api update ([d63714d](https://github.com/warpdotdev/oz-sdk-typescript/commit/d63714d943829a4e8e8f3d32b7ffa91717a94fcc))
+* **api:** api update ([9a36cd0](https://github.com/warpdotdev/oz-sdk-typescript/commit/9a36cd0f406cb1872ac4f77dad9793b5950629c0))
+* Followups for docs-syncing workflow ([5352485](https://github.com/warpdotdev/oz-sdk-typescript/commit/5352485eb4a7a32ab86779d3f8911720f3f980a1))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([2786b6c](https://github.com/warpdotdev/oz-sdk-typescript/commit/2786b6cda95db75f3c00a9a049cb594f35e7fdfd))
+* update flatted to resolve CVE-2026-33228 ([#32](https://github.com/warpdotdev/oz-sdk-typescript/issues/32)) ([4841416](https://github.com/warpdotdev/oz-sdk-typescript/commit/48414165a2fa1070ff1aa231a5fc309cf862daad))
+
 ## 1.4.0-alpha.3 (2026-05-22)
 
 Full Changelog: [v1.4.0-alpha.2...v1.4.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.2...v1.4.0-alpha.3)
