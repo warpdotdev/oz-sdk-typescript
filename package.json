@@ -51,17 +51,26 @@
   },
   "overrides": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.7",
+    "js-yaml": "4.2.0",
+    "handlebars": "4.7.9",
+    "picomatch": ">=2.3.2"
   },
   "pnpm": {
     "overrides": {
       "flatted": "^3.4.2",
-      "minimatch": "^9.0.7"
+      "minimatch": "^9.0.7",
+      "js-yaml": "4.2.0",
+      "handlebars": "4.7.9",
+      "picomatch": ">=2.3.2"
     }
   },
   "resolutions": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.7",
+    "js-yaml": "4.2.0",
+    "handlebars": "4.7.9",
+    "picomatch": ">=2.3.2"
   },
   "exports": {
     ".": {

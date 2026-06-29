@@ -408,6 +408,7 @@ export interface RunItem {
    * - GITHUB_ACTION: Created from a GitHub action
    * - CLOUD_MODE: Created from a Cloud Mode
    * - CLI: Created from the CLI
+   * - JIRA: Created from Jira integration
    */
   source?: RunSourceType;
 
@@ -557,6 +558,7 @@ export namespace RunItem {
  * - GITHUB_ACTION: Created from a GitHub action
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
+ * - JIRA: Created from Jira integration
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -567,7 +569,8 @@ export type RunSourceType =
   | 'WEB_APP'
   | 'GITHUB_ACTION'
   | 'CLOUD_MODE'
-  | 'CLI';
+  | 'CLI'
+  | 'JIRA';
 
 /**
  * Current state of the run:
