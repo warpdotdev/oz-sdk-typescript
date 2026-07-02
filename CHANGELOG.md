@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0-alpha.4](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.3...v1.4.0-alpha.4) (2026-07-02)
+
+
+### Bug Fixes
+
+* update flatted to resolve CVE-2026-33228 ([#32](https://github.com/warpdotdev/oz-sdk-typescript/issues/32)) ([4841416](https://github.com/warpdotdev/oz-sdk-typescript/commit/48414165a2fa1070ff1aa231a5fc309cf862daad))
+
 ## 1.4.0-alpha.3 (2026-05-22)
 
 Full Changelog: [v1.4.0-alpha.2...v1.4.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.2...v1.4.0-alpha.3)
