@@ -48,6 +48,7 @@ describe('resource runs', () => {
           execution_location: 'LOCAL',
           executor: 'executor',
           limit: 1,
+          metadata: { foo: 'string' },
           model_id: 'model_id',
           name: 'name',
           q: 'q',

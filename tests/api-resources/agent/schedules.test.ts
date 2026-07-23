@@ -32,7 +32,11 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
-        harness: { type: 'oz' },
+        harness: {
+          model_id: 'model_id',
+          reasoning_level: 'reasoning_level',
+          type: 'oz',
+        },
         harness_auth_secrets: {
           claude_auth_secret_name: 'claude_auth_secret_name',
           codex_auth_secret_name: 'codex_auth_secret_name',
@@ -71,6 +75,7 @@ describe('resource schedules', () => {
       },
       agent_uid: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       enabled: true,
+      metadata: { foo: 'string' },
       mode: 'normal',
       prompt: 'Review open pull requests and provide feedback',
       team: true,
@@ -115,7 +120,11 @@ describe('resource schedules', () => {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
         environment_id: 'environment_id',
-        harness: { type: 'oz' },
+        harness: {
+          model_id: 'model_id',
+          reasoning_level: 'reasoning_level',
+          type: 'oz',
+        },
         harness_auth_secrets: {
           claude_auth_secret_name: 'claude_auth_secret_name',
           codex_auth_secret_name: 'codex_auth_secret_name',
@@ -153,6 +162,7 @@ describe('resource schedules', () => {
         worker_host: 'worker_host',
       },
       agent_uid: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      metadata: { foo: 'string' },
       mode: 'normal',
       prompt: 'prompt',
     });

@@ -77,7 +77,7 @@ Methods:
 
 - <code title="post /agent/identities">client.agent.agent.<a href="./src/resources/agent/agent_.ts">create</a>({ ...params }) -> AgentResponse</code>
 - <code title="put /agent/identities/{uid}">client.agent.agent.<a href="./src/resources/agent/agent_.ts">update</a>(uid, { ...params }) -> AgentResponse</code>
-- <code title="get /agent/identities">client.agent.agent.<a href="./src/resources/agent/agent_.ts">list</a>() -> ListAgentIdentitiesResponse</code>
+- <code title="get /agent/identities">client.agent.agent.<a href="./src/resources/agent/agent_.ts">list</a>({ ...params }) -> ListAgentIdentitiesResponse</code>
 - <code title="delete /agent/identities/{uid}">client.agent.agent.<a href="./src/resources/agent/agent_.ts">delete</a>(uid) -> void</code>
 - <code title="get /agent/identities/{uid}">client.agent.agent.<a href="./src/resources/agent/agent_.ts">get</a>(uid) -> AgentResponse</code>
 

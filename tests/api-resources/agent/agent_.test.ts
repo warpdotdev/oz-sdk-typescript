@@ -24,10 +24,13 @@ describe('resource agent', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.agent.agent.create({
       name: 'name',
+      agent_type: 'FOREMAN',
       base_harness: 'base_harness',
       base_model: 'base_model',
+      default_runner_uid: 'default_runner_uid',
       description: 'description',
       environment_id: 'environment_id',
+      factory_uid: 'factory_uid',
       harness_auth_secrets: {
         claude_auth_secret_name: 'claude_auth_secret_name',
         codex_auth_secret_name: 'codex_auth_secret_name',
@@ -87,6 +90,14 @@ describe('resource agent', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.agent.agent.list({ factory_uid: 'factory_uid' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OzAPI.NotFoundError);
   });
 
   // Mock server tests are disabled

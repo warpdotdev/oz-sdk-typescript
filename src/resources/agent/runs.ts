@@ -110,7 +110,8 @@ export type ArtifactItem =
   | ArtifactItem.PlanArtifact
   | ArtifactItem.PullRequestArtifact
   | ArtifactItem.ScreenshotArtifact
-  | ArtifactItem.FileArtifact;
+  | ArtifactItem.FileArtifact
+  | ArtifactItem.ExternalReferenceArtifact;
 
 export namespace ArtifactItem {
   export interface PlanArtifact {
@@ -263,6 +264,59 @@ export namespace ArtifactItem {
        * Size of the uploaded file in bytes
        */
       size_bytes?: number;
+
+      /**
+       * Short, badge-visible label for the artifact. For recording artifacts, this is
+       * the agent-authored title shown in Oz web and blocklist badges. Distinct from
+       * description, which is longer and shown in detail views.
+       */
+      title?: string;
+    }
+  }
+
+  export interface ExternalReferenceArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'EXTERNAL_REFERENCE';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Data for a generic external reference artifact.
+     */
+    data: ExternalReferenceArtifact.Data;
+  }
+
+  export namespace ExternalReferenceArtifact {
+    /**
+     * Data for a generic external reference artifact.
+     */
+    export interface Data {
+      /**
+       * Free-form category identifier for this reference (e.g. "linear_issue",
+       * "spec_link", "jira_ticket"). Used for filtering and display.
+       */
+      reference_type: string;
+
+      /**
+       * Canonical URL for the reference. Used as the key for reverse lookups ("which run
+       * produced this URL?").
+       */
+      url: string;
+
+      /**
+       * Optional category-specific extra fields.
+       */
+      metadata?: { [key: string]: unknown };
+
+      /**
+       * Optional human-readable label for the reference.
+       */
+      title?: string;
     }
   }
 }
@@ -358,6 +412,17 @@ export interface RunItem {
    * Whether the sandbox environment is currently running
    */
   is_sandbox_running?: boolean;
+
+  /**
+   * Custom key/value metadata attached to a run at creation time and immutable
+   * afterward. At most 20 keys. Keys are 1-64 bytes matching [a-zA-Z0-9._-]+
+   * (case-sensitive); values are 0-256 bytes of UTF-8 and cannot contain NUL
+   * characters. Requests with invalid metadata are rejected. A run's effective
+   * metadata is merged per key at creation: explicit request keys override keys
+   * inherited from the parent run, which override automatic keys (ticket_id and
+   * ticket_source on Linear- and Jira-triggered runs).
+   */
+  metadata?: { [key: string]: string };
 
   /**
    * UUID of the parent run that spawned this run
@@ -651,7 +716,7 @@ export interface RunListParams extends RunsCursorPageParams {
   /**
    * Filter runs by artifact type
    */
-  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE';
+  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE' | 'EXTERNAL_REFERENCE';
 
   /**
    * Filter runs created after this timestamp (RFC3339 format)
@@ -683,6 +748,14 @@ export interface RunListParams extends RunsCursorPageParams {
    * as the creator, but not always: users may delegate tasks to agents.
    */
   executor?: string;
+
+  /**
+   * Filter by exact metadata key/value pairs using object notation (e.g.
+   * `metadata[ticket_id]=VIS-238`). Multiple pairs combine with AND semantics. At
+   * most 5 pairs per request. Returns `feature_not_available` when metadata
+   * filtering is not enabled.
+   */
+  metadata?: { [key: string]: string };
 
   /**
    * Filter by model ID

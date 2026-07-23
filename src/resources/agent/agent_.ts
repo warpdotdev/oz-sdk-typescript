@@ -50,8 +50,11 @@ export class Agent extends APIResource {
    *   await client.agent.agent.list();
    * ```
    */
-  list(options?: RequestOptions): APIPromise<ListAgentIdentitiesResponse> {
-    return this._client.get('/agent/identities', options);
+  list(
+    query: AgentListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAgentIdentitiesResponse> {
+    return this._client.get('/agent/identities', { query, ...options });
   }
 
   /**
@@ -96,6 +99,19 @@ export interface AgentResponse {
   created_at: string;
 
   /**
+   * Default runner UID for runs executed by this agent. When set, it overrides the
+   * selected environment's default runner for runs that do not specify their own
+   * `runner_id`. The precedence order for runner resolution is:
+   *
+   * 1. The runner specified on the run itself
+   * 2. The agent's default runner
+   * 3. The selected environment's default runner
+   * 4. The environment's legacy inline compute fields
+   * 5. System defaults
+   */
+  default_runner_uid: string;
+
+  /**
    * Memory settings for an agent.
    */
   memory: AgentResponse.Memory;
@@ -125,6 +141,12 @@ export interface AgentResponse {
    * When the agent was last updated (RFC3339)
    */
   updated_at: string;
+
+  /**
+   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
+   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   */
+  agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
    * Default harness for runs executed by this agent. The precedence order for
@@ -160,6 +182,12 @@ export interface AgentResponse {
    * 3. An empty environment
    */
   environment_id?: string;
+
+  /**
+   * UID of the Factory this agent was seeded for. Null (or omitted) for agents that
+   * do not belong to a factory.
+   */
+  factory_uid?: string | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -344,6 +372,12 @@ export interface CreateAgentRequest {
   name: string;
 
   /**
+   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
+   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   */
+  agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
+
+  /**
    * Optional default harness for runs executed by this agent.
    */
   base_harness?: string | null;
@@ -352,6 +386,14 @@ export interface CreateAgentRequest {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Optional default runner UID for runs executed by this agent. When set, it
+   * overrides the selected environment's default runner for runs that do not specify
+   * their own `runner_id`. The editor must have View permission on the referenced
+   * runner.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Optional description of the agent
@@ -363,6 +405,12 @@ export interface CreateAgentRequest {
    * environment must be owned by the same team as the agent.
    */
   environment_id?: string | null;
+
+  /**
+   * Optional UID of the Factory to link this agent to. When omitted, the agent is
+   * not linked to any factory.
+   */
+  factory_uid?: string | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -534,6 +582,12 @@ export interface ListAgentIdentitiesResponse {
  */
 export interface UpdateAgentRequest {
   /**
+   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
+   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   */
+  agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
+
+  /**
    * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
    * empty string to clear.
    */
@@ -544,6 +598,13 @@ export interface UpdateAgentRequest {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear. A non-empty value must reference a runner the editor
+   * can View.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
@@ -708,6 +769,12 @@ export interface AgentCreateParams {
   name: string;
 
   /**
+   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
+   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   */
+  agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
+
+  /**
    * Optional default harness for runs executed by this agent.
    */
   base_harness?: string | null;
@@ -716,6 +783,14 @@ export interface AgentCreateParams {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Optional default runner UID for runs executed by this agent. When set, it
+   * overrides the selected environment's default runner for runs that do not specify
+   * their own `runner_id`. The editor must have View permission on the referenced
+   * runner.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Optional description of the agent
@@ -727,6 +802,12 @@ export interface AgentCreateParams {
    * environment must be owned by the same team as the agent.
    */
   environment_id?: string | null;
+
+  /**
+   * Optional UID of the Factory to link this agent to. When omitted, the agent is
+   * not linked to any factory.
+   */
+  factory_uid?: string | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -887,6 +968,12 @@ export namespace AgentCreateParams {
 
 export interface AgentUpdateParams {
   /**
+   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
+   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   */
+  agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
+
+  /**
    * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
    * empty string to clear.
    */
@@ -897,6 +984,13 @@ export interface AgentUpdateParams {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear. A non-empty value must reference a runner the editor
+   * can View.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
@@ -1054,6 +1148,15 @@ export namespace AgentUpdateParams {
   }
 }
 
+export interface AgentListParams {
+  /**
+   * Optional UID of a Factory to filter by. When provided, only agents linked to
+   * that factory (and owned by the caller's team) are returned. Ignored unless the
+   * factory API is enabled.
+   */
+  factory_uid?: string;
+}
+
 export declare namespace Agent {
   export {
     type AgentResponse as AgentResponse,
@@ -1062,5 +1165,6 @@ export declare namespace Agent {
     type UpdateAgentRequest as UpdateAgentRequest,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
+    type AgentListParams as AgentListParams,
   };
 }
