@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0-alpha.5](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.4...v1.4.0-alpha.5) (2026-07-23)
+
+
+### Features
+
+* add default runner, run metadata, factory APIs, and artifact reporting ([#47](https://github.com/warpdotdev/oz-sdk-typescript/issues/47)) ([d4d6b7c](https://github.com/warpdotdev/oz-sdk-typescript/commit/d4d6b7ced52fa8cd652e909e45ad829433627065))
+
 ## [1.4.0-alpha.4](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.3...v1.4.0-alpha.4) (2026-07-07)
 
 
