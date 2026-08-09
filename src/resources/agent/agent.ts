@@ -75,6 +75,10 @@ export class Agent extends APIResource {
    * a time-limited signed download URL. For plan artifacts, returns the current plan
    * content inline.
    *
+   * Public artifacts can be read without authentication; private artifacts require
+   * the caller to be authenticated and authorized. Anonymous reads of public file
+   * artifacts omit the `filepath` field.
+   *
    * @example
    * ```ts
    * const response = await client.agent.getArtifact(
@@ -217,9 +221,25 @@ export interface AmbientAgentConfig {
 
   /**
    * Controls whether computer use is enabled for this agent. If not set, defaults to
-   * false.
+   * true for runs on Warp's built-in harness and false for third-party harnesses.
    */
   computer_use_enabled?: boolean;
+
+  /**
+   * Controls which principal's credentials are used when the platform mints tokens
+   * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
+   *
+   * - EXECUTOR (default when unset): credentials are sourced from the run's
+   *   execution principal. For agent principals this produces a GitHub App
+   *   installation token; for user principals this produces their personal OAuth
+   *   token.
+   * - CREATOR: credentials are always sourced from the run creator, regardless of
+   *   the execution principal. Useful when a service account executes the run but
+   *   Git operations should authenticate as the human who triggered it. When unset,
+   *   behavior is identical to EXECUTOR and no additional pre-flight validation is
+   *   performed.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * UID of the environment to run the agent in
@@ -272,6 +292,14 @@ export interface AmbientAgentConfig {
    * and track them via the name query parameter on GET /agent/runs.
    */
   name?: string;
+
+  /**
+   * UID of the runner providing the run's compute (platform, instance shape, and
+   * setup commands). When omitted on a request, the runner is resolved at run
+   * creation from the agent's default runner, then the environment's default runner,
+   * and the resolved UID is recorded on the run.
+   */
+  runner_id?: string;
 
   /**
    * Configures sharing behavior for the run's shared session. When set, the worker
@@ -757,7 +785,8 @@ export interface McpServerConfig {
   url?: string;
 
   /**
-   * Reference to a Warp shared MCP server by UUID
+   * Reference to a Warp shared MCP server by UUID, or a well-known integration MCP
+   * id (e.g. "linear") backed by the team's integration connection.
    */
   warp_id?: string;
 }
@@ -985,14 +1014,15 @@ export namespace AgentGetArtifactResponse {
       filename: string;
 
       /**
-       * Conversation-relative filepath for the uploaded file
-       */
-      filepath: string;
-
-      /**
        * Optional description of the file
        */
       description?: string;
+
+      /**
+       * Conversation-relative filepath for the uploaded file. Omitted for anonymous
+       * reads of public artifacts.
+       */
+      filepath?: string;
 
       /**
        * Size of the uploaded file in bytes
@@ -1133,6 +1163,16 @@ export interface AgentRunParams {
    * this field explicitly to request non-normal behavior.
    */
   mode?: 'normal' | 'plan' | 'orchestrate';
+
+  /**
+   * Optional email address or user ID of a Warp user to attribute the run to. When
+   * set, the resolved user becomes the run's creator instead of the caller. Only
+   * agent API keys may use this field, and the calling agent must have on_behalf_of
+   * enabled in its configuration (`on_behalf_of_enabled`), which a team admin must
+   * intentionally turn on per agent. The target user must be an active member of the
+   * run's owner team. Only valid for team-owned runs.
+   */
+  on_behalf_of?: string;
 
   /**
    * Optional run ID of the parent that spawned this run. Used for orchestration

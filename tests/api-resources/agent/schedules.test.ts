@@ -31,6 +31,7 @@ describe('resource schedules', () => {
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
+        credential_strategy: 'CREATOR',
         environment_id: 'environment_id',
         harness: {
           model_id: 'model_id',
@@ -68,6 +69,7 @@ describe('resource schedules', () => {
         ],
         model_id: 'model_id',
         name: 'name',
+        runner_id: 'runner_id',
         session_sharing: { public_access: 'VIEWER' },
         skill_spec: 'skill_spec',
         skills: ['string'],
@@ -119,6 +121,7 @@ describe('resource schedules', () => {
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
+        credential_strategy: 'CREATOR',
         environment_id: 'environment_id',
         harness: {
           model_id: 'model_id',
@@ -156,6 +159,7 @@ describe('resource schedules', () => {
         ],
         model_id: 'model_id',
         name: 'name',
+        runner_id: 'runner_id',
         session_sharing: { public_access: 'VIEWER' },
         skill_spec: 'skill_spec',
         skills: ['string'],
