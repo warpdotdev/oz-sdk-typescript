@@ -474,6 +474,10 @@ export interface RunItem {
    * - CLOUD_MODE: Created from a Cloud Mode
    * - CLI: Created from the CLI
    * - JIRA: Created from Jira integration
+   * - AUTOFIX: Created by Warp's autofix pipeline
+   * - RUN_SCORER: Created by Warp's run-scoring judge
+   * - ORCHESTRATION: Created as a child run by the orchestration layer
+   *   (parent_run_id set)
    */
   source?: RunSourceType;
 
@@ -526,19 +530,37 @@ export namespace RunItem {
    */
   export interface RequestUsage {
     /**
-     * Cost of compute resources for the run
+     * Credits consumed by compute resources for the run
      */
     compute_cost?: number;
 
     /**
-     * Cost of LLM inference for the run
+     * compute_cost in US dollars, converted at a fixed rate. An approximate cost, not
+     * a billed amount.
+     */
+    compute_cost_usd?: number;
+
+    /**
+     * Credits consumed by LLM inference for the run
      */
     inference_cost?: number;
 
     /**
-     * Cost of platform usage for the run
+     * inference_cost in US dollars, converted at a fixed rate. An approximate cost,
+     * not a billed amount.
+     */
+    inference_cost_usd?: number;
+
+    /**
+     * Credits consumed by platform usage for the run
      */
     platform_cost?: number;
+
+    /**
+     * platform_cost in US dollars, converted at a fixed rate. An approximate cost, not
+     * a billed amount.
+     */
+    platform_cost_usd?: number;
   }
 
   /**
@@ -608,6 +630,17 @@ export namespace RunItem {
      * the underlying cause will not succeed.
      */
     retryable?: boolean;
+
+    /**
+     * When a failed run's shared session stops being held open for debugging. Only
+     * present while that window is open.
+     *
+     * The window is an idle window owned by the agent process: activity in the session
+     * pushes this deadline out. The agent republishes it periodically rather than on
+     * every keystroke, so the value can lag the true deadline by up to a throttle
+     * interval, and always in the conservative direction.
+     */
+    session_debug_until?: string;
   }
 }
 
@@ -624,6 +657,10 @@ export namespace RunItem {
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
  * - JIRA: Created from Jira integration
+ * - AUTOFIX: Created by Warp's autofix pipeline
+ * - RUN_SCORER: Created by Warp's run-scoring judge
+ * - ORCHESTRATION: Created as a child run by the orchestration layer
+ *   (parent_run_id set)
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -635,7 +672,10 @@ export type RunSourceType =
   | 'GITHUB_ACTION'
   | 'CLOUD_MODE'
   | 'CLI'
-  | 'JIRA';
+  | 'JIRA'
+  | 'AUTOFIX'
+  | 'RUN_SCORER'
+  | 'ORCHESTRATION';
 
 /**
  * Current state of the run:
@@ -719,6 +759,12 @@ export interface RunListParams extends RunsCursorPageParams {
   artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE' | 'EXTERNAL_REFERENCE';
 
   /**
+   * Filter runs by the factory automation that dispatched them. Matches runs stamped
+   * with the automation_id metadata key at creation time.
+   */
+  automation_id?: string;
+
+  /**
    * Filter runs created after this timestamp (RFC3339 format)
    */
   created_after?: string;
@@ -748,6 +794,12 @@ export interface RunListParams extends RunsCursorPageParams {
    * as the creator, but not always: users may delegate tasks to agents.
    */
   executor?: string;
+
+  /**
+   * Filter runs by factory. Matches runs executed by any of the factory's agents. A
+   * UID outside the caller's accessible factories matches nothing.
+   */
+  factory_uid?: string;
 
   /**
    * Filter by exact metadata key/value pairs using object notation (e.g.

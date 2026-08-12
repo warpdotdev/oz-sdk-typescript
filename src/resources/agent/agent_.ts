@@ -149,12 +149,7 @@ export interface AgentResponse {
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
-   * Default harness for runs executed by this agent. The precedence order for
-   * harness resolution is:
-   *
-   * 1. The harness specified on the run itself
-   * 2. The agent's base harness
-   * 3. Oz
+   * @deprecated Use harness instead.
    */
   base_harness?: string;
 
@@ -167,6 +162,21 @@ export interface AgentResponse {
    * 3. The team's default model
    */
   base_model?: string;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR';
 
   /**
    * Optional description of the agent
@@ -190,6 +200,15 @@ export interface AgentResponse {
   factory_uid?: string | null;
 
   /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  harness?: AgentResponse.Harness;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -205,6 +224,12 @@ export interface AgentResponse {
    * config takes precedence over this agent-level default.
    */
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
+
+  /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member.
+   */
+  on_behalf_of_enabled?: boolean;
 
   /**
    * Optional base prompt for this agent
@@ -313,6 +338,40 @@ export namespace AgentResponse {
   }
 
   /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  export interface Harness {
+    /**
+     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+     * when type is a non-oz harness; the top-level config model_id targets the
+     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * default model.
+     */
+    model_id?: string;
+
+    /**
+     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
+     * levels.
+     */
+    reasoning_level?: string;
+
+    /**
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
+     */
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
+  }
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -378,7 +437,7 @@ export interface CreateAgentRequest {
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
-   * Optional default harness for runs executed by this agent.
+   * @deprecated Use harness instead.
    */
   base_harness?: string | null;
 
@@ -386,6 +445,21 @@ export interface CreateAgentRequest {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Optional default runner UID for runs executed by this agent. When set, it
@@ -413,6 +487,15 @@ export interface CreateAgentRequest {
   factory_uid?: string | null;
 
   /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  harness?: CreateAgentRequest.Harness;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -433,6 +516,13 @@ export interface CreateAgentRequest {
    * Memory settings for creating an agent.
    */
   memory?: CreateAgentRequest.Memory;
+
+  /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Defaults to false. Only team admins may
+   * set this field.
+   */
+  on_behalf_of_enabled?: boolean;
 
   /**
    * Optional base prompt for this agent
@@ -457,6 +547,40 @@ export interface CreateAgentRequest {
 }
 
 export namespace CreateAgentRequest {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  export interface Harness {
+    /**
+     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+     * when type is a non-oz harness; the top-level config model_id targets the
+     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * default model.
+     */
+    model_id?: string;
+
+    /**
+     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
+     * levels.
+     */
+    reasoning_level?: string;
+
+    /**
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
+     */
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
+  }
+
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
@@ -588,8 +712,7 @@ export interface UpdateAgentRequest {
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
-   * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
-   * empty string to clear.
+   * @deprecated Use harness instead.
    */
   base_harness?: string | null;
 
@@ -598,6 +721,21 @@ export interface UpdateAgentRequest {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
@@ -617,6 +755,15 @@ export interface UpdateAgentRequest {
    * unchanged, or pass an empty string to clear.
    */
   environment_id?: string | null;
+
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  harness?: UpdateAgentRequest.Harness | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -647,6 +794,13 @@ export interface UpdateAgentRequest {
   name?: string;
 
   /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Omit or pass `null` to leave unchanged.
+   * Only team admins may set this field.
+   */
+  on_behalf_of_enabled?: boolean | null;
+
+  /**
    * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -666,6 +820,40 @@ export interface UpdateAgentRequest {
 }
 
 export namespace UpdateAgentRequest {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  export interface Harness {
+    /**
+     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+     * when type is a non-oz harness; the top-level config model_id targets the
+     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * default model.
+     */
+    model_id?: string;
+
+    /**
+     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
+     * levels.
+     */
+    reasoning_level?: string;
+
+    /**
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
+     */
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
+  }
+
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
@@ -775,7 +963,7 @@ export interface AgentCreateParams {
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
-   * Optional default harness for runs executed by this agent.
+   * @deprecated Use harness instead.
    */
   base_harness?: string | null;
 
@@ -783,6 +971,21 @@ export interface AgentCreateParams {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Optional default runner UID for runs executed by this agent. When set, it
@@ -810,6 +1013,15 @@ export interface AgentCreateParams {
   factory_uid?: string | null;
 
   /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  harness?: AgentCreateParams.Harness;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
@@ -830,6 +1042,13 @@ export interface AgentCreateParams {
    * Memory settings for creating an agent.
    */
   memory?: AgentCreateParams.Memory;
+
+  /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Defaults to false. Only team admins may
+   * set this field.
+   */
+  on_behalf_of_enabled?: boolean;
 
   /**
    * Optional base prompt for this agent
@@ -854,6 +1073,40 @@ export interface AgentCreateParams {
 }
 
 export namespace AgentCreateParams {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  export interface Harness {
+    /**
+     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+     * when type is a non-oz harness; the top-level config model_id targets the
+     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * default model.
+     */
+    model_id?: string;
+
+    /**
+     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
+     * levels.
+     */
+    reasoning_level?: string;
+
+    /**
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
+     */
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
+  }
+
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
@@ -974,8 +1227,7 @@ export interface AgentUpdateParams {
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
   /**
-   * Replacement default harness. Omit or pass `null` to leave unchanged, or pass an
-   * empty string to clear.
+   * @deprecated Use harness instead.
    */
   base_harness?: string | null;
 
@@ -984,6 +1236,21 @@ export interface AgentUpdateParams {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
@@ -1003,6 +1270,15 @@ export interface AgentUpdateParams {
    * unchanged, or pass an empty string to clear.
    */
   environment_id?: string | null;
+
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  harness?: AgentUpdateParams.Harness | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
@@ -1033,6 +1309,13 @@ export interface AgentUpdateParams {
   name?: string;
 
   /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Omit or pass `null` to leave unchanged.
+   * Only team admins may set this field.
+   */
+  on_behalf_of_enabled?: boolean | null;
+
+  /**
    * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -1052,6 +1335,40 @@ export interface AgentUpdateParams {
 }
 
 export namespace AgentUpdateParams {
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
+   * to be empty, since the two describe mutually exclusive default models.
+   */
+  export interface Harness {
+    /**
+     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+     * when type is a non-oz harness; the top-level config model_id targets the
+     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * default model.
+     */
+    model_id?: string;
+
+    /**
+     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
+     * levels.
+     */
+    reasoning_level?: string;
+
+    /**
+     * The harness type identifier.
+     *
+     * - oz: Warp's built-in harness (default)
+     * - claude: Claude Code harness
+     * - gemini: Gemini CLI harness
+     * - codex: Codex CLI harness
+     */
+    type?: 'oz' | 'claude' | 'gemini' | 'codex';
+  }
+
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.

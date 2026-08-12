@@ -40,6 +40,7 @@ describe('resource runs', () => {
         {
           ancestor_run_id: 'ancestor_run_id',
           artifact_type: 'PLAN',
+          automation_id: 'automation_id',
           created_after: '2019-12-27T18:11:19.117Z',
           created_before: '2019-12-27T18:11:19.117Z',
           creator: 'creator',
@@ -47,6 +48,7 @@ describe('resource runs', () => {
           environment_id: 'environment_id',
           execution_location: 'LOCAL',
           executor: 'executor',
+          factory_uid: 'factory_uid',
           limit: 1,
           metadata: { foo: 'string' },
           model_id: 'model_id',
