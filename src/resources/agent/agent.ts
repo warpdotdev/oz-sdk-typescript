@@ -221,7 +221,7 @@ export interface AmbientAgentConfig {
 
   /**
    * Controls whether computer use is enabled for this agent. If not set, defaults to
-   * true for runs on Warp's built-in harness and false for third-party harnesses.
+   * true.
    */
   computer_use_enabled?: boolean;
 
@@ -682,6 +682,11 @@ export interface Error {
   type: string;
 
   /**
+   * URL where the caller can reconnect the external provider.
+   */
+  auth_url?: string;
+
+  /**
    * A human-readable explanation specific to this occurrence of the problem
    * (RFC 7807)
    */
@@ -691,6 +696,11 @@ export interface Error {
    * The request path that generated this error (RFC 7807)
    */
   instance?: string;
+
+  /**
+   * External provider that requires authorization, such as `linear`.
+   */
+  provider?: string;
 
   /**
    * Whether the request can be retried. When true, the error is transient and the

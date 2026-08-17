@@ -72,6 +72,7 @@ describe('resource agent', () => {
       prompt: 'prompt',
       secrets: [{ name: 'name' }],
       skills: ['string'],
+      worker_host: 'worker_host',
     });
   });
 
