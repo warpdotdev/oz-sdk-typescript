@@ -89,7 +89,7 @@ export class Agent extends APIResource {
 
 export interface AgentResponse {
   /**
-   * Whether this agent is within the team's plan limit and can be used for runs
+   * Whether the agent is currently enabled. Defaults to true.
    */
   available: boolean;
 
@@ -235,6 +235,16 @@ export interface AgentResponse {
    * Optional base prompt for this agent
    */
   prompt?: string | null;
+
+  /**
+   * Default worker host for runs executed by this agent, or empty when unset. The
+   * precedence order for worker host resolution is:
+   *
+   * 1. The host specified on the run itself
+   * 2. The agent's default host
+   * 3. The workspace default host
+   */
+  worker_host?: string;
 }
 
 export namespace AgentResponse {
@@ -544,6 +554,19 @@ export interface CreateAgentRequest {
    * or malformed specs are rejected.
    */
   skills?: Array<string>;
+
+  /**
+   * Optional default worker host for runs executed by this agent. Omission, null, or
+   * an empty value stores no Agent default, in which case the workspace default
+   * applies. A non-empty value is trimmed and stored; use "warp" to force
+   * Warp-hosted execution over a self-hosted workspace default. The precedence order
+   * for worker host resolution is:
+   *
+   * 1. The host specified on the run itself
+   * 2. The agent's default host
+   * 3. The workspace default host
+   */
+  worker_host?: string | null;
 }
 
 export namespace CreateAgentRequest {
@@ -817,6 +840,14 @@ export interface UpdateAgentRequest {
    * clear, or pass a non-empty array to replace.
    */
   skills?: Array<string> | null;
+
+  /**
+   * Replacement default worker host. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear (the workspace default then applies). A non-empty value
+   * is trimmed and replaces the stored default; use "warp" to force Warp-hosted
+   * execution over a self-hosted workspace default.
+   */
+  worker_host?: string | null;
 }
 
 export namespace UpdateAgentRequest {
@@ -1070,6 +1101,19 @@ export interface AgentCreateParams {
    * or malformed specs are rejected.
    */
   skills?: Array<string>;
+
+  /**
+   * Optional default worker host for runs executed by this agent. Omission, null, or
+   * an empty value stores no Agent default, in which case the workspace default
+   * applies. A non-empty value is trimmed and stored; use "warp" to force
+   * Warp-hosted execution over a self-hosted workspace default. The precedence order
+   * for worker host resolution is:
+   *
+   * 1. The host specified on the run itself
+   * 2. The agent's default host
+   * 3. The workspace default host
+   */
+  worker_host?: string | null;
 }
 
 export namespace AgentCreateParams {
@@ -1332,6 +1376,14 @@ export interface AgentUpdateParams {
    * clear, or pass a non-empty array to replace.
    */
   skills?: Array<string> | null;
+
+  /**
+   * Replacement default worker host. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear (the workspace default then applies). A non-empty value
+   * is trimmed and replaces the stored default; use "warp" to force Warp-hosted
+   * execution over a self-hosted workspace default.
+   */
+  worker_host?: string | null;
 }
 
 export namespace AgentUpdateParams {

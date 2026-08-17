@@ -474,6 +474,9 @@ export interface RunItem {
    * - CLOUD_MODE: Created from a Cloud Mode
    * - CLI: Created from the CLI
    * - JIRA: Created from Jira integration
+   * - SELF_IMPROVEMENT: Created by Warp's self-improvement pipeline
+   * - GITHUB_WEBHOOK: Created from a GitHub webhook event
+   * - GITLAB_WEBHOOK: Created from a GitLab webhook event
    * - AUTOFIX: Created by Warp's autofix pipeline
    * - RUN_SCORER: Created by Warp's run-scoring judge
    * - ORCHESTRATION: Created as a child run by the orchestration layer
@@ -535,8 +538,8 @@ export namespace RunItem {
     compute_cost?: number;
 
     /**
-     * compute_cost in US dollars, converted at a fixed rate. An approximate cost, not
-     * a billed amount.
+     * compute_cost in US dollars, converted at the owning team's current credit price.
+     * An approximate cost, not a billed amount.
      */
     compute_cost_usd?: number;
 
@@ -546,8 +549,8 @@ export namespace RunItem {
     inference_cost?: number;
 
     /**
-     * inference_cost in US dollars, converted at a fixed rate. An approximate cost,
-     * not a billed amount.
+     * inference_cost in US dollars, converted at the owning team's current credit
+     * price. An approximate cost, not a billed amount.
      */
     inference_cost_usd?: number;
 
@@ -557,8 +560,8 @@ export namespace RunItem {
     platform_cost?: number;
 
     /**
-     * platform_cost in US dollars, converted at a fixed rate. An approximate cost, not
-     * a billed amount.
+     * platform_cost in US dollars, converted at the owning team's current credit
+     * price. An approximate cost, not a billed amount.
      */
     platform_cost_usd?: number;
   }
@@ -657,6 +660,9 @@ export namespace RunItem {
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
  * - JIRA: Created from Jira integration
+ * - SELF_IMPROVEMENT: Created by Warp's self-improvement pipeline
+ * - GITHUB_WEBHOOK: Created from a GitHub webhook event
+ * - GITLAB_WEBHOOK: Created from a GitLab webhook event
  * - AUTOFIX: Created by Warp's autofix pipeline
  * - RUN_SCORER: Created by Warp's run-scoring judge
  * - ORCHESTRATION: Created as a child run by the orchestration layer
@@ -673,6 +679,9 @@ export type RunSourceType =
   | 'CLOUD_MODE'
   | 'CLI'
   | 'JIRA'
+  | 'SELF_IMPROVEMENT'
+  | 'GITHUB_WEBHOOK'
+  | 'GITLAB_WEBHOOK'
   | 'AUTOFIX'
   | 'RUN_SCORER'
   | 'ORCHESTRATION';
@@ -780,7 +789,12 @@ export interface RunListParams extends RunsCursorPageParams {
   creator?: string;
 
   /**
-   * Filter runs by environment ID
+   * Filter runs by environment ID. Passing the literal value `empty-environment`
+   * matches runs with no environment configured, rather than omitting the parameter,
+   * which applies no environment filter at all. `empty-environment` can never
+   * collide with a real environment ID: every environment ID is exactly 22
+   * characters drawn from `[A-Za-z0-9]`, while this sentinel contains a hyphen and
+   * is a different length.
    */
   environment_id?: string;
 
