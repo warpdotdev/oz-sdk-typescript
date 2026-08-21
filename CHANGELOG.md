@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0-alpha.7](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.6...v1.4.0-alpha.7) (2026-08-21)
+
+
+### Features
+
+* **api:** Add token totals and inference cost breakdown to REST RequestUsage ([04783b3](https://github.com/warpdotdev/oz-sdk-typescript/commit/04783b33eaf119ef95b7b07ac54c6fc8e8c1e974))
+
 ## [1.4.0-alpha.6](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.5...v1.4.0-alpha.6) (2026-08-17)
 
 
