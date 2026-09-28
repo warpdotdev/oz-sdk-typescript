@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.4.0-alpha.8](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.7...v1.4.0-alpha.8) (2026-09-28)
+
+
+### Features
+
+* add Azure DevOps Factory support via a general Azure Entra connection ([f96f5c9](https://github.com/warpdotdev/oz-sdk-typescript/commit/f96f5c9ed2d6a85ec2cab165cec8b30f78338fa7))
+* **api:** [APP-5847] Add run quick filters ([ec47bed](https://github.com/warpdotdev/oz-sdk-typescript/commit/ec47beda477b43503339d9683b58ca2ef671c387))
+* **api:** [APP-5882] Show only Factory runs on global Runs page ([f829a3e](https://github.com/warpdotdev/oz-sdk-typescript/commit/f829a3e864477058c538b71b9598149ace7f20b0))
+* **api:** [APP-5982] Show video artifact thumbnails ([bb2f194](https://github.com/warpdotdev/oz-sdk-typescript/commit/bb2f1948b2b34ba2b822917230c14799ff6f64a0))
+* **api:** [APP-6045] Add run usage metadata to trace responses ([c7c9604](https://github.com/warpdotdev/oz-sdk-typescript/commit/c7c9604c508637bbcb26d00a38db9e8baade4e66))
+* **api:** [APP-6076] Persist Factory Inbox read state per recipient ([e236121](https://github.com/warpdotdev/oz-sdk-typescript/commit/e23612164c135c4f3d843e5520af5cb29dc8f69b))
+* **api:** Add BENCHMARK_TRIAL as a filterable Benchmark run source ([cd69aa3](https://github.com/warpdotdev/oz-sdk-typescript/commit/cd69aa384264ac3f2b6c7e5612f117c87d98dbd7))
+* **api:** Add Factory Agent and Automation idle timeout configuration ([f982ba8](https://github.com/warpdotdev/oz-sdk-typescript/commit/f982ba857de564567ede562e55f4453a0d586e84))
+* **api:** Add Jira starter-ticket Factory handoff ([dcd4a82](https://github.com/warpdotdev/oz-sdk-typescript/commit/dcd4a823b6237abc7469e3d1a1b0f8220c2dc2b5))
+* **api:** Add MAA stream platform error codes ([c47ae4a](https://github.com/warpdotdev/oz-sdk-typescript/commit/c47ae4a6668d682e2ef27b86b8e2ec855916fe56))
+* **api:** Add Microsoft Teams Factory access contracts ([cd63708](https://github.com/warpdotdev/oz-sdk-typescript/commit/cd63708a1ff66acfde470ae5827aaeb4c5365817))
+* **api:** Add per-factory Slack auto-respond toggle for thread replies ([f23f506](https://github.com/warpdotdev/oz-sdk-typescript/commit/f23f50653f78e2091cb257f48a879eb350992359))
+* **api:** Align global runs list with designs ([bf7e614](https://github.com/warpdotdev/oz-sdk-typescript/commit/bf7e6140fa0f8226119c886cb1d508de6b8f7edc))
+* **api:** APP-5973 Color Factory PR artifacts by live status ([ce63c6c](https://github.com/warpdotdev/oz-sdk-typescript/commit/ce63c6cdd68bd795b480c1b28a694ca1cdaed1ad))
+* **api:** Chore: display all models used during auto ([b1b237e](https://github.com/warpdotdev/oz-sdk-typescript/commit/b1b237e5ae809727a37ebd16397fb43d94d33b1b))
+* **api:** Clarify Factory secrets management UI ([8a42893](https://github.com/warpdotdev/oz-sdk-typescript/commit/8a42893cea70f9f15f0270a06d172312abc504a3))
+* **api:** Conversation steering: follow-ups with attachments, interrupt, conversation-keyed aliases ([828fc41](https://github.com/warpdotdev/oz-sdk-typescript/commit/828fc4178447767517d71e90745fc64f2a3628b3))
+* **api:** Create benchmark tasks from runs via Factory foreman ([9f148f1](https://github.com/warpdotdev/oz-sdk-typescript/commit/9f148f11e72be9cc4e0322972293a31e4c6ce491))
+* **api:** Enable Factory Slack auto-respond by default ([512df6c](https://github.com/warpdotdev/oz-sdk-typescript/commit/512df6c5e74e2311e7da75e0d302c8a8da1f27d6))
+* **api:** Expose Factory Inbox listing API and MCP tool ([d2db3a7](https://github.com/warpdotdev/oz-sdk-typescript/commit/d2db3a746e40d3096ac4c01a18a3e8a02f6c48e2))
+* **api:** expose secret allowlists in public schemas ([8030d9d](https://github.com/warpdotdev/oz-sdk-typescript/commit/8030d9df3c93a2ff6bd5cfb49a0504f8db4e0587))
+* **api:** Factory Webhooks: address dogfooding feedback (secret picker, automations callout, detail pane, webhook run badge) ([e7569ef](https://github.com/warpdotdev/oz-sdk-typescript/commit/e7569ef75431c93b7e27d3e67a9b7b8daa8272ca))
+* **api:** Link Factory runs and PRs in responsive artifact headers ([dc35df0](https://github.com/warpdotdev/oz-sdk-typescript/commit/dc35df0d47220ed56d7c3e6bf1b81f72284503ae))
+* **api:** Persist Teams Factory thread reply settings ([6c2844b](https://github.com/warpdotdev/oz-sdk-typescript/commit/6c2844beb33c2ef5eb4a5255e42e97db93b66b09))
+* **api:** REMOTE-2661: allow a debug agent in a retained setup-failure session (server) ([d68fa53](https://github.com/warpdotdev/oz-sdk-typescript/commit/d68fa5377ebc65c5dc3325a12030bd0b8c2ec43c))
+* **api:** Resolve the caller's team from X-Warp-Team-Uid on the public API ([2341804](https://github.com/warpdotdev/oz-sdk-typescript/commit/2341804f7bc019bc6965659493e06c82c7ae61bc))
+* **api:** Spending Card for Self-improvement + Filtering Button Fix ([0828410](https://github.com/warpdotdev/oz-sdk-typescript/commit/082841045f404043dad4b965eed810e2c7521ddb))
+* **api:** Support run ID search in benchmark task picker ([41ac47c](https://github.com/warpdotdev/oz-sdk-typescript/commit/41ac47c11cf83b5568f3cf1d0eee97a5e108d6d7))
+* **api:** Team/project-scoped Linear and Jira starter-task discovery for Factory onboarding ([ded8c26](https://github.com/warpdotdev/oz-sdk-typescript/commit/ded8c26ae2b335a1591d85a88ff4e5bdbe4d3e38))
+* **code-forge:** collapse multi-forge stack onto develop ([aa0576e](https://github.com/warpdotdev/oz-sdk-typescript/commit/aa0576eb4789b0108870801430c11abbe2ffe7ea))
+* **factory:** add Azure DevOps automation triggers ([47bc6b1](https://github.com/warpdotdev/oz-sdk-typescript/commit/47bc6b1ddcecab2a3ce458c69328e6d3f017896d))
+
+
+### Bug Fixes
+
+* **deps:** pin @humanfs/node to resolve GHSA-p498-v437-472g ([822eefc](https://github.com/warpdotdev/oz-sdk-typescript/commit/822eefce34428f3d7557bdf4e71aa095e853977f))
+* **deps:** pin baseline-browser-mapping to resolve CVE-2026-45819 ([18032c4](https://github.com/warpdotdev/oz-sdk-typescript/commit/18032c4bc345e246f070d43f8b1d4025f80fdab4))
+* **deps:** pin browserslist to resolve CVE-2026-73088 ([36540a8](https://github.com/warpdotdev/oz-sdk-typescript/commit/36540a8b126defa2e2331824a812b2d465199acf))
+* **deps:** pin js-yaml to 4.3.2 to resolve CVE-2026-84375 ([9fa25ff](https://github.com/warpdotdev/oz-sdk-typescript/commit/9fa25ff8bd9e716d1d3f2c3796162894bd49bcd3))
+* **deps:** pin js-yaml to 4.3.2 to resolve CVE-2026-84375 ([6012cf6](https://github.com/warpdotdev/oz-sdk-typescript/commit/6012cf63770bd7861f4d18b2fe8a4733d1368452))
+* **deps:** re-pin @humanfs/node and browserslist (reseal after regen dropped them) ([144255c](https://github.com/warpdotdev/oz-sdk-typescript/commit/144255ce616403312e04a3c8604f90ad9afbd685))
+* **deps:** re-pin browserslist to resolve CVE-2026-73088 (reseal after regen dropped it) ([c240054](https://github.com/warpdotdev/oz-sdk-typescript/commit/c24005485cf5f25fc2061954477962d5ae0eefaf))
+
 ## [1.4.0-alpha.7](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.6...v1.4.0-alpha.7) (2026-08-25)
 
 
