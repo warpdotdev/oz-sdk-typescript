@@ -1,6 +1,6 @@
 {
   "name": "@warp-dot-dev/warp-platform-sdk",
-  "version": "1.4.0-alpha.7",
+  "version": "1.4.0-alpha.8",
   "description": "The official TypeScript library for the Warp API",
   "author": "Warp <>",
   "types": "dist/index.d.ts",
