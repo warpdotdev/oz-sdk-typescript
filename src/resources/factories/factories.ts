@@ -489,6 +489,14 @@ export namespace Factory {
     reviewer_type: 'none' | 'admins' | 'team' | 'custom';
 
     /**
+     * Per-agent count of distinct scored-failing source runs required for scheduled
+     * self-improvement. Must be between 1 and 50: one self-improvement run can triage
+     * at most 50 failure findings. Omitted to use the server default. The age-based
+     * flush and manual dispatch are unchanged.
+     */
+    failed_run_threshold?: number;
+
+    /**
      * Owning-team member emails reviewers are chosen from. Only allowed when
      * `reviewer_type` is `custom`: a Factory YAML change that sets emails with any
      * other reviewer type fails validation, including the pull request check.
