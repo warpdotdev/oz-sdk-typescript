@@ -371,9 +371,22 @@ export interface RunItem {
   created_at: string;
 
   /**
+   * Timestamp when the run last reached a terminal state (RFC3339). Null while the
+   * run is still active, and for terminal runs with no recorded finish time (runs
+   * executed locally, and runs that finished before finish times were recorded).
+   */
+  finished_at: string | null;
+
+  /**
    * The prompt/instruction for the agent
    */
   prompt: string;
+
+  /**
+   * UUID of the top-level run of this run's orchestration tree. Equals `run_id` for
+   * a top-level run.
+   */
+  root_run_id: string;
 
   /**
    * Unique identifier for the run
@@ -450,6 +463,12 @@ export interface RunItem {
   execution_location?: 'LOCAL' | 'REMOTE';
 
   executor?: AgentAPI.UserProfile;
+
+  /**
+   * UID of the factory whose agent executed the run. Absent for runs not executed by
+   * a factory agent.
+   */
+  factory_uid?: string;
 
   /**
    * Whether the run's type is eligible for cancellation via the API.
