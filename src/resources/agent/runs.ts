@@ -622,8 +622,8 @@ export namespace RunItem {
     compute_cost?: number;
 
     /**
-     * compute_cost in US dollars, converted at the owning team's current credit price.
-     * An approximate cost, not a billed amount.
+     * What the run's hosted compute was billed at, in US dollars. Runs that predate
+     * billed-amount tracking fall back to an estimated cost.
      */
     compute_cost_usd?: number;
 
@@ -633,8 +633,8 @@ export namespace RunItem {
     inference_cost?: number;
 
     /**
-     * inference_cost in US dollars, converted at the owning team's current credit
-     * price. An approximate cost, not a billed amount.
+     * What the run's LLM inference was billed at, in US dollars. Runs that predate
+     * billed-amount tracking fall back to an estimated cost.
      */
     inference_cost_usd?: number;
 
@@ -653,8 +653,8 @@ export namespace RunItem {
     platform_cost?: number;
 
     /**
-     * platform_cost in US dollars, converted at the owning team's current credit
-     * price. An approximate cost, not a billed amount.
+     * What the run's platform usage was billed at, in US dollars. Runs that predate
+     * billed-amount tracking fall back to an estimated cost.
      */
     platform_cost_usd?: number;
 
