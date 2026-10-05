@@ -275,14 +275,14 @@ export namespace Factory {
     type: 'jira' | 'linear' | 'microsoft-teams' | 'slack';
 
     /**
-     * Persisted Jira discovery scope. Present only when type is jira and the factory
-     * declares selected projects.
+     * Jira project keys from earlier integration selections, when present. Issue
+     * discovery follows enabled agent-session automations instead.
      */
     jira?: Integration.Jira | null;
 
     /**
-     * Persisted Linear discovery scope. Present only when type is linear and the
-     * factory declares selected teams.
+     * Linear team IDs from earlier integration selections, when present. Issue
+     * discovery follows enabled agent-session automations instead.
      */
     linear?: Integration.Linear | null;
 
@@ -301,25 +301,26 @@ export namespace Factory {
 
   export namespace Integration {
     /**
-     * Persisted Jira discovery scope. Present only when type is jira and the factory
-     * declares selected projects.
+     * Jira project keys from earlier integration selections, when present. Issue
+     * discovery follows enabled agent-session automations instead.
      */
     export interface Jira {
       /**
-       * Jira project keys (for example APP, not the numeric project ID) that scope issue
-       * discovery and routing to the Factory FOREMAN agent.
+       * Jira project keys (for example APP, not the numeric project ID) for the one-time
+       * agent-session automation seed. Discovery follows enabled seated automation
+       * filters afterward.
        */
       project_keys: Array<string>;
     }
 
     /**
-     * Persisted Linear discovery scope. Present only when type is linear and the
-     * factory declares selected teams.
+     * Linear team IDs from earlier integration selections, when present. Issue
+     * discovery follows enabled agent-session automations instead.
      */
     export interface Linear {
       /**
-       * Linear team IDs that scope issue discovery and routing to the Factory FOREMAN
-       * agent.
+       * Linear team IDs for the one-time agent-session automation seed. Discovery
+       * follows enabled seated automation filters afterward.
        */
       team_ids: Array<string>;
     }
