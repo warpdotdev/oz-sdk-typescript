@@ -55,9 +55,9 @@ export class Runs extends APIResource {
   /**
    * Cancel an agent run that is currently queued or in progress; once cancelled, the
    * run transitions to a cancelled state. Not all runs can be cancelled: a run
-   * already in a terminal state, in PENDING, or of an unsupported type (self-hosted,
-   * local, GitHub Action) is rejected instead — see the error responses below for
-   * each case.
+   * already in a terminal state, in PENDING, or of an unsupported type (e.g. local,
+   * GitHub Action) is rejected instead — see the error responses below for each
+   * case.
    *
    * @example
    * ```ts
@@ -66,6 +66,90 @@ export class Runs extends APIResource {
    */
   cancel(runID: string, options?: RequestOptions): APIPromise<string> {
     return this._client.post(path`/agent/runs/${runID}/cancel`, options);
+  }
+
+  /**
+   * Retrieve a run's conversation as a normalized sequence of messages and nested
+   * steps. The response groups text, tool activity, and event content into
+   * structured blocks.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.getConversation(
+   *   'runId',
+   * );
+   * ```
+   */
+  getConversation(runID: string, options?: RequestOptions): APIPromise<RunGetConversationResponse> {
+    return this._client.get(path`/agent/runs/${runID}/conversation`, options);
+  }
+
+  /**
+   * Return the latest cumulative raw usage snapshot retained for a Claude Code or
+   * Codex run. Missing metrics are represented as an unavailable result rather than
+   * zero. Access uses the same run view authorization as transcript reads.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.getHarnessUsage(
+   *   'runId',
+   * );
+   * ```
+   */
+  getHarnessUsage(runID: string, options?: RequestOptions): APIPromise<RunGetHarnessUsageResponse> {
+    return this._client.get(path`/agent/runs/${runID}/harness-usage`, options);
+  }
+
+  /**
+   * Retrieve chronological setup and lifecycle timeline events for an agent run.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.getTimeline(
+   *   'runId',
+   * );
+   * ```
+   */
+  getTimeline(runID: string, options?: RequestOptions): APIPromise<RunGetTimelineResponse> {
+    return this._client.get(path`/agent/runs/${runID}/timeline`, options);
+  }
+
+  /**
+   * Retrieve the raw conversation transcript for an agent run. Returns a 302
+   * redirect to a time-limited download URL for the transcript.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.getTranscript(
+   *   'runId',
+   * );
+   *
+   * const content = await response.blob();
+   * console.log(content);
+   * ```
+   */
+  getTranscript(runID: string, options?: RequestOptions): APIPromise<Response> {
+    return this._client.get(path`/agent/runs/${runID}/transcript`, {
+      ...options,
+      headers: buildHeaders([{ Accept: 'application/octet-stream' }, options?.headers]),
+      __binaryResponse: true,
+    });
+  }
+
+  /**
+   * Cancel the request the agent is currently working on without ending the run or
+   * tearing down its sandbox. The run stays in progress and accepts follow-ups
+   * afterwards. Only live runs on the Warp harness can be interrupted; use
+   * `POST /agent/runs/{runId}/cancel` to end a run outright. A 202 means the
+   * platform accepted the cancel; the agent applies it asynchronously.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.runs.interrupt('runId');
+   * ```
+   */
+  interrupt(runID: string, options?: RequestOptions): APIPromise<unknown> {
+    return this._client.post(path`/agent/runs/${runID}/interrupt`, options);
   }
 
   /**
@@ -93,18 +177,15 @@ export class Runs extends APIResource {
   /**
    * Send a follow-up message to an existing run. The server transparently routes the
    * message based on the current state of the run (still queued, actively running,
-   * or ended). A 200 response means the follow-up was accepted; updated run state
-   * can be observed via `GET /agent/runs/{runId}`.
+   * or ended) and will resume the agent in a new sandbox if necessary. A 200
+   * response means the follow-up was accepted; updated run state can be observed via
+   * `GET /agent/runs/{runId}`.
    *
    * A run that failed during environment setup keeps its retained session reachable
    * for a bounded debug window. A follow-up sent to an eligible run in that window
    * is delivered into the retained session to start or continue a debug agent,
    * without reopening the run: it stays in its failed state, with its original
-   * failure message and error code unchanged. This applies uniformly to every
-   * follow-up origin (this endpoint, the Warp client, and integrations) and requires
-   * the same authorization as any other follow-up. Once the debug window closes, or
-   * when the run is not eligible, a follow-up falls back to the run's ordinary
-   * continuation behavior (which may start a new execution).
+   * failure message and error code unchanged.
    *
    * @example
    * ```ts
@@ -364,6 +445,198 @@ export namespace ArtifactItem {
   }
 }
 
+export interface ConversationStep {
+  /**
+   * Unique identifier for the step
+   */
+  id: string;
+
+  /**
+   * Ordered normalized messages for this step
+   */
+  messages: Array<ConversationStep.Message>;
+
+  /**
+   * Nested delegated work performed as part of this step
+   */
+  steps: Array<ConversationStep>;
+
+  /**
+   * Latest transcript message timestamp contained in this step or any nested step
+   * (RFC3339)
+   */
+  completed_at?: string;
+
+  /**
+   * Original instruction or delegated work description for the step
+   */
+  description?: string;
+
+  /**
+   * Earliest transcript message timestamp contained in this step or any nested step
+   * (RFC3339)
+   */
+  started_at?: string;
+
+  /**
+   * Summary of the work completed for the step
+   */
+  summary?: string;
+}
+
+export namespace ConversationStep {
+  export interface Message {
+    content: Array<
+      | Message.TextContentBlock
+      | Message.ActionContentBlock
+      | Message.ActionResultContentBlock
+      | Message.EventContentBlock
+    >;
+
+    /**
+     * Role of the normalized message
+     */
+    role: 'user' | 'assistant' | 'tool' | 'system';
+
+    /**
+     * Underlying transcript message IDs grouped into this normalized message
+     */
+    message_ids?: Array<string>;
+
+    /**
+     * Request identifier shared by transcript messages from the same request, when
+     * available
+     */
+    request_id?: string;
+
+    /**
+     * Timestamp of the first transcript message included in this normalized message
+     * (RFC3339)
+     */
+    timestamp?: string;
+  }
+
+  export namespace Message {
+    export interface TextContentBlock {
+      /**
+       * Plain text content
+       */
+      text: string;
+
+      type: 'text';
+
+      /**
+       * Underlying transcript message ID that produced this content block, when
+       * available
+       */
+      message_id?: string;
+    }
+
+    export interface ActionContentBlock {
+      /**
+       * Unique identifier for the action
+       */
+      id: string;
+
+      /**
+       * High-level category of an action performed during the conversation
+       */
+      category:
+        | 'command'
+        | 'files'
+        | 'search'
+        | 'integration'
+        | 'documents'
+        | 'computer'
+        | 'review'
+        | 'skill';
+
+      /**
+       * Curated public input for this action. This object is owned by the API and is not
+       * a raw internal tool payload.
+       */
+      input: { [key: string]: unknown };
+
+      /**
+       * Public action name, such as run_command or edit_files
+       */
+      name: string;
+
+      type: 'action';
+
+      /**
+       * Underlying transcript message ID that produced this content block, when
+       * available
+       */
+      message_id?: string;
+    }
+
+    export interface ActionResultContentBlock {
+      /**
+       * Identifier of the corresponding action
+       */
+      action_id: string;
+
+      /**
+       * High-level category of an action performed during the conversation
+       */
+      category:
+        | 'command'
+        | 'files'
+        | 'search'
+        | 'integration'
+        | 'documents'
+        | 'computer'
+        | 'review'
+        | 'skill';
+
+      /**
+       * Public action name matching the corresponding action block
+       */
+      name: string;
+
+      /**
+       * Curated public result for this action. Large or binary internal payloads should
+       * be summarized rather than passed through raw.
+       */
+      output: { [key: string]: unknown };
+
+      /**
+       * State of an action result
+       */
+      state: 'running' | 'completed' | 'failed' | 'denied';
+
+      type: 'action_result';
+
+      /**
+       * Underlying transcript message ID that produced this content block, when
+       * available
+       */
+      message_id?: string;
+    }
+
+    export interface EventContentBlock {
+      /**
+       * Minimal structured metadata for the event
+       */
+      data: { [key: string]: unknown };
+
+      /**
+       * Event type for intentionally exposed non-core transcript events
+       */
+      name: string;
+
+      type: 'event';
+
+      /**
+       * Underlying transcript message ID that produced this content block, when
+       * available
+       */
+      message_id?: string;
+    }
+  }
+}
+
 export interface RunItem {
   /**
    * Timestamp when the run was created (RFC3339)
@@ -426,7 +699,7 @@ export interface RunItem {
   /**
    * Configuration for a cloud agent run
    */
-  agent_config?: AgentAPI.AmbientAgentConfig;
+  agent_config?: AgentAPI.AgentConfigSnapshot;
 
   /**
    * Information about the agent skill used for the run. Either full_path or
@@ -1151,6 +1424,405 @@ export type RunState =
  */
 export type RunCancelResponse = string;
 
+export interface RunGetConversationResponse {
+  /**
+   * Unique identifier for the conversation
+   */
+  conversation_id: string;
+
+  /**
+   * Root steps in the conversation
+   */
+  steps: Array<ConversationStep>;
+}
+
+export interface RunGetHarnessUsageResponse {
+  available: boolean;
+
+  conversation_id: string;
+
+  run_id: string;
+
+  age_seconds?: number | null;
+
+  usage?:
+    | RunGetHarnessUsageResponse.ClaudeHarnessUsageEnvelope
+    | RunGetHarnessUsageResponse.CodexHarnessUsageEnvelope;
+}
+
+export namespace RunGetHarnessUsageResponse {
+  export interface ClaudeHarnessUsageEnvelope {
+    capturedAt: string;
+
+    captureSequence: number;
+
+    executionId: number;
+
+    harness: 'CLAUDE_CODE';
+
+    /**
+     * Server-owned storage format metadata, not the producer's parser version.
+     */
+    metricsVersion: 1;
+
+    snapshot: ClaudeHarnessUsageEnvelope.Snapshot;
+  }
+
+  export namespace ClaudeHarnessUsageEnvelope {
+    export interface Snapshot {
+      coverage: Snapshot.Coverage;
+
+      payload: Snapshot.Payload;
+    }
+
+    export namespace Snapshot {
+      export interface Coverage {
+        tokenStatus: 'known' | 'partial' | 'unavailable';
+
+        toolStatus: 'known' | 'partial' | 'unavailable';
+      }
+
+      export interface Payload {
+        attribution?: Array<Payload.Attribution> | null;
+
+        /**
+         * Native tool invocation counts. Total must equal the sum of byName; tool names
+         * are arbitrary map keys.
+         */
+        toolCalls?: Payload.ToolCalls | null;
+
+        /**
+         * Native cumulative token categories; cache counters are not added to
+         * input_tokens.
+         */
+        usage?: Payload.Usage | null;
+      }
+
+      export namespace Payload {
+        export interface Attribution {
+          /**
+           * Native cumulative token categories; cache counters are not added to
+           * input_tokens.
+           */
+          usage: Attribution.Usage | null;
+
+          inference_geo?: string | null;
+
+          model?: string | null;
+
+          service_tier?: string | null;
+
+          speed?: string | null;
+        }
+
+        export namespace Attribution {
+          /**
+           * Native cumulative token categories; cache counters are not added to
+           * input_tokens.
+           */
+          export interface Usage {
+            cache_creation?: Usage.CacheCreation | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            cache_creation_input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            cache_read_input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            output_tokens?: number | null;
+          }
+
+          export namespace Usage {
+            export interface CacheCreation {
+              /**
+               * A native count. Absent or null means unmeasured, not zero.
+               */
+              ephemeral_1h_input_tokens?: number | null;
+
+              /**
+               * A native count. Absent or null means unmeasured, not zero.
+               */
+              ephemeral_5m_input_tokens?: number | null;
+            }
+          }
+        }
+
+        /**
+         * Native tool invocation counts. Total must equal the sum of byName; tool names
+         * are arbitrary map keys.
+         */
+        export interface ToolCalls {
+          byName: { [key: string]: number };
+
+          total: number;
+        }
+
+        /**
+         * Native cumulative token categories; cache counters are not added to
+         * input_tokens.
+         */
+        export interface Usage {
+          cache_creation?: Usage.CacheCreation | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          cache_creation_input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          cache_read_input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          output_tokens?: number | null;
+        }
+
+        export namespace Usage {
+          export interface CacheCreation {
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            ephemeral_1h_input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            ephemeral_5m_input_tokens?: number | null;
+          }
+        }
+      }
+    }
+  }
+
+  export interface CodexHarnessUsageEnvelope {
+    capturedAt: string;
+
+    captureSequence: number;
+
+    executionId: number;
+
+    harness: 'CODEX';
+
+    /**
+     * Server-owned storage format metadata, not the producer's parser version.
+     */
+    metricsVersion: 1;
+
+    snapshot: CodexHarnessUsageEnvelope.Snapshot;
+  }
+
+  export namespace CodexHarnessUsageEnvelope {
+    export interface Snapshot {
+      coverage: Snapshot.Coverage;
+
+      payload: Snapshot.Payload;
+    }
+
+    export namespace Snapshot {
+      export interface Coverage {
+        tokenStatus: 'known' | 'partial' | 'unavailable';
+
+        toolStatus: 'known' | 'partial' | 'unavailable';
+      }
+
+      export interface Payload {
+        attribution?: Array<Payload.Attribution> | null;
+
+        /**
+         * Native tool invocation counts. Total must equal the sum of byName; tool names
+         * are arbitrary map keys.
+         */
+        toolCalls?: Payload.ToolCalls | null;
+
+        /**
+         * Native checkpoint counters. Cached input and reasoning output may overlap other
+         * categories; no derived total is inferred.
+         */
+        usage?: Payload.Usage | null;
+      }
+
+      export namespace Payload {
+        export interface Attribution {
+          /**
+           * Native checkpoint counters. Cached input and reasoning output may overlap other
+           * categories; no derived total is inferred.
+           */
+          usage: Attribution.Usage | null;
+
+          inference_geo?: string | null;
+
+          model?: string | null;
+
+          service_tier?: string | null;
+
+          speed?: string | null;
+        }
+
+        export namespace Attribution {
+          /**
+           * Native checkpoint counters. Cached input and reasoning output may overlap other
+           * categories; no derived total is inferred.
+           */
+          export interface Usage {
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            cache_write_input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            cached_input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            input_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            output_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            reasoning_output_tokens?: number | null;
+
+            /**
+             * A native count. Absent or null means unmeasured, not zero.
+             */
+            total_tokens?: number | null;
+          }
+        }
+
+        /**
+         * Native tool invocation counts. Total must equal the sum of byName; tool names
+         * are arbitrary map keys.
+         */
+        export interface ToolCalls {
+          byName: { [key: string]: number };
+
+          total: number;
+        }
+
+        /**
+         * Native checkpoint counters. Cached input and reasoning output may overlap other
+         * categories; no derived total is inferred.
+         */
+        export interface Usage {
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          cache_write_input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          cached_input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          input_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          output_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          reasoning_output_tokens?: number | null;
+
+          /**
+           * A native count. Absent or null means unmeasured, not zero.
+           */
+          total_tokens?: number | null;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Response body for listing run timeline events.
+ */
+export interface RunGetTimelineResponse {
+  events: Array<RunGetTimelineResponse.Event>;
+}
+
+export namespace RunGetTimelineResponse {
+  /**
+   * A setup or lifecycle event recorded for an agent run.
+   */
+  export interface Event {
+    /**
+     * Type of timeline event recorded for a run.
+     */
+    event_type:
+      | 'oz_run_created'
+      | 'oz_run_claimed'
+      | 'worker_container_ready'
+      | 'shared_session_started'
+      | 'agent_started'
+      | 'oz_run_done'
+      | 'oz_run_blocked'
+      | 'oz_run_cancelled'
+      | 'oz_run_failed'
+      | 'oz_run_errored'
+      | 'vm_shutdown';
+
+    /**
+     * Unique client- or server-generated identifier for this event.
+     */
+    event_uuid: string;
+
+    /**
+     * Timestamp when the event occurred.
+     */
+    occurred_at: string;
+
+    /**
+     * Run that owns this event.
+     */
+    run_id: string;
+
+    /**
+     * Run execution associated with this event, when available.
+     */
+    execution_id?: number;
+
+    /**
+     * Optional event-specific JSON payload. Contents vary by event type.
+     */
+    payload?: { [key: string]: unknown };
+  }
+}
+
+export type RunInterruptResponse = unknown;
+
 /**
  * Response body for listing handoff snapshot attachments.
  */
@@ -1284,7 +1956,7 @@ export interface RunListParams extends RunsCursorPageParams {
 
   /**
    * Query param: Filter by exact metadata key/value pairs using object notation
-   * (e.g. `metadata[ticket_id]=VIS-238`), combining multiple pairs with AND
+   * (e.g. `metadata[ticket_id]=ACME-238`), combining multiple pairs with AND
    * semantics, up to 5 per request. Returns `feature_not_available` when metadata
    * filtering is not enabled.
    */
@@ -1418,10 +2090,15 @@ export namespace RunSubmitFollowupParams {
 export declare namespace Runs {
   export {
     type ArtifactItem as ArtifactItem,
+    type ConversationStep as ConversationStep,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
+    type RunGetConversationResponse as RunGetConversationResponse,
+    type RunGetHarnessUsageResponse as RunGetHarnessUsageResponse,
+    type RunGetTimelineResponse as RunGetTimelineResponse,
+    type RunInterruptResponse as RunInterruptResponse,
     type RunListHandoffAttachmentsResponse as RunListHandoffAttachmentsResponse,
     type RunSubmitFollowupResponse as RunSubmitFollowupResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,

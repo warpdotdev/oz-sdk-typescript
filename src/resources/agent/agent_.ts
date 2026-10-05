@@ -12,8 +12,8 @@ import { path } from '../../internal/utils/path';
  */
 export class Agent extends APIResource {
   /**
-   * Create a new agent for the caller's team. Agents can be used as the execution
-   * principal for team-owned runs.
+   * Create a new agent in the caller's active team. Agents act autonomously with
+   * their own permissions, configuration, and identity.
    *
    * @example
    * ```ts
@@ -49,8 +49,7 @@ export class Agent extends APIResource {
   }
 
   /**
-   * List all agents for the caller's team. Each agent includes an `available` flag
-   * indicating whether it is within the team's plan limit and may be used for runs.
+   * List all agents on the caller's team.
    *
    * @example
    * ```ts
@@ -89,9 +88,7 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Retrieve a single agent by its unique identifier. The response includes an
-   * `available` flag indicating whether the agent is within the team's plan limit
-   * and may be used for runs.
+   * Retrieve a single agent by its unique identifier.
    *
    * @example
    * ```ts
@@ -130,7 +127,7 @@ export interface AgentResponse {
   /**
    * Memory settings for an agent.
    */
-  memory: AgentResponse.Memory;
+  memory: MemoryResponse;
 
   /**
    * Name of the agent
@@ -140,7 +137,7 @@ export interface AgentResponse {
   /**
    * Secrets that this agent may access by default.
    */
-  secrets: Array<AgentResponse.Secret>;
+  secrets: Array<AgentAPI.SecretRef>;
 
   /**
    * Ordered list of normalized skill specs associated with this agent. Always
@@ -220,18 +217,18 @@ export interface AgentResponse {
    * agent's base_model to be empty, since the two describe mutually exclusive
    * default models.
    */
-  harness?: AgentResponse.Harness;
+  harness?: AgentAPI.Harness;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
-  harness_auth_secrets?: AgentResponse.HarnessAuthSecrets;
+  harness_auth_secrets?: AgentAPI.HarnessAuthSecrets;
 
   /**
    * Inference provider settings used for LLM calls.
    */
-  inference_providers?: AgentResponse.InferenceProviders;
+  inference_providers?: AgentAPI.InferenceProvidersConfig;
 
   /**
    * MCP server configurations attached to this agent by default. Run-level MCP
@@ -261,194 +258,19 @@ export interface AgentResponse {
   worker_host?: string;
 }
 
-export namespace AgentResponse {
+/**
+ * Auto-memory state for an agent.
+ */
+export interface AutoMemoryResponse {
   /**
-   * Memory settings for an agent.
+   * Whether this agent has an agent-owned memory store.
    */
-  export interface Memory {
-    /**
-     * Team memory stores attached to the agent.
-     */
-    attached_stores: Array<Memory.AttachedStore>;
-
-    /**
-     * Auto-memory state for an agent.
-     */
-    auto_memory: Memory.AutoMemory;
-  }
-
-  export namespace Memory {
-    /**
-     * Reference to a memory store to attach to an agent.
-     */
-    export interface AttachedStore {
-      /**
-       * Access level for the store.
-       */
-      access: 'read_write' | 'read_only';
-
-      /**
-       * Instructions for how the agent should use this memory store. Must not be empty.
-       */
-      instructions: string;
-
-      /**
-       * UID of the memory store.
-       */
-      uid: string;
-    }
-
-    /**
-     * Auto-memory state for an agent.
-     */
-    export interface AutoMemory {
-      /**
-       * Whether this agent has an agent-owned memory store.
-       */
-      enabled: boolean;
-
-      /**
-       * Memory store attached to an agent.
-       */
-      store?: AutoMemory.Store;
-    }
-
-    export namespace AutoMemory {
-      /**
-       * Memory store attached to an agent.
-       */
-      export interface Store {
-        /**
-         * Access level for the store.
-         */
-        access: 'read_write' | 'read_only';
-
-        /**
-         * Instructions for how the agent should use this memory store.
-         */
-        instructions: string;
-
-        /**
-         * Public owner type.
-         */
-        owner_type: 'user' | 'service_account' | 'team';
-
-        /**
-         * Public UID of the user, service account, or team that owns the memory store.
-         */
-        owner_uid: string;
-
-        /**
-         * UID of the memory store.
-         */
-        uid: string;
-
-        /**
-         * Optional description for the memory store.
-         */
-        description?: string;
-      }
-    }
-  }
+  enabled: boolean;
 
   /**
-   * Reference to a managed secret by name.
+   * Memory store attached to an agent.
    */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
-
-  /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
+  store?: MemoryStoreAttachmentResponse;
 }
 
 export interface CreateAgentRequest {
@@ -518,18 +340,18 @@ export interface CreateAgentRequest {
    * agent's base_model to be empty, since the two describe mutually exclusive
    * default models.
    */
-  harness?: CreateAgentRequest.Harness;
+  harness?: AgentAPI.Harness;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
-  harness_auth_secrets?: CreateAgentRequest.HarnessAuthSecrets;
+  harness_auth_secrets?: AgentAPI.HarnessAuthSecrets;
 
   /**
    * Inference provider settings used for LLM calls.
    */
-  inference_providers?: CreateAgentRequest.InferenceProviders;
+  inference_providers?: AgentAPI.InferenceProvidersConfig;
 
   /**
    * Optional map of MCP server configurations by name to attach to runs executed by
@@ -559,7 +381,7 @@ export interface CreateAgentRequest {
    * single request are rejected. Each entry is unioned into the run-time secret
    * scope when the agent executes.
    */
-  secrets?: Array<CreateAgentRequest.Secret>;
+  secrets?: Array<AgentAPI.SecretRef>;
 
   /**
    * Optional list of skill specs to associate with the agent. Format:
@@ -586,95 +408,6 @@ export interface CreateAgentRequest {
 
 export namespace CreateAgentRequest {
   /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
-
-  /**
    * Memory settings for creating an agent.
    */
   export interface Memory {
@@ -682,7 +415,7 @@ export namespace CreateAgentRequest {
      * Existing team memory stores to attach to the agent. Duplicate UIDs within a
      * single request are rejected.
      */
-    attached_stores?: Array<Memory.AttachedStore>;
+    attached_stores?: Array<AgentAPI.MemoryStoreRef>;
 
     /**
      * Auto-memory settings for creating an agent.
@@ -691,26 +424,6 @@ export namespace CreateAgentRequest {
   }
 
   export namespace Memory {
-    /**
-     * Reference to a memory store to attach to an agent.
-     */
-    export interface AttachedStore {
-      /**
-       * Access level for the store.
-       */
-      access: 'read_write' | 'read_only';
-
-      /**
-       * Instructions for how the agent should use this memory store. Must not be empty.
-       */
-      instructions: string;
-
-      /**
-       * UID of the memory store.
-       */
-      uid: string;
-    }
-
     /**
      * Auto-memory settings for creating an agent.
      */
@@ -722,20 +435,60 @@ export namespace CreateAgentRequest {
       enabled?: boolean;
     }
   }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
 }
 
 export interface ListAgentIdentitiesResponse {
   agents: Array<AgentResponse>;
+}
+
+/**
+ * Memory settings for an agent.
+ */
+export interface MemoryResponse {
+  /**
+   * Team memory stores attached to the agent.
+   */
+  attached_stores: Array<AgentAPI.MemoryStoreRef>;
+
+  /**
+   * Auto-memory state for an agent.
+   */
+  auto_memory: AutoMemoryResponse;
+}
+
+/**
+ * Memory store attached to an agent.
+ */
+export interface MemoryStoreAttachmentResponse {
+  /**
+   * Access level for the store.
+   */
+  access: 'read_write' | 'read_only';
+
+  /**
+   * Instructions for how the agent should use this memory store.
+   */
+  instructions: string;
+
+  /**
+   * Public owner type.
+   */
+  owner_type: 'user' | 'service_account' | 'team';
+
+  /**
+   * Public UID of the user, service account, or team that owns the memory store.
+   */
+  owner_uid: string;
+
+  /**
+   * UID of the memory store.
+   */
+  uid: string;
+
+  /**
+   * Optional description for the memory store.
+   */
+  description?: string;
 }
 
 /**
@@ -802,18 +555,18 @@ export interface UpdateAgentRequest {
    * agent's base_model to be empty, since the two describe mutually exclusive
    * default models.
    */
-  harness?: UpdateAgentRequest.Harness | null;
+  harness?: AgentAPI.Harness | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
-  harness_auth_secrets?: UpdateAgentRequest.HarnessAuthSecrets | null;
+  harness_auth_secrets?: AgentAPI.HarnessAuthSecrets | null;
 
   /**
    * Inference provider settings used for LLM calls.
    */
-  inference_providers?: UpdateAgentRequest.InferenceProviders | null;
+  inference_providers?: AgentAPI.InferenceProvidersConfig | null;
 
   /**
    * Replacement map of MCP server configurations by name. Omit to leave unchanged,
@@ -849,7 +602,7 @@ export interface UpdateAgentRequest {
    * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
    * clear, or pass a non-empty array to replace. Duplicate names are rejected.
    */
-  secrets?: Array<UpdateAgentRequest.Secret> | null;
+  secrets?: Array<AgentAPI.SecretRef> | null;
 
   /**
    * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
@@ -868,95 +621,6 @@ export interface UpdateAgentRequest {
 
 export namespace UpdateAgentRequest {
   /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
-
-  /**
    * Memory settings for updating an agent.
    */
   export interface Memory {
@@ -964,39 +628,7 @@ export namespace UpdateAgentRequest {
      * Replacement list of attached team memory stores. Omit to leave unchanged, pass
      * an empty array to clear, or pass a non-empty array to replace.
      */
-    attached_stores?: Array<Memory.AttachedStore> | null;
-  }
-
-  export namespace Memory {
-    /**
-     * Reference to a memory store to attach to an agent.
-     */
-    export interface AttachedStore {
-      /**
-       * Access level for the store.
-       */
-      access: 'read_write' | 'read_only';
-
-      /**
-       * Instructions for how the agent should use this memory store. Must not be empty.
-       */
-      instructions: string;
-
-      /**
-       * UID of the memory store.
-       */
-      uid: string;
-    }
-  }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
+    attached_stores?: Array<AgentAPI.MemoryStoreRef> | null;
   }
 }
 
@@ -1068,18 +700,18 @@ export interface AgentCreateParams {
    * agent's base_model to be empty, since the two describe mutually exclusive
    * default models.
    */
-  harness?: AgentCreateParams.Harness;
+  harness?: AgentAPI.Harness;
 
   /**
    * Body param: Authentication secrets for third-party harnesses. Only the secret
    * for the harness specified gets injected into the environment.
    */
-  harness_auth_secrets?: AgentCreateParams.HarnessAuthSecrets;
+  harness_auth_secrets?: AgentAPI.HarnessAuthSecrets;
 
   /**
    * Body param: Inference provider settings used for LLM calls.
    */
-  inference_providers?: AgentCreateParams.InferenceProviders;
+  inference_providers?: AgentAPI.InferenceProvidersConfig;
 
   /**
    * Body param: Optional map of MCP server configurations by name to attach to runs
@@ -1110,7 +742,7 @@ export interface AgentCreateParams {
    * within a single request are rejected. Each entry is unioned into the run-time
    * secret scope when the agent executes.
    */
-  secrets?: Array<AgentCreateParams.Secret>;
+  secrets?: Array<AgentAPI.SecretRef>;
 
   /**
    * Body param: Optional list of skill specs to associate with the agent. Format:
@@ -1143,95 +775,6 @@ export interface AgentCreateParams {
 
 export namespace AgentCreateParams {
   /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
-
-  /**
    * Memory settings for creating an agent.
    */
   export interface Memory {
@@ -1239,7 +782,7 @@ export namespace AgentCreateParams {
      * Existing team memory stores to attach to the agent. Duplicate UIDs within a
      * single request are rejected.
      */
-    attached_stores?: Array<Memory.AttachedStore>;
+    attached_stores?: Array<AgentAPI.MemoryStoreRef>;
 
     /**
      * Auto-memory settings for creating an agent.
@@ -1248,26 +791,6 @@ export namespace AgentCreateParams {
   }
 
   export namespace Memory {
-    /**
-     * Reference to a memory store to attach to an agent.
-     */
-    export interface AttachedStore {
-      /**
-       * Access level for the store.
-       */
-      access: 'read_write' | 'read_only';
-
-      /**
-       * Instructions for how the agent should use this memory store. Must not be empty.
-       */
-      instructions: string;
-
-      /**
-       * UID of the memory store.
-       */
-      uid: string;
-    }
-
     /**
      * Auto-memory settings for creating an agent.
      */
@@ -1278,16 +801,6 @@ export namespace AgentCreateParams {
        */
       enabled?: boolean;
     }
-  }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
   }
 }
 
@@ -1348,18 +861,18 @@ export interface AgentUpdateParams {
    * agent's base_model to be empty, since the two describe mutually exclusive
    * default models.
    */
-  harness?: AgentUpdateParams.Harness | null;
+  harness?: AgentAPI.Harness | null;
 
   /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
-  harness_auth_secrets?: AgentUpdateParams.HarnessAuthSecrets | null;
+  harness_auth_secrets?: AgentAPI.HarnessAuthSecrets | null;
 
   /**
    * Inference provider settings used for LLM calls.
    */
-  inference_providers?: AgentUpdateParams.InferenceProviders | null;
+  inference_providers?: AgentAPI.InferenceProvidersConfig | null;
 
   /**
    * Replacement map of MCP server configurations by name. Omit to leave unchanged,
@@ -1395,7 +908,7 @@ export interface AgentUpdateParams {
    * Replacement list of secrets. Omit to leave unchanged, pass an empty array to
    * clear, or pass a non-empty array to replace. Duplicate names are rejected.
    */
-  secrets?: Array<AgentUpdateParams.Secret> | null;
+  secrets?: Array<AgentAPI.SecretRef> | null;
 
   /**
    * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
@@ -1414,95 +927,6 @@ export interface AgentUpdateParams {
 
 export namespace AgentUpdateParams {
   /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
-
-  /**
    * Memory settings for updating an agent.
    */
   export interface Memory {
@@ -1510,47 +934,14 @@ export namespace AgentUpdateParams {
      * Replacement list of attached team memory stores. Omit to leave unchanged, pass
      * an empty array to clear, or pass a non-empty array to replace.
      */
-    attached_stores?: Array<Memory.AttachedStore> | null;
-  }
-
-  export namespace Memory {
-    /**
-     * Reference to a memory store to attach to an agent.
-     */
-    export interface AttachedStore {
-      /**
-       * Access level for the store.
-       */
-      access: 'read_write' | 'read_only';
-
-      /**
-       * Instructions for how the agent should use this memory store. Must not be empty.
-       */
-      instructions: string;
-
-      /**
-       * UID of the memory store.
-       */
-      uid: string;
-    }
-  }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
+    attached_stores?: Array<AgentAPI.MemoryStoreRef> | null;
   }
 }
 
 export interface AgentListParams {
   /**
    * Query param: Optional UID of a Factory to filter by. When provided, only agents
-   * linked to that factory (and owned by the caller's team) are returned. Ignored
-   * unless the factory API is enabled.
+   * linked to that factory are returned.
    */
   factory_uid?: string;
 
@@ -1564,8 +955,11 @@ export interface AgentListParams {
 export declare namespace Agent {
   export {
     type AgentResponse as AgentResponse,
+    type AutoMemoryResponse as AutoMemoryResponse,
     type CreateAgentRequest as CreateAgentRequest,
     type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
+    type MemoryResponse as MemoryResponse,
+    type MemoryStoreAttachmentResponse as MemoryStoreAttachmentResponse,
     type UpdateAgentRequest as UpdateAgentRequest,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,

@@ -8,16 +8,32 @@ import {
   AgentCreateParams,
   AgentResponse,
   AgentUpdateParams,
+  AutoMemoryResponse,
   CreateAgentRequest,
   ListAgentIdentitiesResponse,
+  MemoryResponse,
+  MemoryStoreAttachmentResponse,
   UpdateAgentRequest,
 } from './agent_';
 import * as ConversationsAPI from './conversations';
-import { ConversationCheckRedirectResponse, Conversations } from './conversations';
+import {
+  ConversationCheckRedirectResponse,
+  ConversationDownloadScreenshotParams,
+  ConversationInterruptResponse,
+  ConversationRetrieveResponse,
+  ConversationSubmitFollowupParams,
+  ConversationSubmitFollowupResponse,
+  Conversations,
+} from './conversations';
 import * as RunsAPI from './runs';
 import {
   ArtifactItem,
+  ConversationStep,
   RunCancelResponse,
+  RunGetConversationResponse,
+  RunGetHarnessUsageResponse,
+  RunGetTimelineResponse,
+  RunInterruptResponse,
   RunItem,
   RunItemsRunsCursorPage,
   RunListHandoffAttachmentsResponse,
@@ -60,10 +76,7 @@ export class Agent extends APIResource {
    * Retrieve a list of available agents (skills) that can be used to run tasks.
    * Agents are discovered from environments or a specific repository.
    *
-   * @example
-   * ```ts
-   * const agents = await client.agent.list();
-   * ```
+   * @deprecated
    */
   list(
     params: AgentListParams | null | undefined = {},
@@ -77,6 +90,29 @@ export class Agent extends APIResource {
         { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
         options?.headers,
       ]),
+    });
+  }
+
+  /**
+   * Redirect to a temporary signed download URL for a downloadable artifact. Public
+   * artifacts can be downloaded without authentication; private artifacts require
+   * the caller to be authenticated and authorized.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.downloadArtifact(
+   *   'artifactUid',
+   * );
+   *
+   * const content = await response.blob();
+   * console.log(content);
+   * ```
+   */
+  downloadArtifact(artifactUid: string, options?: RequestOptions): APIPromise<Response> {
+    return this._client.get(path`/agent/artifacts/${artifactUid}/download`, {
+      ...options,
+      headers: buildHeaders([{ Accept: 'application/octet-stream' }, options?.headers]),
+      __binaryResponse: true,
     });
   }
 
@@ -95,6 +131,27 @@ export class Agent extends APIResource {
    */
   getArtifact(artifactUid: string, options?: RequestOptions): APIPromise<AgentGetArtifactResponse> {
     return this._client.get(path`/agent/artifacts/${artifactUid}`, options);
+  }
+
+  /**
+   * Reverse-looks up the agent run that created an external reference with the given
+   * URL. The URL is matched against the canonical locator stored when the artifact
+   * was reported. Returns 404 when no matching run exists or when the caller lacks
+   * access.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.agent.getRunByExternalReference({
+   *     url: 'url',
+   *   });
+   * ```
+   */
+  getRunByExternalReference(
+    query: AgentGetRunByExternalReferenceParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentGetRunByExternalReferenceResponse> {
+    return this._client.get('/agent/run-by-external-reference', { query, ...options });
   }
 
   /**
@@ -123,6 +180,21 @@ export class Agent extends APIResource {
   }
 
   /**
+   * Retrieve the list of LLM models available to the authenticated user for agent
+   * runs. The response includes which model is the default, as well as per-model
+   * metadata such as provider, cost, and whether the model is currently disabled
+   * (and why).
+   *
+   * @example
+   * ```ts
+   * const response = await client.agent.listModels();
+   * ```
+   */
+  listModels(options?: RequestOptions): APIPromise<AgentListModelsResponse> {
+    return this._client.get('/agent/models', options);
+  }
+
+  /**
    * Spawn a cloud agent with a prompt and optional configuration. The agent will be
    * queued for execution and assigned a unique run ID.
    *
@@ -142,6 +214,155 @@ export class Agent extends APIResource {
       ]),
     });
   }
+}
+
+/**
+ * Configuration for a cloud agent run
+ */
+export interface AgentConfigSnapshot {
+  /**
+   * Custom base prompt for the agent
+   */
+  base_prompt?: string;
+
+  /**
+   * Controls whether computer use is enabled for this agent. If not set, defaults to
+   * true.
+   */
+  computer_use_enabled?: boolean;
+
+  /**
+   * Model the computer use subagent runs on; if omitted, the subagent picks its own
+   * model automatically. Only applies to the built-in Warp harness — the value is
+   * accepted but has no effect under a third-party harness or when computer use is
+   * disabled. Requires an agent CLI version that supports the --computer-use-model
+   * flag.
+   */
+  computer_use_model_id?: string;
+
+  /**
+   * Controls which principal's credentials are used when the platform mints tokens
+   * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
+   *
+   * - EXECUTOR (default when unset): credentials are sourced from the run's
+   *   execution principal — a GitHub App installation token for agent principals, a
+   *   personal OAuth token for user principals.
+   * - CREATOR: credentials are always sourced from the run creator regardless of the
+   *   execution principal, useful when a service account executes the run but Git
+   *   operations should authenticate as the triggering human.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
+
+  /**
+   * UID of the environment to run the agent in
+   */
+  environment_id?: string;
+
+  /**
+   * Internal per-Factory run configuration, populated only by the server.
+   */
+  experimental?: { [key: string]: string | number | boolean | null };
+
+  /**
+   * Specifies which execution harness to use for the agent run. Default (nil/empty)
+   * uses Warp's built-in harness. When stored as a named agent's default
+   * (create/update agent identity), this field replaces the deprecated
+   * base_harness/base_model pair: a harness other than `oz` here requires the
+   * agent's base_model to be empty, since the two describe mutually exclusive
+   * default models.
+   */
+  harness?: Harness;
+
+  /**
+   * Authentication secrets for third-party harnesses. Only the secret for the
+   * harness specified gets injected into the environment.
+   */
+  harness_auth_secrets?: HarnessAuthSecrets;
+
+  /**
+   * Number of minutes to keep the agent environment alive after task completion. Set
+   * to 0 to shut down immediately after task completion. If not set, defaults to 10
+   * minutes. Maximum allowed value is min(60, floor(max_instance_runtime_seconds
+   * / 60) for your billing tier).
+   */
+  idle_timeout_minutes?: number;
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: InferenceProvidersConfig;
+
+  /**
+   * Map of MCP server configurations by name
+   */
+  mcp_servers?: { [key: string]: McpServerConfig };
+
+  /**
+   * Memory stores to attach to this run.
+   */
+  memory_stores?: Array<MemoryStoreRef>;
+
+  /**
+   * LLM model to use (uses team default if not specified)
+   */
+  model_id?: string;
+
+  /**
+   * Human-readable label for grouping, filtering, and traceability. Automatically
+   * set to the skill name when running a skill-based agent. Set this explicitly to
+   * categorize runs by intent (e.g., "nightly-dependency-check") so you can filter
+   * and track them via the name query parameter on GET /agent/runs.
+   */
+  name?: string;
+
+  /**
+   * UID of the runner providing the run's compute (platform, instance shape, and
+   * setup commands). When omitted on a request, the runner is resolved at run
+   * creation from the agent's default runner, then the environment's default runner,
+   * and the resolved UID is recorded on the run.
+   */
+  runner_id?: string;
+
+  /**
+   * Optional run-specific managed secret allowlist. Omission and an empty array both
+   * add no generic secrets. Secret references from the resolved environment and
+   * execution principal are still unioned into the run's secret scope.
+   */
+  secrets?: Array<SecretRef>;
+
+  /**
+   * Configures sharing behavior for the run's shared session; when set, the worker
+   * emits `--share public:<level>` and the bundled Warp client applies an
+   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
+   * ACL is mirrored onto the backing conversation so link viewers can read it
+   * without being on the run's team, subject to the workspace-level anyone-with-link
+   * sharing setting.
+   */
+  session_sharing?: SessionSharingConfig;
+
+  /**
+   * Skill specification identifying the primary agent skill to use, in
+   * `{owner}/{repo}:{skill_path}` format (e.g.
+   * `warpdotdev/warp-server:.claude/skills/deploy/SKILL.md`); mutually exclusive
+   * with `skills` in create/update requests. Responses include the first `skills`
+   * entry here for backward compatibility; use the list agents endpoint to discover
+   * available skills.
+   */
+  skill_spec?: string;
+
+  /**
+   * Ordered skill specifications to attach to the run. Format:
+   * "{owner}/{repo}:{skill_path}" Example:
+   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
+   * skill_spec in create/update requests.
+   */
+  skills?: Array<string>;
+
+  /**
+   * Self-hosted worker ID that should execute this task. If not specified or set to
+   * "warp", the task runs on Warp-hosted workers.
+   */
+  worker_host?: string;
 }
 
 export interface AgentSkill {
@@ -234,293 +455,23 @@ export namespace AgentSkill {
 }
 
 /**
- * Configuration for a cloud agent run
+ * Configures AWS Bedrock as the LLM inference provider for this agent or run.
  */
-export interface AmbientAgentConfig {
+export interface AwsInferenceProviderConfig {
   /**
-   * Custom base prompt for the agent
+   * If true, opt out of Bedrock at this layer.
    */
-  base_prompt?: string;
-
-  /**
-   * Controls whether computer use is enabled for this agent. If not set, defaults to
-   * true.
-   */
-  computer_use_enabled?: boolean;
+  disabled?: boolean;
 
   /**
-   * Model the computer use subagent runs on; if omitted, the subagent picks its own
-   * model automatically. Only applies to the built-in Warp harness — the value is
-   * accepted but has no effect under a third-party harness or when computer use is
-   * disabled. Requires an agent CLI version that supports the --computer-use-model
-   * flag.
+   * AWS region used for STS when assuming the Bedrock inference role.
    */
-  computer_use_model_id?: string;
+  region?: string;
 
   /**
-   * Controls which principal's credentials are used when the platform mints tokens
-   * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
-   *
-   * - EXECUTOR (default when unset): credentials are sourced from the run's
-   *   execution principal — a GitHub App installation token for agent principals, a
-   *   personal OAuth token for user principals.
-   * - CREATOR: credentials are always sourced from the run creator regardless of the
-   *   execution principal, useful when a service account executes the run but Git
-   *   operations should authenticate as the triggering human.
+   * IAM role ARN to assume when calling Bedrock.
    */
-  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
-
-  /**
-   * UID of the environment to run the agent in
-   */
-  environment_id?: string;
-
-  /**
-   * Internal per-Factory run configuration, populated only by the server.
-   */
-  experimental?: { [key: string]: string | number | boolean | null };
-
-  /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  harness?: AmbientAgentConfig.Harness;
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  harness_auth_secrets?: AmbientAgentConfig.HarnessAuthSecrets;
-
-  /**
-   * Number of minutes to keep the agent environment alive after task completion. Set
-   * to 0 to shut down immediately after task completion. If not set, defaults to 10
-   * minutes. Maximum allowed value is min(60, floor(max_instance_runtime_seconds
-   * / 60) for your billing tier).
-   */
-  idle_timeout_minutes?: number;
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  inference_providers?: AmbientAgentConfig.InferenceProviders;
-
-  /**
-   * Map of MCP server configurations by name
-   */
-  mcp_servers?: { [key: string]: McpServerConfig };
-
-  /**
-   * Memory stores to attach to this run.
-   */
-  memory_stores?: Array<AmbientAgentConfig.MemoryStore>;
-
-  /**
-   * LLM model to use (uses team default if not specified)
-   */
-  model_id?: string;
-
-  /**
-   * Human-readable label for grouping, filtering, and traceability. Automatically
-   * set to the skill name when running a skill-based agent. Set this explicitly to
-   * categorize runs by intent (e.g., "nightly-dependency-check") so you can filter
-   * and track them via the name query parameter on GET /agent/runs.
-   */
-  name?: string;
-
-  /**
-   * UID of the runner providing the run's compute (platform, instance shape, and
-   * setup commands). When omitted on a request, the runner is resolved at run
-   * creation from the agent's default runner, then the environment's default runner,
-   * and the resolved UID is recorded on the run.
-   */
-  runner_id?: string;
-
-  /**
-   * Optional run-specific managed secret allowlist. Omission and an empty array both
-   * add no generic secrets. Secret references from the resolved environment and
-   * execution principal are still unioned into the run's secret scope.
-   */
-  secrets?: Array<AmbientAgentConfig.Secret>;
-
-  /**
-   * Configures sharing behavior for the run's shared session; when set, the worker
-   * emits `--share public:<level>` and the bundled Warp client applies an
-   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read it
-   * without being on the run's team, subject to the workspace-level anyone-with-link
-   * sharing setting.
-   */
-  session_sharing?: AmbientAgentConfig.SessionSharing;
-
-  /**
-   * Skill specification identifying the primary agent skill to use, in
-   * `{owner}/{repo}:{skill_path}` format (e.g.
-   * `warpdotdev/warp-server:.claude/skills/deploy/SKILL.md`); mutually exclusive
-   * with `skills` in create/update requests. Responses include the first `skills`
-   * entry here for backward compatibility; use the list agents endpoint to discover
-   * available skills.
-   */
-  skill_spec?: string;
-
-  /**
-   * Ordered skill specifications to attach to the run. Format:
-   * "{owner}/{repo}:{skill_path}" Example:
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
-   * skill_spec in create/update requests.
-   */
-  skills?: Array<string>;
-
-  /**
-   * Self-hosted worker ID that should execute this task. If not specified or set to
-   * "warp", the task runs on Warp-hosted workers.
-   */
-  worker_host?: string;
-}
-
-export namespace AmbientAgentConfig {
-  /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
-   * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a harness other than `oz` here requires the
-   * agent's base_model to be empty, since the two describe mutually exclusive
-   * default models.
-   */
-  export interface Harness {
-    /**
-     * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a harness other than `oz`; the top-level config model_id targets
-     * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model. For an individual Warp-managed Factory Claude Code agent,
-     * send an explicit empty string to use the environment's model. Omitting model_id
-     * when replacing that agent's harness is invalid.
-     */
-    model_id?: string;
-
-    /**
-     * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a harness other than `oz`. Ignored by harnesses that do not support
-     * reasoning levels.
-     */
-    reasoning_level?: string;
-
-    /**
-     * The harness type identifier.
-     *
-     * - oz: Warp's built-in harness (default)
-     * - claude: Claude Code harness
-     * - gemini: Gemini CLI harness
-     * - codex: Codex CLI harness
-     */
-    type?: 'oz' | 'claude' | 'gemini' | 'codex';
-  }
-
-  /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
-   */
-  export interface HarnessAuthSecrets {
-    /**
-     * Name of a managed secret for Claude Code harness authentication. The secret must
-     * exist within the caller's personal or team scope. Only applicable when harness
-     * type is "claude".
-     */
-    claude_auth_secret_name?: string;
-
-    /**
-     * Name of a managed secret for Codex harness authentication. The secret must exist
-     * within the caller's personal or team scope. Only applicable when harness type is
-     * "codex".
-     */
-    codex_auth_secret_name?: string;
-  }
-
-  /**
-   * Inference provider settings used for LLM calls.
-   */
-  export interface InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    aws?: InferenceProviders.Aws;
-  }
-
-  export namespace InferenceProviders {
-    /**
-     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
-     */
-    export interface Aws {
-      /**
-       * If true, opt out of Bedrock at this layer.
-       */
-      disabled?: boolean;
-
-      /**
-       * AWS region used for STS when assuming the Bedrock inference role.
-       */
-      region?: string;
-
-      /**
-       * IAM role ARN to assume when calling Bedrock.
-       */
-      role_arn?: string;
-    }
-  }
-
-  /**
-   * Reference to a memory store to attach to an agent.
-   */
-  export interface MemoryStore {
-    /**
-     * Access level for the store.
-     */
-    access: 'read_write' | 'read_only';
-
-    /**
-     * Instructions for how the agent should use this memory store. Must not be empty.
-     */
-    instructions: string;
-
-    /**
-     * UID of the memory store.
-     */
-    uid: string;
-  }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
-  }
-
-  /**
-   * Configures sharing behavior for the run's shared session; when set, the worker
-   * emits `--share public:<level>` and the bundled Warp client applies an
-   * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read it
-   * without being on the run's team, subject to the workspace-level anyone-with-link
-   * sharing setting.
-   */
-  export interface SessionSharing {
-    /**
-     * Grants anyone-with-link access at the specified level to the run's shared
-     * session and backing conversation; link viewers must still be authenticated Warp
-     * users (anonymous reads are not supported in this release).
-     *
-     * - VIEWER: link viewers can read the session and conversation.
-     * - EDITOR: link viewers can also interact with the session.
-     */
-    public_access?: 'VIEWER' | 'EDITOR';
-  }
+  role_arn?: string;
 }
 
 /**
@@ -536,11 +487,11 @@ export interface AwsProviderConfig {
 /**
  * A cloud environment for running agents
  */
-export interface CloudEnvironment {
+export interface Environment {
   /**
    * Configuration for a cloud environment used by scheduled agents
    */
-  config: CloudEnvironmentConfig;
+  config: EnvironmentConfig;
 
   /**
    * Timestamp when the environment was last updated (RFC3339)
@@ -564,7 +515,7 @@ export interface CloudEnvironment {
   /**
    * Summary of the most recently created task for an environment
    */
-  last_task_created?: CloudEnvironment.LastTaskCreated;
+  last_task_created?: Environment.LastTaskCreated;
 
   /**
    * Timestamp of the most recent task run in this environment (RFC3339)
@@ -577,7 +528,7 @@ export interface CloudEnvironment {
   scope?: Scope;
 }
 
-export namespace CloudEnvironment {
+export namespace Environment {
   /**
    * Summary of the most recently created task for an environment
    */
@@ -627,7 +578,7 @@ export namespace CloudEnvironment {
 /**
  * Configuration for a cloud environment used by scheduled agents
  */
-export interface CloudEnvironmentConfig {
+export interface EnvironmentConfig {
   /**
    * Optional description of the environment
    */
@@ -653,7 +604,7 @@ export interface CloudEnvironmentConfig {
   /**
    * List of GitHub repositories to clone into the environment
    */
-  github_repos?: Array<CloudEnvironmentConfig.GitHubRepo>;
+  github_repos?: Array<EnvironmentConfig.GitHubRepo>;
 
   /**
    * Human-readable name for the environment
@@ -663,14 +614,14 @@ export interface CloudEnvironmentConfig {
   /**
    * Optional cloud provider configurations for automatic auth
    */
-  providers?: CloudEnvironmentConfig.Providers;
+  providers?: EnvironmentConfig.Providers;
 
   /**
    * Managed secret references contributed by this environment. Omission and an empty
    * array both contribute no secrets. These references are unioned with references
    * from the run config and execution principal.
    */
-  secrets?: Array<CloudEnvironmentConfig.Secret>;
+  secrets?: Array<SecretRef>;
 
   /**
    * Shell commands to run during environment setup
@@ -678,7 +629,7 @@ export interface CloudEnvironmentConfig {
   setup_commands?: Array<string>;
 }
 
-export namespace CloudEnvironmentConfig {
+export namespace EnvironmentConfig {
   export interface GitHubRepo {
     /**
      * GitHub repository owner (user or organization)
@@ -704,16 +655,6 @@ export namespace CloudEnvironmentConfig {
      * GCP Workload Identity Federation settings
      */
     gcp?: AgentAPI.GcpProviderConfig;
-  }
-
-  /**
-   * Reference to a managed secret by name.
-   */
-  export interface Secret {
-    /**
-     * Name of the managed secret.
-     */
-    name: string;
   }
 }
 
@@ -859,6 +800,73 @@ export interface GcpProviderConfig {
 }
 
 /**
+ * Specifies which execution harness to use for the agent run. Default (nil/empty)
+ * uses Warp's built-in harness. When stored as a named agent's default
+ * (create/update agent identity), this field replaces the deprecated
+ * base_harness/base_model pair: a harness other than `oz` here requires the
+ * agent's base_model to be empty, since the two describe mutually exclusive
+ * default models.
+ */
+export interface Harness {
+  /**
+   * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
+   * when type is a harness other than `oz`; the top-level config model_id targets
+   * the built-in Warp harness instead. When omitted or empty, the harness uses its
+   * own default model. For an individual Warp-managed Factory Claude Code agent,
+   * send an explicit empty string to use the environment's model. Omitting model_id
+   * when replacing that agent's harness is invalid.
+   */
+  model_id?: string;
+
+  /**
+   * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
+   * type is a harness other than `oz`. Ignored by harnesses that do not support
+   * reasoning levels.
+   */
+  reasoning_level?: string;
+
+  /**
+   * The harness type identifier.
+   *
+   * - oz: Warp's built-in harness (default)
+   * - claude: Claude Code harness
+   * - gemini: Gemini CLI harness
+   * - codex: Codex CLI harness
+   */
+  type?: 'oz' | 'claude' | 'gemini' | 'codex';
+}
+
+/**
+ * Authentication secrets for third-party harnesses. Only the secret for the
+ * harness specified gets injected into the environment.
+ */
+export interface HarnessAuthSecrets {
+  /**
+   * Name of a managed secret for Claude Code harness authentication. The secret must
+   * exist within the caller's personal or team scope. Only applicable when harness
+   * type is "claude".
+   */
+  claude_auth_secret_name?: string;
+
+  /**
+   * Name of a managed secret for Codex harness authentication. The secret must exist
+   * within the caller's personal or team scope. Only applicable when harness type is
+   * "codex".
+   */
+  codex_auth_secret_name?: string;
+}
+
+/**
+ * Inference provider settings used for LLM calls.
+ */
+export interface InferenceProvidersConfig {
+  /**
+   * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+   */
+  aws?: AwsInferenceProviderConfig;
+}
+
+/**
  * Configuration for an MCP server. Must have exactly one of: warp_id, command, or
  * url.
  */
@@ -896,6 +904,26 @@ export interface McpServerConfig {
 }
 
 /**
+ * Reference to a memory store to attach to an agent.
+ */
+export interface MemoryStoreRef {
+  /**
+   * Access level for the store.
+   */
+  access: 'read_write' | 'read_only';
+
+  /**
+   * Instructions for how the agent should use this memory store. Must not be empty.
+   */
+  instructions: string;
+
+  /**
+   * UID of the memory store.
+   */
+  uid: string;
+}
+
+/**
  * Ownership scope for a resource (team or personal)
  */
 export interface Scope {
@@ -908,6 +936,36 @@ export interface Scope {
    * UID of the owning user or team
    */
   uid?: string;
+}
+
+/**
+ * Reference to a managed secret by name.
+ */
+export interface SecretRef {
+  /**
+   * Name of the managed secret.
+   */
+  name: string;
+}
+
+/**
+ * Configures sharing behavior for the run's shared session; when set, the worker
+ * emits `--share public:<level>` and the bundled Warp client applies an
+ * anyone-with-link ACL to the shared session once it has bootstrapped. The same
+ * ACL is mirrored onto the backing conversation so link viewers can read it
+ * without being on the run's team, subject to the workspace-level anyone-with-link
+ * sharing setting.
+ */
+export interface SessionSharingConfig {
+  /**
+   * Grants anyone-with-link access at the specified level to the run's shared
+   * session and backing conversation; link viewers must still be authenticated Warp
+   * users (anonymous reads are not supported in this release).
+   *
+   * - VIEWER: link viewers can read the session and conversation.
+   * - EDITOR: link viewers can also interact with the session.
+   */
+  public_access?: 'VIEWER' | 'EDITOR';
 }
 
 export interface UserProfile {
@@ -1189,11 +1247,72 @@ export namespace AgentGetArtifactResponse {
   }
 }
 
+/**
+ * Response for a run reverse-lookup by external reference URL.
+ */
+export interface AgentGetRunByExternalReferenceResponse {
+  /**
+   * The ID of the run that produced the external reference.
+   */
+  run_id: string;
+}
+
 export interface AgentListEnvironmentsResponse {
   /**
    * List of accessible cloud environments
    */
-  environments: Array<CloudEnvironment>;
+  environments: Array<Environment>;
+}
+
+export interface AgentListModelsResponse {
+  /**
+   * The ID of the default model for agent runs
+   */
+  default_model_id: string;
+
+  /**
+   * List of available models
+   */
+  models: Array<AgentListModelsResponse.Model>;
+}
+
+export namespace AgentListModelsResponse {
+  export interface Model {
+    /**
+     * Unique identifier for the model (e.g. "claude-4-6-opus-high" or "gpt-5-4-high")
+     */
+    id: string;
+
+    /**
+     * Human-readable name of the model
+     */
+    display_name: string;
+
+    /**
+     * The LLM provider
+     */
+    provider: 'OPENAI' | 'ANTHROPIC' | 'GOOGLE' | 'UNKNOWN';
+
+    /**
+     * Whether the model supports vision/image inputs
+     */
+    vision_supported: boolean;
+
+    /**
+     * Optional extra descriptor for the model
+     */
+    description?: string;
+
+    /**
+     * If set, the model is currently unavailable for the given reason
+     */
+    disable_reason?: 'PROVIDER_OUTAGE' | 'OUT_OF_REQUESTS' | 'ADMIN_DISABLED' | 'REQUIRES_UPGRADE';
+
+    /**
+     * Reasoning level descriptor, if any (e.g. "low", "medium", "high")
+     */
+    reasoning_level?: string;
+  }
 }
 
 export interface AgentRunResponse {
@@ -1263,6 +1382,13 @@ export interface AgentListParams {
   team_uid?: string;
 }
 
+export interface AgentGetRunByExternalReferenceParams {
+  /**
+   * The canonical URL of the external reference artifact to look up.
+   */
+  url: string;
+}
+
 export interface AgentListEnvironmentsParams {
   /**
    * Query param: Sort order for the returned environments.
@@ -1295,7 +1421,7 @@ export interface AgentRunParams {
   /**
    * Body param: Configuration for a cloud agent run
    */
-  config?: AmbientAgentConfig;
+  config?: AgentConfigSnapshot;
 
   /**
    * Body param: Optional conversation ID to continue an existing conversation. If
@@ -1414,22 +1540,32 @@ Agent.Conversations = Conversations;
 
 export declare namespace Agent {
   export {
+    type AgentConfigSnapshot as AgentConfigSnapshot,
     type AgentSkill as AgentSkill,
-    type AmbientAgentConfig as AmbientAgentConfig,
+    type AwsInferenceProviderConfig as AwsInferenceProviderConfig,
     type AwsProviderConfig as AwsProviderConfig,
-    type CloudEnvironment as CloudEnvironment,
-    type CloudEnvironmentConfig as CloudEnvironmentConfig,
+    type Environment as Environment,
+    type EnvironmentConfig as EnvironmentConfig,
     type Error as Error,
     type ErrorCode as ErrorCode,
     type GcpProviderConfig as GcpProviderConfig,
+    type Harness as Harness,
+    type HarnessAuthSecrets as HarnessAuthSecrets,
+    type InferenceProvidersConfig as InferenceProvidersConfig,
     type McpServerConfig as McpServerConfig,
+    type MemoryStoreRef as MemoryStoreRef,
     type Scope as Scope,
+    type SecretRef as SecretRef,
+    type SessionSharingConfig as SessionSharingConfig,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
+    type AgentGetRunByExternalReferenceResponse as AgentGetRunByExternalReferenceResponse,
     type AgentListEnvironmentsResponse as AgentListEnvironmentsResponse,
+    type AgentListModelsResponse as AgentListModelsResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
+    type AgentGetRunByExternalReferenceParams as AgentGetRunByExternalReferenceParams,
     type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
     type AgentRunParams as AgentRunParams,
   };
@@ -1437,10 +1573,15 @@ export declare namespace Agent {
   export {
     Runs as Runs,
     type ArtifactItem as ArtifactItem,
+    type ConversationStep as ConversationStep,
     type RunItem as RunItem,
     type RunSourceType as RunSourceType,
     type RunState as RunState,
     type RunCancelResponse as RunCancelResponse,
+    type RunGetConversationResponse as RunGetConversationResponse,
+    type RunGetHarnessUsageResponse as RunGetHarnessUsageResponse,
+    type RunGetTimelineResponse as RunGetTimelineResponse,
+    type RunInterruptResponse as RunInterruptResponse,
     type RunListHandoffAttachmentsResponse as RunListHandoffAttachmentsResponse,
     type RunSubmitFollowupResponse as RunSubmitFollowupResponse,
     type RunItemsRunsCursorPage as RunItemsRunsCursorPage,
@@ -1462,8 +1603,11 @@ export declare namespace Agent {
   export {
     AgentAPIAgent as Agent,
     type AgentResponse as AgentResponse,
+    type AutoMemoryResponse as AutoMemoryResponse,
     type CreateAgentRequest as CreateAgentRequest,
     type ListAgentIdentitiesResponse as ListAgentIdentitiesResponse,
+    type MemoryResponse as MemoryResponse,
+    type MemoryStoreAttachmentResponse as MemoryStoreAttachmentResponse,
     type UpdateAgentRequest as UpdateAgentRequest,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
@@ -1473,6 +1617,11 @@ export declare namespace Agent {
 
   export {
     Conversations as Conversations,
+    type ConversationRetrieveResponse as ConversationRetrieveResponse,
     type ConversationCheckRedirectResponse as ConversationCheckRedirectResponse,
+    type ConversationInterruptResponse as ConversationInterruptResponse,
+    type ConversationSubmitFollowupResponse as ConversationSubmitFollowupResponse,
+    type ConversationDownloadScreenshotParams as ConversationDownloadScreenshotParams,
+    type ConversationSubmitFollowupParams as ConversationSubmitFollowupParams,
   };
 }

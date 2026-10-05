@@ -172,13 +172,13 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
   }
 }
 
-export interface FactoryInboxCursorPageResponse<Item> {
-  items: Array<Item>;
+export interface FactoryTasksCursorPageResponse<Item> {
+  tasks: Array<Item>;
 
-  page_info: FactoryInboxCursorPageResponse.PageInfo;
+  page_info: FactoryTasksCursorPageResponse.PageInfo;
 }
 
-export namespace FactoryInboxCursorPageResponse {
+export namespace FactoryTasksCursorPageResponse {
   export interface PageInfo {
     has_next_page?: boolean;
 
@@ -186,34 +186,170 @@ export namespace FactoryInboxCursorPageResponse {
   }
 }
 
-export interface FactoryInboxCursorPageParams {
+export interface FactoryTasksCursorPageParams {
   cursor?: string;
 
   limit?: number;
 }
 
-export class FactoryInboxCursorPage<Item>
+export class FactoryTasksCursorPage<Item>
   extends AbstractPage<Item>
-  implements FactoryInboxCursorPageResponse<Item>
+  implements FactoryTasksCursorPageResponse<Item>
 {
-  items: Array<Item>;
+  tasks: Array<Item>;
 
-  page_info: FactoryInboxCursorPageResponse.PageInfo;
+  page_info: FactoryTasksCursorPageResponse.PageInfo;
 
   constructor(
     client: WarpClient,
     response: Response,
-    body: FactoryInboxCursorPageResponse<Item>,
+    body: FactoryTasksCursorPageResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);
 
-    this.items = body.items || [];
+    this.tasks = body.tasks || [];
     this.page_info = body.page_info || {};
   }
 
   getPaginatedItems(): Item[] {
-    return this.items ?? [];
+    return this.tasks ?? [];
+  }
+
+  override hasNextPage(): boolean {
+    if (this.page_info?.has_next_page === false) {
+      return false;
+    }
+
+    return super.hasNextPage();
+  }
+
+  nextPageRequestOptions(): PageRequestOptions | null {
+    const cursor = this.page_info?.next_cursor;
+    if (!cursor) {
+      return null;
+    }
+
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        cursor,
+      },
+    };
+  }
+}
+
+export interface ScorerResultsCursorPageResponse<Item> {
+  results: Array<Item>;
+
+  page_info: ScorerResultsCursorPageResponse.PageInfo;
+}
+
+export namespace ScorerResultsCursorPageResponse {
+  export interface PageInfo {
+    has_next_page?: boolean;
+
+    next_cursor?: string;
+  }
+}
+
+export interface ScorerResultsCursorPageParams {
+  cursor?: string;
+
+  limit?: number;
+}
+
+export class ScorerResultsCursorPage<Item>
+  extends AbstractPage<Item>
+  implements ScorerResultsCursorPageResponse<Item>
+{
+  results: Array<Item>;
+
+  page_info: ScorerResultsCursorPageResponse.PageInfo;
+
+  constructor(
+    client: WarpClient,
+    response: Response,
+    body: ScorerResultsCursorPageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
+    super(client, response, body, options);
+
+    this.results = body.results || [];
+    this.page_info = body.page_info || {};
+  }
+
+  getPaginatedItems(): Item[] {
+    return this.results ?? [];
+  }
+
+  override hasNextPage(): boolean {
+    if (this.page_info?.has_next_page === false) {
+      return false;
+    }
+
+    return super.hasNextPage();
+  }
+
+  nextPageRequestOptions(): PageRequestOptions | null {
+    const cursor = this.page_info?.next_cursor;
+    if (!cursor) {
+      return null;
+    }
+
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        cursor,
+      },
+    };
+  }
+}
+
+export interface BenchmarkSuitesCursorPageResponse<Item> {
+  suites: Array<Item>;
+
+  page_info: BenchmarkSuitesCursorPageResponse.PageInfo;
+}
+
+export namespace BenchmarkSuitesCursorPageResponse {
+  export interface PageInfo {
+    has_next_page?: boolean;
+
+    next_cursor?: string;
+  }
+}
+
+export interface BenchmarkSuitesCursorPageParams {
+  cursor?: string;
+
+  limit?: number;
+}
+
+export class BenchmarkSuitesCursorPage<Item>
+  extends AbstractPage<Item>
+  implements BenchmarkSuitesCursorPageResponse<Item>
+{
+  suites: Array<Item>;
+
+  page_info: BenchmarkSuitesCursorPageResponse.PageInfo;
+
+  constructor(
+    client: WarpClient,
+    response: Response,
+    body: BenchmarkSuitesCursorPageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
+    super(client, response, body, options);
+
+    this.suites = body.suites || [];
+    this.page_info = body.page_info || {};
+  }
+
+  getPaginatedItems(): Item[] {
+    return this.suites ?? [];
   }
 
   override hasNextPage(): boolean {

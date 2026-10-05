@@ -50,6 +50,23 @@ describe('resource agent', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('getRunByExternalReference: only required params', async () => {
+    const responsePromise = client.agent.getRunByExternalReference({ url: 'url' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('getRunByExternalReference: required and optional params', async () => {
+    const response = await client.agent.getRunByExternalReference({ url: 'url' });
+  });
+
+  // Mock server tests are disabled
   test.skip('listEnvironments', async () => {
     const responsePromise = client.agent.listEnvironments();
     const rawResponse = await responsePromise.asResponse();
@@ -70,6 +87,18 @@ describe('resource agent', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(WarpClient.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listModels', async () => {
+    const responsePromise = client.agent.listModels();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled

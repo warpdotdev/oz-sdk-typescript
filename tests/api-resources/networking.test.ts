@@ -7,10 +7,10 @@ const client = new WarpClient({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource factories', () => {
+describe('resource networking', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.factories.list();
+  test.skip('getEgressRanges', async () => {
+    const responsePromise = client.networking.getEgressRanges();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,31 +21,13 @@ describe('resource factories', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test.skip('getEgressRanges: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.factories.list(
-        {
-          cursor: 'cursor',
-          limit: 1,
-          search: 'search',
-          filter_team_uid: 'team_uid',
-          team_uid: 'X-Warp-Team-Uid',
-        },
+      client.networking.getEgressRanges(
+        { team_uid: 'X-Warp-Team-Uid' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(WarpClient.NotFoundError);
-  });
-
-  // Mock server tests are disabled
-  test.skip('get', async () => {
-    const responsePromise = client.factories.get('uid');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

@@ -7,10 +7,10 @@ const client = new WarpClient({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource conversations', () => {
+describe('resource runs', () => {
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.agent.conversations.retrieve('conversation_id');
+  test.skip('list', async () => {
+    const responsePromise = client.factories.benchmarks.runs.list('uid');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,25 @@ describe('resource conversations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('checkRedirect', async () => {
-    const responsePromise = client.agent.conversations.checkRedirect('conversationId');
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.factories.benchmarks.runs.list(
+        'uid',
+        {
+          cursor: 'cursor',
+          limit: 1,
+          state: ['pending'],
+          suite_uid: 'suite_uid',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(WarpClient.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.factories.benchmarks.runs.get('run_uid', { uid: 'uid' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -33,15 +50,13 @@ describe('resource conversations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('downloadScreenshot: required and optional params', async () => {
-    const response = await client.agent.conversations.downloadScreenshot('screenshot_uid', {
-      conversation_id: 'conversation_id',
-    });
+  test.skip('get: required and optional params', async () => {
+    const response = await client.factories.benchmarks.runs.get('run_uid', { uid: 'uid' });
   });
 
   // Mock server tests are disabled
-  test.skip('interrupt', async () => {
-    const responsePromise = client.agent.conversations.interrupt('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  test.skip('getResults: only required params', async () => {
+    const responsePromise = client.factories.benchmarks.runs.getResults('run_uid', { uid: 'uid' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,17 +67,7 @@ describe('resource conversations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('submitFollowup', async () => {
-    const responsePromise = client.agent.conversations.submitFollowup(
-      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      {},
-    );
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+  test.skip('getResults: required and optional params', async () => {
+    const response = await client.factories.benchmarks.runs.getResults('run_uid', { uid: 'uid' });
   });
 });

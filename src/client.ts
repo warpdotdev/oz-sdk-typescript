@@ -17,35 +17,54 @@ import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
 import {
   AbstractPage,
+  type BenchmarkSuitesCursorPageParams,
+  BenchmarkSuitesCursorPageResponse,
   type FactoriesCursorPageParams,
   FactoriesCursorPageResponse,
-  type FactoryInboxCursorPageParams,
-  FactoryInboxCursorPageResponse,
+  type FactoryTasksCursorPageParams,
+  FactoryTasksCursorPageResponse,
   type RunsCursorPageParams,
   RunsCursorPageResponse,
+  type ScorerResultsCursorPageParams,
+  ScorerResultsCursorPageResponse,
 } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  Networking,
+  NetworkingGetEgressRangesParams,
+  NetworkingGetEgressRangesResponse,
+} from './resources/networking';
+import {
   Agent,
+  AgentConfigSnapshot,
   AgentGetArtifactResponse,
+  AgentGetRunByExternalReferenceParams,
+  AgentGetRunByExternalReferenceResponse,
   AgentListEnvironmentsParams,
   AgentListEnvironmentsResponse,
+  AgentListModelsResponse,
   AgentListParams,
   AgentListResponse,
   AgentRunParams,
   AgentRunResponse,
   AgentSkill,
-  AmbientAgentConfig,
+  AwsInferenceProviderConfig,
   AwsProviderConfig,
-  CloudEnvironment,
-  CloudEnvironmentConfig,
+  Environment,
+  EnvironmentConfig,
   Error,
   ErrorCode,
   GcpProviderConfig,
+  Harness,
+  HarnessAuthSecrets,
+  InferenceProvidersConfig,
   McpServerConfig,
+  MemoryStoreRef,
   Scope,
+  SecretRef,
+  SessionSharingConfig,
   UserProfile,
 } from './resources/agent/agent';
 import {
@@ -808,12 +827,17 @@ export class WarpClient {
    */
   agent: API.Agent = new API.Agent(this);
   /**
+   * Networking information for Warp-hosted agents
+   */
+  networking: API.Networking = new API.Networking(this);
+  /**
    * Operations for creating and managing factories
    */
   factories: API.Factories = new API.Factories(this);
 }
 
 WarpClient.Agent = Agent;
+WarpClient.Networking = Networking;
 WarpClient.Factories = Factories;
 
 export declare namespace WarpClient {
@@ -825,10 +849,22 @@ export declare namespace WarpClient {
     type RunsCursorPageResponse as RunsCursorPageResponse,
   };
 
-  export import FactoryInboxCursorPage = Pagination.FactoryInboxCursorPage;
+  export import FactoryTasksCursorPage = Pagination.FactoryTasksCursorPage;
   export {
-    type FactoryInboxCursorPageParams as FactoryInboxCursorPageParams,
-    type FactoryInboxCursorPageResponse as FactoryInboxCursorPageResponse,
+    type FactoryTasksCursorPageParams as FactoryTasksCursorPageParams,
+    type FactoryTasksCursorPageResponse as FactoryTasksCursorPageResponse,
+  };
+
+  export import ScorerResultsCursorPage = Pagination.ScorerResultsCursorPage;
+  export {
+    type ScorerResultsCursorPageParams as ScorerResultsCursorPageParams,
+    type ScorerResultsCursorPageResponse as ScorerResultsCursorPageResponse,
+  };
+
+  export import BenchmarkSuitesCursorPage = Pagination.BenchmarkSuitesCursorPage;
+  export {
+    type BenchmarkSuitesCursorPageParams as BenchmarkSuitesCursorPageParams,
+    type BenchmarkSuitesCursorPageResponse as BenchmarkSuitesCursorPageResponse,
   };
 
   export import FactoriesCursorPage = Pagination.FactoriesCursorPage;
@@ -839,24 +875,40 @@ export declare namespace WarpClient {
 
   export {
     Agent as Agent,
+    type AgentConfigSnapshot as AgentConfigSnapshot,
     type AgentSkill as AgentSkill,
-    type AmbientAgentConfig as AmbientAgentConfig,
+    type AwsInferenceProviderConfig as AwsInferenceProviderConfig,
     type AwsProviderConfig as AwsProviderConfig,
-    type CloudEnvironment as CloudEnvironment,
-    type CloudEnvironmentConfig as CloudEnvironmentConfig,
+    type Environment as Environment,
+    type EnvironmentConfig as EnvironmentConfig,
     type Error as Error,
     type ErrorCode as ErrorCode,
     type GcpProviderConfig as GcpProviderConfig,
+    type Harness as Harness,
+    type HarnessAuthSecrets as HarnessAuthSecrets,
+    type InferenceProvidersConfig as InferenceProvidersConfig,
     type McpServerConfig as McpServerConfig,
+    type MemoryStoreRef as MemoryStoreRef,
     type Scope as Scope,
+    type SecretRef as SecretRef,
+    type SessionSharingConfig as SessionSharingConfig,
     type UserProfile as UserProfile,
     type AgentListResponse as AgentListResponse,
     type AgentGetArtifactResponse as AgentGetArtifactResponse,
+    type AgentGetRunByExternalReferenceResponse as AgentGetRunByExternalReferenceResponse,
     type AgentListEnvironmentsResponse as AgentListEnvironmentsResponse,
+    type AgentListModelsResponse as AgentListModelsResponse,
     type AgentRunResponse as AgentRunResponse,
     type AgentListParams as AgentListParams,
+    type AgentGetRunByExternalReferenceParams as AgentGetRunByExternalReferenceParams,
     type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
     type AgentRunParams as AgentRunParams,
+  };
+
+  export {
+    Networking as Networking,
+    type NetworkingGetEgressRangesResponse as NetworkingGetEgressRangesResponse,
+    type NetworkingGetEgressRangesParams as NetworkingGetEgressRangesParams,
   };
 
   export {

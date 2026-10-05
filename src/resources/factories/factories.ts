@@ -2,21 +2,39 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from '../agent/agent';
-import * as InboxAPI from './inbox';
-import {
-  Inbox,
-  InboxItem,
-  InboxItemsFactoryInboxCursorPage,
-  InboxListParams,
-  InboxMarkReadParams,
-  InboxMarkReadResponse,
-  InboxMarkUnreadParams,
-  InboxMarkUnreadResponse,
-  InboxRecipient,
-  InboxScope,
-} from './inbox';
 import * as RunsAPI from './runs';
-import { RunCreateParams, RunCreateResponse, Runs } from './runs';
+import { RunCreateParams, RunCreateResponse, RunListScoresResponse, Runs } from './runs';
+import * as ScorersAPI from './scorers';
+import {
+  ScorerCreateParams,
+  ScorerCreateResponse,
+  ScorerListParams,
+  ScorerListResponse,
+  ScorerListResultReasonsParams,
+  ScorerListResultReasonsResponse,
+  ScorerListResultsParams,
+  ScorerListResultsResponse,
+  ScorerListResultsResponsesScorerResultsCursorPage,
+  Scorers,
+} from './scorers';
+import * as TasksAPI from './tasks';
+import {
+  Task,
+  TaskCancelParams,
+  TaskCreateParams,
+  TaskDeleteParams,
+  TaskGetByConversationParams,
+  TaskGetByRunParams,
+  TaskGetParams,
+  TaskListParams,
+  TaskUpdateParams,
+  Tasks,
+  TasksFactoryTasksCursorPage,
+} from './tasks';
+import * as BenchmarksAPI from './benchmarks/benchmarks';
+import { Benchmarks } from './benchmarks/benchmarks';
+import * as FilesAPI from './files/files';
+import { FileValidateParams, FileValidateResponse, Files } from './files/files';
 import { APIPromise } from '../../core/api-promise';
 import { FactoriesCursorPage, type FactoriesCursorPageParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -27,8 +45,11 @@ import { path } from '../../internal/utils/path';
  * Operations for creating and managing factories
  */
 export class Factories extends APIResource {
-  inbox: InboxAPI.Inbox = new InboxAPI.Inbox(this._client);
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
+  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  scorers: ScorersAPI.Scorers = new ScorersAPI.Scorers(this._client);
+  benchmarks: BenchmarksAPI.Benchmarks = new BenchmarksAPI.Benchmarks(this._client);
+  files: FilesAPI.Files = new FilesAPI.Files(this._client);
 
   /**
    * List factories accessible to the authenticated principal, restricted to the
@@ -36,6 +57,14 @@ export class Factories extends APIResource {
    * overrides the active team and restricts results to a single team, and an
    * optional search query parameter filters by a case-insensitive substring match on
    * the factory name or alias.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const factory of client.factories.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     params: FactoryListParams | null | undefined = {},
@@ -53,7 +82,12 @@ export class Factories extends APIResource {
   }
 
   /**
-   * Get a factory by its public UID.
+   * Get a factory by its UID.
+   *
+   * @example
+   * ```ts
+   * const factory = await client.factories.get('uid');
+   * ```
    */
   get(uid: string, options?: RequestOptions): APIPromise<Factory> {
     return this._client.get(path`/factory/${uid}`, options);
@@ -205,7 +239,7 @@ export namespace Factory {
     /**
      * Secrets attached to the factory's named agents by default.
      */
-    secrets: Array<AgentDefaults.Secret>;
+    secrets: Array<AgentAPI.SecretRef>;
 
     /**
      * Default worker host for the factory's named agents. Empty when unset, in which
@@ -221,82 +255,13 @@ export namespace Factory {
      * agent's base_model to be empty, since the two describe mutually exclusive
      * default models.
      */
-    harness?: AgentDefaults.Harness;
+    harness?: AgentAPI.Harness;
 
     /**
      * Authentication secrets for third-party harnesses. Only the secret for the
      * harness specified gets injected into the environment.
      */
-    harness_auth_secrets?: AgentDefaults.HarnessAuthSecrets;
-  }
-
-  export namespace AgentDefaults {
-    /**
-     * Reference to a managed secret by name.
-     */
-    export interface Secret {
-      /**
-       * Name of the managed secret.
-       */
-      name: string;
-    }
-
-    /**
-     * Specifies which execution harness to use for the agent run. Default (nil/empty)
-     * uses Warp's built-in harness. When stored as a named agent's default
-     * (create/update agent identity), this field replaces the deprecated
-     * base_harness/base_model pair: a harness other than `oz` here requires the
-     * agent's base_model to be empty, since the two describe mutually exclusive
-     * default models.
-     */
-    export interface Harness {
-      /**
-       * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-       * when type is a harness other than `oz`; the top-level config model_id targets
-       * the built-in Warp harness instead. When omitted or empty, the harness uses its
-       * own default model. For an individual Warp-managed Factory Claude Code agent,
-       * send an explicit empty string to use the environment's model. Omitting model_id
-       * when replacing that agent's harness is invalid.
-       */
-      model_id?: string;
-
-      /**
-       * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-       * type is a harness other than `oz`. Ignored by harnesses that do not support
-       * reasoning levels.
-       */
-      reasoning_level?: string;
-
-      /**
-       * The harness type identifier.
-       *
-       * - oz: Warp's built-in harness (default)
-       * - claude: Claude Code harness
-       * - gemini: Gemini CLI harness
-       * - codex: Codex CLI harness
-       */
-      type?: 'oz' | 'claude' | 'gemini' | 'codex';
-    }
-
-    /**
-     * Authentication secrets for third-party harnesses. Only the secret for the
-     * harness specified gets injected into the environment.
-     */
-    export interface HarnessAuthSecrets {
-      /**
-       * Name of a managed secret for Claude Code harness authentication. The secret must
-       * exist within the caller's personal or team scope. Only applicable when harness
-       * type is "claude".
-       */
-      claude_auth_secret_name?: string;
-
-      /**
-       * Name of a managed secret for Codex harness authentication. The secret must exist
-       * within the caller's personal or team scope. Only applicable when harness type is
-       * "codex".
-       */
-      codex_auth_secret_name?: string;
-    }
+    harness_auth_secrets?: AgentAPI.HarnessAuthSecrets;
   }
 
   /**
@@ -435,19 +400,7 @@ export namespace Factory {
      * Scorer-default secrets. Omitted to inherit the agent defaults; an empty array
      * explicitly clears them.
      */
-    secrets?: Array<ScorerDefaults.Secret>;
-  }
-
-  export namespace ScorerDefaults {
-    /**
-     * Reference to a managed secret by name.
-     */
-    export interface Secret {
-      /**
-       * Name of the managed secret.
-       */
-      name: string;
-    }
+    secrets?: Array<AgentAPI.SecretRef>;
   }
 
   export interface Scoring {
@@ -515,7 +468,7 @@ export interface FactoryListParams extends FactoriesCursorPageParams {
    * Query param: Optional team UID to filter factories by ownership. Takes
    * precedence over the X-Warp-Team-Uid header.
    */
-  query_team_uid?: string;
+  filter_team_uid?: string;
 
   /**
    * Header param: UID of the team to use as the request's active team. Ignored for
@@ -524,8 +477,11 @@ export interface FactoryListParams extends FactoriesCursorPageParams {
   team_uid?: string;
 }
 
-Factories.Inbox = Inbox;
 Factories.Runs = Runs;
+Factories.Tasks = Tasks;
+Factories.Scorers = Scorers;
+Factories.Benchmarks = Benchmarks;
+Factories.Files = Files;
 
 export declare namespace Factories {
   export {
@@ -535,21 +491,44 @@ export declare namespace Factories {
   };
 
   export {
-    Inbox as Inbox,
-    type InboxItem as InboxItem,
-    type InboxRecipient as InboxRecipient,
-    type InboxScope as InboxScope,
-    type InboxMarkReadResponse as InboxMarkReadResponse,
-    type InboxMarkUnreadResponse as InboxMarkUnreadResponse,
-    type InboxItemsFactoryInboxCursorPage as InboxItemsFactoryInboxCursorPage,
-    type InboxListParams as InboxListParams,
-    type InboxMarkReadParams as InboxMarkReadParams,
-    type InboxMarkUnreadParams as InboxMarkUnreadParams,
+    Runs as Runs,
+    type RunCreateResponse as RunCreateResponse,
+    type RunListScoresResponse as RunListScoresResponse,
+    type RunCreateParams as RunCreateParams,
   };
 
   export {
-    Runs as Runs,
-    type RunCreateResponse as RunCreateResponse,
-    type RunCreateParams as RunCreateParams,
+    Tasks as Tasks,
+    type Task as Task,
+    type TasksFactoryTasksCursorPage as TasksFactoryTasksCursorPage,
+    type TaskCreateParams as TaskCreateParams,
+    type TaskUpdateParams as TaskUpdateParams,
+    type TaskListParams as TaskListParams,
+    type TaskDeleteParams as TaskDeleteParams,
+    type TaskCancelParams as TaskCancelParams,
+    type TaskGetParams as TaskGetParams,
+    type TaskGetByConversationParams as TaskGetByConversationParams,
+    type TaskGetByRunParams as TaskGetByRunParams,
+  };
+
+  export {
+    Scorers as Scorers,
+    type ScorerCreateResponse as ScorerCreateResponse,
+    type ScorerListResponse as ScorerListResponse,
+    type ScorerListResultReasonsResponse as ScorerListResultReasonsResponse,
+    type ScorerListResultsResponse as ScorerListResultsResponse,
+    type ScorerListResultsResponsesScorerResultsCursorPage as ScorerListResultsResponsesScorerResultsCursorPage,
+    type ScorerCreateParams as ScorerCreateParams,
+    type ScorerListParams as ScorerListParams,
+    type ScorerListResultReasonsParams as ScorerListResultReasonsParams,
+    type ScorerListResultsParams as ScorerListResultsParams,
+  };
+
+  export { Benchmarks as Benchmarks };
+
+  export {
+    Files as Files,
+    type FileValidateResponse as FileValidateResponse,
+    type FileValidateParams as FileValidateParams,
   };
 }

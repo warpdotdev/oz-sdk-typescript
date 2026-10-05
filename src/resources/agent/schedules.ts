@@ -195,7 +195,7 @@ export interface ScheduledAgentItem {
   /**
    * Configuration for a cloud agent run
    */
-  agent_config?: AgentAPI.AmbientAgentConfig;
+  agent_config?: AgentAPI.AgentConfigSnapshot;
 
   /**
    * UID of the agent that this schedule runs as
@@ -207,7 +207,7 @@ export interface ScheduledAgentItem {
   /**
    * Configuration for a cloud environment used by scheduled agents
    */
-  environment?: AgentAPI.CloudEnvironmentConfig;
+  environment?: AgentAPI.EnvironmentConfig;
 
   /**
    * Scheduler-derived history metadata for a scheduled agent
@@ -267,7 +267,7 @@ export interface ScheduleCreateParams {
   /**
    * Body param: Configuration for a cloud agent run
    */
-  agent_config?: AgentAPI.AmbientAgentConfig;
+  agent_config?: AgentAPI.AgentConfigSnapshot;
 
   /**
    * Body param: Agent UID to use as the execution principal for this schedule. Only
@@ -336,7 +336,7 @@ export interface ScheduleUpdateParams {
   /**
    * Configuration for a cloud agent run
    */
-  agent_config?: AgentAPI.AmbientAgentConfig;
+  agent_config?: AgentAPI.AgentConfigSnapshot;
 
   /**
    * Agent UID to use as the execution principal for this schedule. Only valid for
