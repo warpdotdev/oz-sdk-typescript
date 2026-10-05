@@ -115,9 +115,8 @@ export interface RunListResponse {
 
   /**
    * Combined trial and scoring cost in US dollars: run_metrics.cost_usd plus
-   * run_metrics.scoring_cost_usd, converted at the owning team's current credit
-   * price. Matches the run detail page's Total cost. Not a billed amount. Null until
-   * the run has produced at least one trial.
+   * run_metrics.scoring_cost_usd, each what the runs were billed. Matches the run
+   * detail page's Total cost. Null until the run has produced at least one trial.
    */
   cost_usd?: number | null;
 
@@ -267,9 +266,8 @@ export interface RunGetResponse {
 
   /**
    * Combined trial and scoring cost in US dollars: run_metrics.cost_usd plus
-   * run_metrics.scoring_cost_usd, converted at the owning team's current credit
-   * price. Matches the run detail page's Total cost. Not a billed amount. Null until
-   * the run has produced at least one trial.
+   * run_metrics.scoring_cost_usd, each what the runs were billed. Matches the run
+   * detail page's Total cost. Null until the run has produced at least one trial.
    */
   cost_usd?: number | null;
 
@@ -641,8 +639,9 @@ export namespace RunGetResultsResponse {
     compute_credits: string;
 
     /**
-     * Estimated trial-run spend at the owning team's current credit price. Not a
-     * billed amount.
+     * What the benchmark trial runs were billed, in US dollars, plus the estimated
+     * provider spend of third-party-harness trials, which Warp does not bill. Runs
+     * that predate billed-amount tracking fall back to an estimated cost.
      */
     cost_usd: number;
 
@@ -651,8 +650,8 @@ export namespace RunGetResultsResponse {
     platform_credits: string;
 
     /**
-     * Estimated scoring and judge spend at the owning team's current credit price. Not
-     * a billed amount.
+     * What the distinct dispatched scoring and judge runs were billed, in US dollars.
+     * Runs that predate billed-amount tracking fall back to an estimated cost.
      */
     scoring_cost_usd: number;
 
