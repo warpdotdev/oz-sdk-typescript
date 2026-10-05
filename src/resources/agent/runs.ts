@@ -809,6 +809,7 @@ export interface RunItem {
    *
    * - LINEAR: Created from Linear integration
    * - API: Created via the Warp API
+   * - MCP: Created through the Factory MCP server's send_task tool
    * - SLACK: Created from Slack integration
    * - TEAMS: Created from Microsoft Teams integration
    * - LOCAL: Created from local CLI/app
@@ -1349,6 +1350,7 @@ export namespace RunItem {
  *
  * - LINEAR: Created from Linear integration
  * - API: Created via the Warp API
+ * - MCP: Created through the Factory MCP server's send_task tool
  * - SLACK: Created from Slack integration
  * - TEAMS: Created from Microsoft Teams integration
  * - LOCAL: Created from local CLI/app
@@ -1375,6 +1377,7 @@ export namespace RunItem {
 export type RunSourceType =
   | 'LINEAR'
   | 'API'
+  | 'MCP'
   | 'SLACK'
   | 'TEAMS'
   | 'LOCAL'
