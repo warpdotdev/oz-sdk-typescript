@@ -60,7 +60,7 @@ describe('resource runs', () => {
           skill_spec: 'skill_spec',
           sort_by: 'updated_at',
           sort_order: 'asc',
-          source: 'LINEAR',
+          source: ['LINEAR'],
           state: ['QUEUED'],
           task_status: ['running'],
           updated_after: '2019-12-27T18:11:19.117Z',

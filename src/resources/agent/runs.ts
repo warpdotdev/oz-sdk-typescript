@@ -1338,9 +1338,10 @@ export interface RunListParams extends RunsCursorPageParams {
   sort_order?: 'asc' | 'desc';
 
   /**
-   * Query param: Filter by run source type
+   * Query param: Filter by run source type. Can be specified multiple times to match
+   * any of the given sources.
    */
-  source?: RunSourceType;
+  source?: Array<RunSourceType>;
 
   /**
    * Query param: Filter by run state. Can be specified multiple times to match any
