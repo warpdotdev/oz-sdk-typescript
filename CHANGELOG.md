@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.0.0](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.8...v2.0.0) (2026-10-06)
+
+
+### Features
+
+* **api:** [Chat] Fix prompt and source for MCP tasks ([a06273d](https://github.com/warpdotdev/oz-sdk-typescript/commit/a06273d459f3df0664e8ced2be8db3e4264c8852))
+* **api:** [REMOTE-3361] Add factory, root run, and finish time to the public run list ([3a8adfe](https://github.com/warpdotdev/oz-sdk-typescript/commit/3a8adfeaa15c47e3bf296195733d5e31267eb191))
+* **api:** APP-6022: Assign new secrets to current Factory agents safely ([d2913da](https://github.com/warpdotdev/oz-sdk-typescript/commit/d2913da3498995daa66000f9d46b1469c3faccf4))
+* **api:** Configure per-factory self-improvement failed-run thresholds ([59f0eb8](https://github.com/warpdotdev/oz-sdk-typescript/commit/59f0eb8e06901295b8ca95e808b07f4599a88d22))
+* **api:** Factory Runs: multi-select sources and hide background runs by default ([91c4776](https://github.com/warpdotdev/oz-sdk-typescript/commit/91c47765768a01d7b2880e254e7d72e39538b0d8))
+* **api:** Price run scoring and benchmark cost figures at billed cents ([5604bb0](https://github.com/warpdotdev/oz-sdk-typescript/commit/5604bb04d47de7b9166de8dbe5b92e6841e3de71))
+* **api:** Record customer-priced billed cents for conversation inference, platform, and compute usage ([47ad9a7](https://github.com/warpdotdev/oz-sdk-typescript/commit/47ad9a7a0e3c9930bdc7aec6e39e979d9c5f7761))
+* **api:** Remove baseline configuration roles from Factory benchmarks ([a705bb0](https://github.com/warpdotdev/oz-sdk-typescript/commit/a705bb0b395adb7f7b238e50f2ba78f55f66d5b5))
+* **api:** Surface server errors when creating or editing a Factory runner ([1f216b5](https://github.com/warpdotdev/oz-sdk-typescript/commit/1f216b517c633d273c59ae96e4f173dc9cc98b4b))
+* **api:** Use Factory automations to scope starter-task issues ([af2bba8](https://github.com/warpdotdev/oz-sdk-typescript/commit/af2bba87716051258d5d622ffb2c98ff3e2d9536))
+* **sdk:** prepare Python Warp platform package ([1714d8f](https://github.com/warpdotdev/oz-sdk-typescript/commit/1714d8f3e3e8ffa0bb6a6ba118441ef041c2c87e))
+
+
+### Bug Fixes
+
+* **api:** keep scorer and benchmark APIs internal ([b100f2d](https://github.com/warpdotdev/oz-sdk-typescript/commit/b100f2d68bcb3c697d5bcabbc4b7d5e1a29b7381))
+* **deps:** pin brace-expansion, @humanfs/node, browserslist, baseline-browser-mapping to resolve CVEs ([503479f](https://github.com/warpdotdev/oz-sdk-typescript/commit/503479f7bbed0a44bdae26cc71dabedb0e999190))
+
+
+### Chores
+
+* **ci:** refresh workflow actions to latest stable ([#7](https://github.com/warpdotdev/oz-sdk-typescript/issues/7)) ([d83417e](https://github.com/warpdotdev/oz-sdk-typescript/commit/d83417ef98b90cc3b6c697efd600f327349257a1))
+* release 2.0.0 ([df212ce](https://github.com/warpdotdev/oz-sdk-typescript/commit/df212ce160aa0510b269edc263e09e92d5794142))
+* **stlc:** seal custom-code tracking files ([fff8c0d](https://github.com/warpdotdev/oz-sdk-typescript/commit/fff8c0d935cd76cf4af0a5601180076f1ad5669b))
+
 ## [1.4.0-alpha.8](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.7...v1.4.0-alpha.8) (2026-10-02)
 
 
