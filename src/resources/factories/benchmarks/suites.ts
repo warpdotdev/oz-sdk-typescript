@@ -143,8 +143,6 @@ export interface SuiteCreateResponse {
 
 export namespace SuiteCreateResponse {
   export interface Configuration {
-    role: 'baseline' | 'candidate';
-
     /**
      * Optional per-named-Agent overrides keyed by stable Agent UID.
      */
@@ -230,8 +228,6 @@ export interface SuiteListResponse {
 
 export namespace SuiteListResponse {
   export interface Configuration {
-    role: 'baseline' | 'candidate';
-
     /**
      * Optional per-named-Agent overrides keyed by stable Agent UID.
      */
@@ -325,8 +321,6 @@ export interface SuiteGetResponse {
 
 export namespace SuiteGetResponse {
   export interface Configuration {
-    role: 'baseline' | 'candidate';
-
     /**
      * Optional per-named-Agent overrides keyed by stable Agent UID.
      */
@@ -531,8 +525,6 @@ export interface SuiteLaunchRunParams {
 
 export namespace SuiteLaunchRunParams {
   export interface Configuration {
-    role: 'baseline' | 'candidate';
-
     /**
      * Optional per-named-Agent overrides keyed by stable Agent UID.
      */

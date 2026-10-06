@@ -176,8 +176,6 @@ export namespace RunListResponse {
 
     pass_count: number;
 
-    role: 'baseline' | 'candidate';
-
     /**
      * Trials dispatched so far for this configuration specifically.
      */
@@ -335,8 +333,6 @@ export namespace RunGetResponse {
 
     pass_count: number;
 
-    role: 'baseline' | 'candidate';
-
     /**
      * Trials dispatched so far for this configuration specifically.
      */
@@ -385,8 +381,6 @@ export namespace RunGetResponse {
      * Optional name given to this configuration at launch. Empty when none was given.
      */
     display_name: string;
-
-    role: 'baseline' | 'candidate';
 
     /**
      * Complete launch-time model/harness matrix keyed by stable Agent UID.
@@ -598,8 +592,6 @@ export namespace RunGetResultsResponse {
      * trials.
      */
     retry_count: number;
-
-    role: 'baseline' | 'candidate';
 
     /**
      * Pass/fail tally with the derived pass rate across all applicable scorers.
