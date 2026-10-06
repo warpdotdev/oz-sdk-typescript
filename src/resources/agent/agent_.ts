@@ -497,6 +497,8 @@ export interface MemoryStoreAttachmentResponse {
  * - Omitted or `null`: leave the field unchanged.
  * - Empty value: clear the field.
  * - Non-empty: replace the field wholesale with the provided value.
+ *   `secrets_append` is an exception: it appends secrets idempotently and must be
+ *   the only supplied field, including fields supplied as `null`.
  */
 export interface UpdateAgentRequest {
   /**
@@ -603,6 +605,17 @@ export interface UpdateAgentRequest {
    * clear, or pass a non-empty array to replace. Duplicate names are rejected.
    */
   secrets?: Array<AgentAPI.SecretRef> | null;
+
+  /**
+   * Adds team-owned raw-value secrets to this agent without removing or replacing
+   * its existing ones. Secrets it already has and any duplicates are skipped, and an
+   * empty array is a no-op. If any name is invalid, the whole request is rejected.
+   * Send this field by itself. Including any other field returns 400, even if that
+   * field is null, and null is not a valid value here. Appending requires edit and
+   * privileged-config-edit access on the agent plus secret-attach access on its
+   * Factory. Agents managed in external source files return 409.
+   */
+  secrets_append?: Array<AgentAPI.SecretRef>;
 
   /**
    * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
@@ -909,6 +922,17 @@ export interface AgentUpdateParams {
    * clear, or pass a non-empty array to replace. Duplicate names are rejected.
    */
   secrets?: Array<AgentAPI.SecretRef> | null;
+
+  /**
+   * Adds team-owned raw-value secrets to this agent without removing or replacing
+   * its existing ones. Secrets it already has and any duplicates are skipped, and an
+   * empty array is a no-op. If any name is invalid, the whole request is rejected.
+   * Send this field by itself. Including any other field returns 400, even if that
+   * field is null, and null is not a valid value here. Appending requires edit and
+   * privileged-config-edit access on the agent plus secret-attach access on its
+   * Factory. Agents managed in external source files return 409.
+   */
+  secrets_append?: Array<AgentAPI.SecretRef>;
 
   /**
    * Replacement list of skill specs. Omit to leave unchanged, pass an empty array to
