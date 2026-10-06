@@ -27,13 +27,6 @@ export class Files extends APIResource {
    * like the schema endpoints beside it, since it reads no tenant state and local
    * authoring agents reach the server from a shell with no access to the client's
    * session.
-   *
-   * @example
-   * ```ts
-   * const response = await client.factories.files.validate({
-   *   files: [{ content: 'content', path: 'factory.yaml' }],
-   * });
-   * ```
    */
   validate(body: FileValidateParams, options?: RequestOptions): APIPromise<FileValidateResponse> {
     return this._client.post('/factory-files/validate', { body, ...options, __security: {} });

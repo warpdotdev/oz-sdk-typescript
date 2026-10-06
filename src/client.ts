@@ -17,16 +17,12 @@ import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
 import {
   AbstractPage,
-  type BenchmarkSuitesCursorPageParams,
-  BenchmarkSuitesCursorPageResponse,
   type FactoriesCursorPageParams,
   FactoriesCursorPageResponse,
   type FactoryTasksCursorPageParams,
   FactoryTasksCursorPageResponse,
   type RunsCursorPageParams,
   RunsCursorPageResponse,
-  type ScorerResultsCursorPageParams,
-  ScorerResultsCursorPageResponse,
 } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
@@ -853,18 +849,6 @@ export declare namespace WarpClient {
   export {
     type FactoryTasksCursorPageParams as FactoryTasksCursorPageParams,
     type FactoryTasksCursorPageResponse as FactoryTasksCursorPageResponse,
-  };
-
-  export import ScorerResultsCursorPage = Pagination.ScorerResultsCursorPage;
-  export {
-    type ScorerResultsCursorPageParams as ScorerResultsCursorPageParams,
-    type ScorerResultsCursorPageResponse as ScorerResultsCursorPageResponse,
-  };
-
-  export import BenchmarkSuitesCursorPage = Pagination.BenchmarkSuitesCursorPage;
-  export {
-    type BenchmarkSuitesCursorPageParams as BenchmarkSuitesCursorPageParams,
-    type BenchmarkSuitesCursorPageResponse as BenchmarkSuitesCursorPageResponse,
   };
 
   export import FactoriesCursorPage = Pagination.FactoriesCursorPage;

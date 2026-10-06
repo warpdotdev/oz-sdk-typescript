@@ -14,14 +14,6 @@ export class Schemas extends APIResource {
    * Returns every JSON Schema 2020-12 document describing one Factory file schema
    * version, as a single bundle so the relative `$id` and `$ref` identities between
    * the documents keep resolving.
-   *
-   * @example
-   * ```ts
-   * const schema =
-   *   await client.factories.files.schemas.retrieve(
-   *     'schema_version',
-   *   );
-   * ```
    */
   retrieve(
     schemaVersion: string,
@@ -42,11 +34,6 @@ export class Schemas extends APIResource {
   /**
    * Returns every Factory file schema version this server can describe, with a link
    * to each version's schema bundle.
-   *
-   * @example
-   * ```ts
-   * const schemas = await client.factories.files.schemas.list();
-   * ```
    */
   list(
     params: SchemaListParams | null | undefined = {},
@@ -72,15 +59,6 @@ export class Schemas extends APIResource {
    *
    * ```yaml
    * # yaml-language-server: $schema=/api/v1/factory-files/schemas/v1alpha1/factory.schema.json
-   * ```
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.factories.files.schemas.getDocument(
-   *     'document',
-   *     { schema_version: 'schema_version' },
-   *   );
    * ```
    */
   getDocument(

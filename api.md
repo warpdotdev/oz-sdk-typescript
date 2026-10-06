@@ -160,12 +160,10 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/factories/runs.ts">RunCreateResponse</a></code>
-- <code><a href="./src/resources/factories/runs.ts">RunListScoresResponse</a></code>
 
 Methods:
 
 - <code title="post /factory/{uid}/runs">client.factories.runs.<a href="./src/resources/factories/runs.ts">create</a>(uid, { ...params }) -> RunCreateResponse</code>
-- <code title="get /factory/runs/{run_id}/scores">client.factories.runs.<a href="./src/resources/factories/runs.ts">listScores</a>(runID) -> RunListScoresResponse</code>
 
 ## Tasks
 
@@ -183,54 +181,6 @@ Methods:
 - <code title="get /factory/{uid}/tasks/{task_uid}">client.factories.tasks.<a href="./src/resources/factories/tasks.ts">get</a>(taskUid, { ...params }) -> Task</code>
 - <code title="get /factory/{uid}/task-by-conversation">client.factories.tasks.<a href="./src/resources/factories/tasks.ts">getByConversation</a>(uid, { ...params }) -> Task</code>
 - <code title="get /factory/{uid}/task-by-run">client.factories.tasks.<a href="./src/resources/factories/tasks.ts">getByRun</a>(uid, { ...params }) -> Task</code>
-
-## Scorers
-
-Types:
-
-- <code><a href="./src/resources/factories/scorers.ts">ScorerCreateResponse</a></code>
-- <code><a href="./src/resources/factories/scorers.ts">ScorerListResponse</a></code>
-- <code><a href="./src/resources/factories/scorers.ts">ScorerListResultReasonsResponse</a></code>
-- <code><a href="./src/resources/factories/scorers.ts">ScorerListResultsResponse</a></code>
-
-Methods:
-
-- <code title="post /factory/scorers">client.factories.scorers.<a href="./src/resources/factories/scorers.ts">create</a>({ ...params }) -> ScorerCreateResponse</code>
-- <code title="get /factory/scorers">client.factories.scorers.<a href="./src/resources/factories/scorers.ts">list</a>({ ...params }) -> ScorerListResponse</code>
-- <code title="get /factory/scorers/{scorer_id}/results/reasons">client.factories.scorers.<a href="./src/resources/factories/scorers.ts">listResultReasons</a>(scorerID, { ...params }) -> ScorerListResultReasonsResponse</code>
-- <code title="get /factory/scorers/{scorer_id}/results">client.factories.scorers.<a href="./src/resources/factories/scorers.ts">listResults</a>(scorerID, { ...params }) -> ScorerListResultsResponsesScorerResultsCursorPage</code>
-
-## Benchmarks
-
-### Suites
-
-Types:
-
-- <code><a href="./src/resources/factories/benchmarks/suites.ts">SuiteCreateResponse</a></code>
-- <code><a href="./src/resources/factories/benchmarks/suites.ts">SuiteListResponse</a></code>
-- <code><a href="./src/resources/factories/benchmarks/suites.ts">SuiteGetResponse</a></code>
-- <code><a href="./src/resources/factories/benchmarks/suites.ts">SuiteLaunchRunResponse</a></code>
-
-Methods:
-
-- <code title="post /factory/{uid}/benchmarks/suites">client.factories.benchmarks.suites.<a href="./src/resources/factories/benchmarks/suites.ts">create</a>(uid, { ...params }) -> SuiteCreateResponse</code>
-- <code title="get /factory/{uid}/benchmarks/suites">client.factories.benchmarks.suites.<a href="./src/resources/factories/benchmarks/suites.ts">list</a>(uid, { ...params }) -> SuiteListResponsesBenchmarkSuitesCursorPage</code>
-- <code title="get /factory/{uid}/benchmarks/suites/{suite_uid}">client.factories.benchmarks.suites.<a href="./src/resources/factories/benchmarks/suites.ts">get</a>(suiteUid, { ...params }) -> SuiteGetResponse</code>
-- <code title="post /factory/{uid}/benchmarks/suites/{suite_uid}/runs">client.factories.benchmarks.suites.<a href="./src/resources/factories/benchmarks/suites.ts">launchRun</a>(suiteUid, { ...params }) -> SuiteLaunchRunResponse</code>
-
-### Runs
-
-Types:
-
-- <code><a href="./src/resources/factories/benchmarks/runs.ts">RunListResponse</a></code>
-- <code><a href="./src/resources/factories/benchmarks/runs.ts">RunGetResponse</a></code>
-- <code><a href="./src/resources/factories/benchmarks/runs.ts">RunGetResultsResponse</a></code>
-
-Methods:
-
-- <code title="get /factory/{uid}/benchmarks/runs">client.factories.benchmarks.runs.<a href="./src/resources/factories/benchmarks/runs.ts">list</a>(uid, { ...params }) -> RunListResponsesRunsCursorPage</code>
-- <code title="get /factory/{uid}/benchmarks/runs/{run_uid}">client.factories.benchmarks.runs.<a href="./src/resources/factories/benchmarks/runs.ts">get</a>(runUid, { ...params }) -> RunGetResponse</code>
-- <code title="get /factory/{uid}/benchmarks/runs/{run_uid}/results">client.factories.benchmarks.runs.<a href="./src/resources/factories/benchmarks/runs.ts">getResults</a>(runUid, { ...params }) -> RunGetResultsResponse</code>
 
 ## Files
 

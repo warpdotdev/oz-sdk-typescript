@@ -22,14 +22,6 @@ export class Tasks extends APIResource {
    * conversation_id are required. The stage defaults to TRIAGE. The conversation's
    * most recent run must be owned by the factory's team, and a conversation may be
    * bound to at most one live task across all factories.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.create('uid', {
-   *   conversation_id: 'conversation_id',
-   *   title: 'title',
-   * });
-   * ```
    */
   create(uid: string, body: TaskCreateParams, options?: RequestOptions): APIPromise<Task> {
     return this._client.post(path`/factory/${uid}/tasks`, { body, ...options });
@@ -39,14 +31,6 @@ export class Tasks extends APIResource {
    * Partially update a task's title, description, and/or stage. Last write wins.
    * Stage writes are unrestricted: any stage-to-stage transition is allowed,
    * including moving backwards or to completion.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.update(
-   *   'task_uid',
-   *   { uid: 'uid' },
-   * );
-   * ```
    */
   update(taskUid: string, params: TaskUpdateParams, options?: RequestOptions): APIPromise<Task> {
     const { uid, ...body } = params;
@@ -57,16 +41,6 @@ export class Tasks extends APIResource {
    * List the factory's tasks with optional filtering and search. List responses are
    * lean by default; set full_list=true to include canonical ticket metadata and
    * derived outputs for the returned page.
-   *
-   * @example
-   * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const task of client.factories.tasks.list(
-   *   'uid',
-   * )) {
-   *   // ...
-   * }
-   * ```
    */
   list(
     uid: string,
@@ -83,13 +57,6 @@ export class Tasks extends APIResource {
    * Soft-delete a task. The task disappears from list and get responses immediately,
    * and its conversation may be bound to a new task. Deleting a task never deletes
    * artifacts or the conversation.
-   *
-   * @example
-   * ```ts
-   * await client.factories.tasks.delete('task_uid', {
-   *   uid: 'uid',
-   * });
-   * ```
    */
   delete(taskUid: string, params: TaskDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { uid } = params;
@@ -102,14 +69,6 @@ export class Tasks extends APIResource {
   /**
    * Cancel the task's current top-level run and move the task to CANCELLED. Every
    * non-terminal descendant of the root run is cancelled as well.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.cancel(
-   *   'task_uid',
-   *   { uid: 'uid' },
-   * );
-   * ```
    */
   cancel(taskUid: string, params: TaskCancelParams, options?: RequestOptions): APIPromise<Task> {
     const { uid } = params;
@@ -118,13 +77,6 @@ export class Tasks extends APIResource {
 
   /**
    * Get a task with its derived outputs, newest-first.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.get('task_uid', {
-   *   uid: 'uid',
-   * });
-   * ```
    */
   get(taskUid: string, params: TaskGetParams, options?: RequestOptions): APIPromise<Task> {
     const { uid } = params;
@@ -135,14 +87,6 @@ export class Tasks extends APIResource {
    * Get the factory task bound to an agent conversation. Conversation bindings are
    * unique across factories, but the lookup is factory-scoped: a task owned by a
    * different factory is 404.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.getByConversation(
-   *   'uid',
-   *   { conversation_id: 'conversation_id' },
-   * );
-   * ```
    */
   getByConversation(
     uid: string,
@@ -156,13 +100,6 @@ export class Tasks extends APIResource {
    * Get the factory task that owns a run: the task bound to the conversation of the
    * run's root ancestor. The lookup is factory-scoped: a task owned by a different
    * factory is 404.
-   *
-   * @example
-   * ```ts
-   * const task = await client.factories.tasks.getByRun('uid', {
-   *   run_id: 'run_id',
-   * });
-   * ```
    */
   getByRun(uid: string, query: TaskGetByRunParams, options?: RequestOptions): APIPromise<Task> {
     return this._client.get(path`/factory/${uid}/task-by-run`, { query, ...options });

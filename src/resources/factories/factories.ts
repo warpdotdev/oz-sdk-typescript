@@ -3,20 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from '../agent/agent';
 import * as RunsAPI from './runs';
-import { RunCreateParams, RunCreateResponse, RunListScoresResponse, Runs } from './runs';
-import * as ScorersAPI from './scorers';
-import {
-  ScorerCreateParams,
-  ScorerCreateResponse,
-  ScorerListParams,
-  ScorerListResponse,
-  ScorerListResultReasonsParams,
-  ScorerListResultReasonsResponse,
-  ScorerListResultsParams,
-  ScorerListResultsResponse,
-  ScorerListResultsResponsesScorerResultsCursorPage,
-  Scorers,
-} from './scorers';
+import { RunCreateParams, RunCreateResponse, Runs } from './runs';
 import * as TasksAPI from './tasks';
 import {
   Task,
@@ -31,8 +18,6 @@ import {
   Tasks,
   TasksFactoryTasksCursorPage,
 } from './tasks';
-import * as BenchmarksAPI from './benchmarks/benchmarks';
-import { Benchmarks } from './benchmarks/benchmarks';
 import * as FilesAPI from './files/files';
 import { FileValidateParams, FileValidateResponse, Files } from './files/files';
 import { APIPromise } from '../../core/api-promise';
@@ -47,8 +32,6 @@ import { path } from '../../internal/utils/path';
 export class Factories extends APIResource {
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
-  scorers: ScorersAPI.Scorers = new ScorersAPI.Scorers(this._client);
-  benchmarks: BenchmarksAPI.Benchmarks = new BenchmarksAPI.Benchmarks(this._client);
   files: FilesAPI.Files = new FilesAPI.Files(this._client);
 
   /**
@@ -57,14 +40,6 @@ export class Factories extends APIResource {
    * overrides the active team and restricts results to a single team, and an
    * optional search query parameter filters by a case-insensitive substring match on
    * the factory name or alias.
-   *
-   * @example
-   * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const factory of client.factories.list()) {
-   *   // ...
-   * }
-   * ```
    */
   list(
     params: FactoryListParams | null | undefined = {},
@@ -83,11 +58,6 @@ export class Factories extends APIResource {
 
   /**
    * Get a factory by its UID.
-   *
-   * @example
-   * ```ts
-   * const factory = await client.factories.get('uid');
-   * ```
    */
   get(uid: string, options?: RequestOptions): APIPromise<Factory> {
     return this._client.get(path`/factory/${uid}`, options);
@@ -480,8 +450,6 @@ export interface FactoryListParams extends FactoriesCursorPageParams {
 
 Factories.Runs = Runs;
 Factories.Tasks = Tasks;
-Factories.Scorers = Scorers;
-Factories.Benchmarks = Benchmarks;
 Factories.Files = Files;
 
 export declare namespace Factories {
@@ -494,7 +462,6 @@ export declare namespace Factories {
   export {
     Runs as Runs,
     type RunCreateResponse as RunCreateResponse,
-    type RunListScoresResponse as RunListScoresResponse,
     type RunCreateParams as RunCreateParams,
   };
 
@@ -511,21 +478,6 @@ export declare namespace Factories {
     type TaskGetByConversationParams as TaskGetByConversationParams,
     type TaskGetByRunParams as TaskGetByRunParams,
   };
-
-  export {
-    Scorers as Scorers,
-    type ScorerCreateResponse as ScorerCreateResponse,
-    type ScorerListResponse as ScorerListResponse,
-    type ScorerListResultReasonsResponse as ScorerListResultReasonsResponse,
-    type ScorerListResultsResponse as ScorerListResultsResponse,
-    type ScorerListResultsResponsesScorerResultsCursorPage as ScorerListResultsResponsesScorerResultsCursorPage,
-    type ScorerCreateParams as ScorerCreateParams,
-    type ScorerListParams as ScorerListParams,
-    type ScorerListResultReasonsParams as ScorerListResultReasonsParams,
-    type ScorerListResultsParams as ScorerListResultsParams,
-  };
-
-  export { Benchmarks as Benchmarks };
 
   export {
     Files as Files,
