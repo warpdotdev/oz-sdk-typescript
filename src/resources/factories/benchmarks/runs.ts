@@ -439,7 +439,10 @@ export namespace RunGetResponse {
 
     rep_index: number;
 
-    state: string;
+    /**
+     * Lifecycle state of a benchmark trial.
+     */
+    state: 'pending' | 'running' | 'succeeded' | 'failed' | 'cancelled';
 
     suite_task_id: number;
 
@@ -532,8 +535,10 @@ export interface RunGetResultsResponse {
 
   /**
    * Score-work ledger row counts by lifecycle state, plus the derived received =
-   * scored and expected = pending + judging + scored + finished_unscored (excludes
-   * awaiting_trial and not_scoreable).
+   * scored, expected = pending + judging + scored + finished_unscored (excludes
+   * awaiting_trial and not_scoreable), total = every row, one per (trial, applicable
+   * scorer) pair and fixed once scoring work is materialized, and settled = scored +
+   * finished_unscored + not_scoreable.
    */
   score_progress?: unknown;
 
@@ -547,9 +552,11 @@ export interface RunGetResultsResponse {
   summary_narrative?: string;
 
   /**
-   * Logical (task, configuration, repetition) trial counts by lifecycle state. A
-   * retry remains part of its original trial. completed is succeeded + failed +
-   * cancelled.
+   * Logical (task, configuration, repetition) trial counts by lifecycle state.
+   * pending counts trials whose current run has not started executing, including a
+   * dispatched run still waiting in the queue or for its sandbox to start; running
+   * counts trials whose current run is executing. A retry remains part of its
+   * original trial. completed is succeeded + failed + cancelled.
    */
   trial_progress?: RunGetResultsResponse.TrialProgress;
 
@@ -668,9 +675,11 @@ export namespace RunGetResultsResponse {
   }
 
   /**
-   * Logical (task, configuration, repetition) trial counts by lifecycle state. A
-   * retry remains part of its original trial. completed is succeeded + failed +
-   * cancelled.
+   * Logical (task, configuration, repetition) trial counts by lifecycle state.
+   * pending counts trials whose current run has not started executing, including a
+   * dispatched run still waiting in the queue or for its sandbox to start; running
+   * counts trials whose current run is executing. A retry remains part of its
+   * original trial. completed is succeeded + failed + cancelled.
    */
   export interface TrialProgress {
     cancelled: number;
@@ -697,7 +706,10 @@ export namespace RunGetResultsResponse {
 
     scores: Array<unknown>;
 
-    state: string;
+    /**
+     * Lifecycle state of a benchmark trial.
+     */
+    state: 'pending' | 'running' | 'succeeded' | 'failed' | 'cancelled';
 
     /**
      * Frozen internal storage coordinate retained for compatibility.
@@ -711,6 +723,13 @@ export namespace RunGetResultsResponse {
     judge_runs?: Array<unknown>;
 
     run_id?: string;
+
+    /**
+     * This trial's scoring state for each applicable classification scorer. A scored
+     * row whose score does not count toward the results reports finished_unscored.
+     * Present only when the benchmark in-progress UI feature is enabled.
+     */
+    score_work?: Array<Trial.ScoreWork>;
 
     task_title?: string;
 
@@ -742,6 +761,12 @@ export namespace RunGetResultsResponse {
        * newest attempt).
        */
       state: string;
+    }
+
+    export interface ScoreWork {
+      scorer_id: number;
+
+      state: 'awaiting_trial' | 'pending' | 'judging' | 'scored' | 'finished_unscored' | 'not_scoreable';
     }
   }
 }
